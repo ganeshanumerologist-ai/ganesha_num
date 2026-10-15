@@ -3,52 +3,41 @@ import { allNumbers } from "../utils/numerology.js";
 import { getMeaning } from "../data/meanings_all.js";
 import ShareButtons from "../components/ShareButtons.jsx";
 import { useLanguage } from "../i18n/LanguageContext.jsx";
-import kundliT from "../i18n/kundli.js";
 import { useAuth } from "../auth/AuthContext.jsx";
 import { db } from "../firebase.js";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { loadProfile, saveProfile } from "../profile/profile.js";
 
-const TX = {
-  hi: {
-    labels: { lifePath: "जीवन पथ", birthday: "जन्मांक", attitude: "मनोवृत्ति अंक", destiny: "भाग्यांक (नाम)", soulUrge: "अंतरात्मा", personality: "व्यक्तित्व", lucky: "लकी (मोबाइल)" },
-    sub: "अपना विवरण दें — मूल अंक जानें।",
-    errFill: "कृपया पूरा नाम और जन्मतिथि भरें।",
-    needLogin: "सेव करने के लिए लॉगिन करें।",
-    savedOk: "सेव हो गया! डैशबोर्ड में देखें।",
-    kvStrength: "खूबियां",
-    shareTitle: "अपने अंक शेयर करें",
-    shareText: (n, lp, de) => `${n} — जीवन पथ ${lp}, भाग्यांक ${de}! अपने अंक निकालो`,
-    exName: "जैसे राहुल शर्मा", exMob: "जैसे 9876543210",
-  },
-  mr: {
-    labels: { lifePath: "जीवन मार्ग", birthday: "जन्मांक", attitude: "मनोवृत्ती अंक", destiny: "नामांक", soulUrge: "आत्म्याची हाक", personality: "व्यक्तिमत्त्व", lucky: "लकी (मोबाईल)" },
-    sub: "तपशील द्या — मूळ अंक जाणून घ्या.",
-    errFill: "कृपया पूर्ण नाव आणि जन्मतारीख भरा.",
-    needLogin: "सेव्ह करण्यासाठी लॉगिन करा.",
-    savedOk: "सेव्ह झाले! डॅशबोर्डमध्ये पहा.",
-    kvStrength: "गुण",
-    shareTitle: "तुमचे अंक शेअर करा",
-    shareText: (n, lp, de) => `${n} — जीवन मार्ग ${lp}, नामांक ${de}! तुमचे अंक काढा`,
-    exName: "जसे राहुल शर्मा", exMob: "जसे 9876543210",
-  },
-  en: {
-    labels: { lifePath: "Life Path Number", birthday: "Birthday Number", attitude: "Attitude Number", destiny: "Destiny Number", soulUrge: "Soul Urge Number", personality: "Personality Number", lucky: "Lucky (Mobile) Number" },
-    sub: "Enter your details to reveal your core numbers.",
-    errFill: "Please enter your full name and date of birth.",
-    needLogin: "Please login to save.",
-    savedOk: "Saved! See it in Dashboard.",
-    kvStrength: "Strengths",
-    shareTitle: "Share your numbers",
-    shareText: (n, lp, de) => `${n} — Life Path ${lp}, Destiny ${de}! Find your numbers`,
-    exName: "e.g. Rahul Sharma", exMob: "e.g. 9876543210",
-  },
+// Label ka bhasha-aware anukram: lifePath -> "lb_lifepath".
+const LABEL_KEYS = {
+  lifePath: "lb_lifepath",
+  birthday: "lb_birthday",
+  attitude: "lb_attitude",
+  destiny: "lb_destiny",
+  soulUrge: "lb_soulurge",
+  personality: "lb_personality",
+  lucky: "lb_lucky",
+};
+
+// Share text bhi bhasha me — isliye har bhasha ka apna template.
+const SHARE = {
+  en: (n, lp, de) => `${n} — Life Path ${lp}, Destiny ${de}! Find your numbers`,
+  hi: (n, lp, de) => `${n} — जीवन पथ ${lp}, भाग्यांक ${de}! अपने अंक निकालो`,
+  mr: (n, lp, de) => `${n} — जीवन मार्ग ${lp}, नामांक ${de}! तुमचे अंक काढा`,
+  bn: (n, lp, de) => `${n} — জীবনপথ ${lp}, ভাগ্যাঙ্ক ${de}! আপনার সংখ্যা বের করুন`,
+  te: (n, lp, de) => `${n} — జీవితపథ ${lp}, భాగ్యాంకం ${de}! మీ సంఖ్యలు తెలుసుకోండి`,
+  ta: (n, lp, de) => `${n} — வாழ்க்கைப் பாதை ${lp}, நாக்கிய எண் ${de}! உங்கள் எண்களைக் கணக்கிடுங்கள்`,
+  gu: (n, lp, de) => `${n} — જીવનમાર્ગ ${lp}, નામાંક ${de}! તમારા અંક શોધો`,
+  ur: (n, lp, de) => `${n} — زندگی کا راستہ ${lp}, نام نمبر ${de}! اپنے اعداد نکالیں`,
+  kn: (n, lp, de) => `${n} — ಜೀವನ ಮಾರ್ಗ ${lp}, ನಾಮಾಂಕ ${de}! ನಿಮ್ಮ ಸಂಖ್ಯೆಗಳನ್ನು ಕಂಡುಕೊಳ್ಳಿ`,
+  ml: (n, lp, de) => `${n} — ജീവിത വഴി ${lp}, നാമാംകം ${de}! നിങ്ങളുടെ സംഖ്യകൾ കണക്കാക്കുക`,
+  pa: (n, lp, de) => `${n} — ਜੀਵਨ ਮਾਰਗ ${lp}, ਨਾਮਾਂਕ ${de}! ਆਪਣੇ ਅੰਕ ਨਿਕਾਲੋ`,
+  or: (n, lp, de) => `${n} — ଜୀବନ ମାର୍ଗ ${lp}, ନାମାଙ୍କ ${de}! ଆପଣଙ୍କ ସଂଖ୍ୟା ବାହାର କରନ୍ତୁ`,
+  as: (n, lp, de) => `${n} — জীৱনপথ ${lp}, ভাগ্যসংখ্যা ${de}! আপোনাৰ সংখ্যা উলিচাওক`,
 };
 
 export default function Calculator() {
   const { t, lang } = useLanguage();
-  const L = kundliT(lang);
-  const T = TX[lang] || TX.en;
   const { user } = useAuth();
   const [name, setName] = useState(() => loadProfile().name || "");
   const [birthdate, setBirthdate] = useState(() => loadProfile().birthdate || "");
@@ -61,7 +50,7 @@ export default function Calculator() {
     e.preventDefault();
     setError(""); setSaved("");
     if (!name.trim() || !birthdate) {
-      setError(T.errFill);
+      setError(t("calc_err_fill"));
       return;
     }
     const nums = allNumbers({ name: name.trim(), birthdate, mobile: mobile.trim() });
@@ -74,28 +63,30 @@ export default function Calculator() {
   };
 
   const saveReading = async () => {
-    if (!user) { setSaved(T.needLogin); return; }
+    if (!user) { setSaved(t("calc_need_login")); return; }
     try {
       await addDoc(collection(db, "readings"), {
         uid: user.uid, name: name.trim(), birthdate, mobile: mobile.trim(),
         numbers: result, createdAt: serverTimestamp(),
       });
-      setSaved(T.savedOk);
+      setSaved(t("calc_saved_ok"));
     } catch (e) {
       setSaved(e.message);
     }
   };
 
+  const shareText = (SHARE[lang] || SHARE.en)(name.trim(), result?.lifePath, result?.destiny);
+
   return (
     <div>
       <h1 className="text-gradient">{t("calc_title")}</h1>
-      <p>{T.sub}</p>
+      <p>{t("calc_sub")}</p>
 
       <div style={{ marginTop: 24 }} className="card">
         <form onSubmit={calculate} className="grid grid-2">
           <div>
             <label className="label">{t("calc_name")}</label>
-            <input className="input" value={name} onChange={(e) => setName(e.target.value)} placeholder={T.exName} />
+            <input className="input" value={name} onChange={(e) => setName(e.target.value)} placeholder={t("calc_ex_name")} />
           </div>
           <div>
             <label className="label">{t("calc_dob")}</label>
@@ -103,7 +94,7 @@ export default function Calculator() {
           </div>
           <div>
             <label className="label">{t("calc_mobile")}</label>
-            <input className="input" value={mobile} onChange={(e) => setMobile(e.target.value)} placeholder={T.exMob} />
+            <input className="input" value={mobile} onChange={(e) => setMobile(e.target.value)} placeholder={t("calc_ex_mob")} />
           </div>
           <div style={{ display: "flex", alignItems: "end", gap: 10, flexWrap: "wrap" }}>
             <button type="submit" className="btn">{t("calc_button")}</button>
@@ -117,7 +108,7 @@ export default function Calculator() {
 
       {result && (
         <div style={{ marginTop: 30 }}>
-          <h2>{t("result_title")}</h2>
+          <h2>{t("calc_result_title")}</h2>
           <div className="grid grid-3">
             {Object.entries(result).map(([key, val]) => {
               if (val == null) return null;
@@ -125,8 +116,10 @@ export default function Calculator() {
               return (
                 <div key={key} className="card number-card">
                   <div className="num"><span>{val}</span></div>
-                  <h3>{T.labels[key]}</h3>
-                  {meaning && <p style={{ fontSize: ".85rem", marginTop: 8 }}>{meaning.title} · {meaning.keywords}</p>}
+                  <h3>{t(LABEL_KEYS[key])}</h3>
+                  {meaning && meaning.title && (
+                    <p style={{ fontSize: ".85rem", marginTop: 8 }}>{meaning.title} · {meaning.keywords}</p>
+                  )}
                 </div>
               );
             })}
@@ -139,19 +132,19 @@ export default function Calculator() {
               if (!meaning || !meaning.title) return null;
               return (
                 <div key={key + "-detail"} className="card">
-                  <h3>{T.labels[key]}: {val} — {meaning.title}</h3>
+                  <h3>{t(LABEL_KEYS[key])}: {val} — {meaning.title}</h3>
                   <p style={{ marginTop: 8 }}>{meaning.desc}</p>
                   <div style={{ marginTop: 12 }}>
-                    <div className="kv"><span className="k">{T.kvStrength}</span><span className="v">{meaning.strengths}</span></div>
-                    <div className="kv"><span className="k">{L.k_career}</span><span className="v">{meaning.career}</span></div>
-                    <div className="kv"><span className="k">{L.k_love}</span><span className="v">{meaning.love}</span></div>
-                    <div className="kv"><span className="k">{L.k_upay}</span><span className="v">{meaning.upay}</span></div>
+                    <div className="kv"><span className="k">{t("calc_kv_strengths")}</span><span className="v">{meaning.strengths}</span></div>
+                    <div className="kv"><span className="k">{t("k_career")}</span><span className="v">{meaning.career}</span></div>
+                    <div className="kv"><span className="k">{t("k_love")}</span><span className="v">{meaning.love}</span></div>
+                    <div className="kv"><span className="k">{t("k_upay")}</span><span className="v">{meaning.upay}</span></div>
                   </div>
                 </div>
               );
             })}
           </div>
-          <ShareButtons title={T.shareTitle} text={T.shareText(name.trim(), result.lifePath, result.destiny)} />
+          <ShareButtons title={t("calc_share_title")} text={shareText} />
         </div>
       )}
     </div>

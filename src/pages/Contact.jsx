@@ -1,17 +1,28 @@
 import React, { useState } from "react";
 import { useLanguage } from "../i18n/LanguageContext.jsx";
+import { pageTX } from "../i18n/pageTx.js";
 import { db } from "../firebase.js";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 const TX = {
   hi: { sub: "न्यूमरोलॉजी रीडिंग के बारे में सवाल है? संदेश भेजें।", errFill: "कृपया सभी खाने भरें।", sending: "भेजा जा रहा है..." },
   mr: { sub: "न्यूमरॉलॉजी रीडिंगबद्दल प्रश्न आहे? संदेश पाठवा.", errFill: "कृपया सर्व रकाने भरा.", sending: "पाठवत आहे..." },
+  bn: { sub: "নিউমেরোলজি রিডিং নিয়ে প্রশ্ন আছে? বার্তা পাঠান।", errFill: "অনুগ্রহ করে সব ঘর পূরণ করুন।", sending: "পাঠানো হচ্ছে..." },
+  te: { sub: "న్యూమెరాలజీ రీడింగ్ గురించి ప్రశ్నలు ఉన్నాయా? సందేశం పంపండి.", errFill: "దయచేసి అన్ని ఖాళాలు నింపండి.", sending: "పంపుతోంది..." },
+  ta: { sub: "நியூமராலஜி வாசிப்பு பற்றி கேள்விகள் உள்ளன? செய்தி அனுப்புங்கள்.", errFill: "அனைத்து புலங்களையும் நிரப்பவும்.", sending: "அனுப்பப்படுகிறது..." },
+  gu: { sub: "ન્યુમરોલોજી રીડિંગ વિશે પ્રશ્નો છે? સંદેશ મોકલો.", errFill: "કૃપા કરીને બધા ખાના ભરો.", sending: "મોકલાય છે..." },
+  ur: { sub: "نیومرولوجی ریڈنگ کے بارے میں سوال ہیں؟ پیغام بھیجیں۔", errFill: "براہِ کرم تمام خانے پُر کریں۔", sending: "بھیجا جا رہا ہے..." },
+  kn: { sub: "ನ್ಯೂಮರಾಲಜಿ ಓದುವಿನ ಬಗ್ಗೆ ಪ್ರಶ್ನೆಗಳಿವೆ? ಸಂದೇಶ ಕಳುಹಿಸಿ.", errFill: "ದಯವಿಟ್ಟು ಎಲ್ಲಾ ಕಣಗಳನ್ನು ತುಂಬಿ.", sending: "ಕಳುಹಿಸಲಾಗುತ್ತಿದೆ..." },
+  ml: { sub: "ന്യൂമറോളജി വായനയെക്കുറിച്ച് ചോദ്യങ്ങളുണ്ടോ? സന്ദേശം അയയ്ക്കൂ.", errFill: "എല്ലാ ഫീഡുകളും പൂരിപ്പിക്കൂ.", sending: "അയയ്ക്കുന്നു..." },
+  pa: { sub: "ਨਿਊਮਰੋਲੋਜੀ ਰੀਡਿੰਗ ਬਾਰੇ ਸਵਾਲ ਹਨ? ਸੁਨੇਹਾ ਭੇਜੋ।", errFill: "ਕਿਰਪਾ ਕਰਕੇ ਸਾਰੇ ਖਾਨੇ ਭਰੋ।", sending: "ਭੇਜਿਆ ਜਾ ਰਿਹਾ ਹੈ..." },
+  or: { sub: "ନ୍ୟୁମେରୋଲୋଜି ରୀଡିଙ୍ଗ ବିଷୟରେ ପ୍ରଶ୍ନ ଅଛି? ବାର୍ତ୍ତା ପଠାନ୍ତୁ।", errFill: "ଦୟାକରି ସବୁ ଖଣ୍ଡ ପୂରଣ କରନ୍ତୁ।", sending: "ପଠାଯାଉଛି..." },
+  as: { sub: "নিউমেৰলজি ৰিডিঙৰ বিষয়ে প্ৰশ্ন আছে? বাৰ্তা পঠিয়াওক।", errFill: "দয়া কৰি সকলো খোজা পূৰণ কৰক।", sending: "পঠিয়ানো হৈছে..." },
   en: { sub: "Have questions about your numerology reading? Send us a message.", errFill: "Please fill all fields.", sending: "Sending..." },
 };
 
 export default function Contact() {
   const { t, lang } = useLanguage();
-  const T = TX[lang] || TX.en;
+  const T = pageTX(TX, lang);
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);

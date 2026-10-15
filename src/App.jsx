@@ -23,6 +23,7 @@ import Rashifal from "./pages/Rashifal.jsx";
 import Gochar from "./pages/Gochar.jsx";
 import Muhurat from "./pages/Muhurat.jsx";
 import Reports from "./pages/Reports.jsx";
+import Shani from "./pages/Shani.jsx";
 import Charts from "./pages/Charts.jsx";
 import Loshu from "./pages/Loshu.jsx";
 import Remedies from "./pages/Remedies.jsx";
@@ -78,6 +79,7 @@ export default function App() {
           <Route path="/gochar" element={<Gochar />} />
           <Route path="/muhurat" element={<Muhurat />} />
           <Route path="/reports" element={<Reports />} />
+          <Route path="/shani" element={<Shani />} />
           <Route path="/charts" element={<Charts />} />
           <Route path="/loshu" element={<Loshu />} />
           <Route path="/remedies" element={<Remedies />} />

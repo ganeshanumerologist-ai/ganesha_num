@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useLanguage } from "../i18n/LanguageContext.jsx";
 import { pgT } from "../i18n/jyotish_b.js";
+import shaniTX from "../i18n/shani.js";
+import { langChain } from "../i18n/registry.js";
 import { useAuth } from "../auth/AuthContext.jsx";
 import { useAdmin } from "../auth/useAdmin.js";
 
@@ -10,6 +12,13 @@ export default function Navbar() {
   const nav = useNavigate();
   const { lang, setLang, t, LANGUAGES } = useLanguage();
   const P = pgT(lang);
+  const shTitle = (() => {
+    for (const c of langChain(lang)) {
+      const d = shaniTX[c];
+      if (d && d.sh_nav && d !== shaniTX.en) return d.sh_nav;
+    }
+    return "Shani Sade Sati";
+  })();
   const { user, logout, loading } = useAuth();
   const { isAdmin } = useAdmin();
   const [open, setOpen] = useState(false);
@@ -26,6 +35,7 @@ export default function Navbar() {
     { to: "/panchang", label: "Panchang" },
     { to: "/rashifal", label: "Rashifal" },
     { to: "/gochar", label: "Gochar" },
+    { to: "/shani", label: shTitle },
     { to: "/muhurat", label: "Muhurat" },
     { to: "/reports", label: "Reports" },
     { to: "/remedies", label: "Rudraksha-Yantra" },

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { SOCIAL_DEFAULTS, SOCIAL_META } from "../config/social.js";
 import { db } from "../firebase.js";
 import { doc, getDoc } from "firebase/firestore";
+import { useLanguage } from "../i18n/LanguageContext.jsx";
 
 const ICONS = {
   facebook: "f",
@@ -13,6 +14,7 @@ const ICONS = {
 };
 
 export default function Footer() {
+  const { t } = useLanguage();
   const [social, setSocial] = useState(SOCIAL_DEFAULTS);
 
   useEffect(() => {
@@ -49,8 +51,8 @@ export default function Footer() {
           ))}
         </div>
       )}
-      <p>© {new Date().getFullYear()} Numerology VIP · Unlock your destiny with the power of numbers.</p>
-      <p style={{ marginTop: 6 }}>Powered by React + Firebase (Hosting & Storage)</p>
+      <p>© {new Date().getFullYear()} {t("app_name")} · {t("footer_tagline")}</p>
+      <p style={{ marginTop: 6 }}>{t("footer_powered")}</p>
     </footer>
   );
 }

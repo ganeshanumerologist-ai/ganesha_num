@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { STATES } from "../data/cities.js";
+import { useLanguage } from "../i18n/LanguageContext.jsx";
 
 const ALL = STATES.flatMap((g) => g.cities.map((c) => ({ name: c[0], state: g.state })));
 
 // Type karte hi sheher sujhav — chunne par onChange(name)
 export default function CitySelect({ value, onChange, placeholder }) {
+  const { t } = useLanguage();
   const [text, setText] = useState(value || "");
   const [show, setShow] = useState(false);
   const box = useRef(null);
@@ -31,7 +33,7 @@ export default function CitySelect({ value, onChange, placeholder }) {
       <input
         className="input"
         value={text}
-        placeholder={placeholder || "Type karke sheher chunein..."}
+        placeholder={placeholder || t("city_search")}
         onChange={(e) => { setText(e.target.value); onChange(e.target.value); setShow(true); }}
         onFocus={() => setShow(true)}
       />
