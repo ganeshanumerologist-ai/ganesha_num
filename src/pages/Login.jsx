@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext.jsx";
 import { useLanguage } from "../i18n/LanguageContext.jsx";
@@ -37,9 +37,14 @@ function friendlyError(err, lang) {
 }
 
 export default function Login() {
-  const { login, signup, googleLogin } = useAuth();
+  const { user, loading, login, signup, googleLogin } = useAuth();
   const { t, lang } = useLanguage();
   const nav = useNavigate();
+
+  // Login ke baad /login khole to dashboard bhejo
+  useEffect(() => {
+    if (!loading && user) nav("/dashboard");
+  }, [user, loading, nav]);
   const [mode, setMode] = useState("login");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

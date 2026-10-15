@@ -10,7 +10,7 @@ export default function Navbar() {
   const nav = useNavigate();
   const { lang, setLang, t, LANGUAGES } = useLanguage();
   const P = pgT(lang);
-  const { user, logout } = useAuth();
+  const { user, logout, loading } = useAuth();
   const { isAdmin } = useAdmin();
   const [open, setOpen] = useState(false);
 
@@ -116,6 +116,8 @@ export default function Navbar() {
             <button className="btn secondary" style={{ padding: "8px 14px" }} onClick={onLogout}>
               {t("nav_logout")}
             </button>
+          ) : loading ? (
+            <span style={{ padding: "8px 14px", color: "var(--muted)" }}>…</span>
           ) : (
             <Link to="/login" className={active("/login")} onClick={close}>
               {t("nav_login")}
