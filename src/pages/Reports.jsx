@@ -17,6 +17,7 @@ import { dayInfo } from "../data/day_i18n.js";
 import { yearMeaning } from "../data/varshphal_i18n.js";
 import { grahaName, rashiName } from "../i18n/charts.js";
 import { rashiLang } from "../data/rashi_i18n.js";
+import { RUDRAKSHA_GUIDE, JADI_GUIDE, YANTRA_GUIDE } from "../data/remedies.js";
 const lagnaTraits = (en, lang) => {
   const i = RASHI_DATA.findIndex((x) => x.name === en);
   if (i < 0) return "";
@@ -72,6 +73,9 @@ const TX = {
     secVarga: "Shodashvarga (7 Varga)", secLagna: "Lagna Bhavishya + Graha Vichar", secLal: "Lal Kitab — Upay + Rin",
     secRatna: "Ratna, Rudraksha, Jadi, Yantra", gocharT: "Aaj ka Gochar (janm-grahon se)", balaT: "Graha Bala (Uchcha/Neecha/Swa/Asta)", rinT: "Rin vichar",
     graha: "Graha", dhatu: "Dhatu", vaar: "Vaar", ungli: "Ungli", rudra: "Rudraksha", jadi: "Jadi (samidha)", yantra: "Yantra",
+    forYou: "⭐ Aapke liye", presc: "Nuskha",
+    whyMoolank: (lp, pl) => `Moolank ${lp} (${pl}) ke aadhar par`,
+    whyRashi: (m2, pl) => `Chandra rashi ${m2} (${pl}) ke aadhar par`,
     rudraHow: "Somvaar ko Gangajal se shuddh karke dharan karein.",
     yantraHow: "Bhojpatra/dhatu par banwakar pooja-sthan me sthapit karein.",
     jadiHow: "Jad ko chandi me jadwakar dharan karein ya havan me prayog karein.",
@@ -97,6 +101,9 @@ const TX = {
     secVarga: "षोडशवर्ग (7 वर्ग)", secLagna: "लग्न भविष्य + ग्रह विचार", secLal: "लाल किताब — उपाय + ऋण",
     secRatna: "रत्न, रुद्राक्ष, जडी, यंत्र", gocharT: "आजचा गोचर (जन्म-ग्रहांपासून)", balaT: "ग्रह बल (उच्च/नीच/स्व/अस्त)", rinT: "ऋण विचार",
     graha: "ग्रह", dhatu: "धातू", vaar: "वार", ungli: "बोट", rudra: "रुद्राक्ष", jadi: "जडी (समिधा)", yantra: "यंत्र",
+    forYou: "⭐ तुमच्यासाठी", presc: "उपाय-पत्र",
+    whyMoolank: (lp, pl) => `मूलांक ${lp} (${pl}) च्या आधारे`,
+    whyRashi: (m2, pl) => `चंद्र राशी ${m2} (${pl}) च्या आधारे`,
     rudraHow: "सोमवारी गंगाजलाने शुद्ध करून धारण करा.",
     yantraHow: "भोजपत्र/धातूवर बनवून पूजा-स्थानी स्थापित करा.",
     jadiHow: "मूळ चांदीत बसवून धारण करा किंवा हवनात वापरा.",
@@ -122,6 +129,9 @@ const TX = {
     secVarga: "Shodashvarga (7 Vargas)", secLagna: "Lagna Reading + Planet Strength", secLal: "Lal Kitab — Remedies + Rin",
     secRatna: "Gemstone, Rudraksha, Herb, Yantra", gocharT: "Today's Transit (vs natal)", balaT: "Planet Strength", rinT: "Rin Analysis",
     graha: "Planet", dhatu: "Metal", vaar: "Day", ungli: "Finger", rudra: "Rudraksha", jadi: "Herb (samidha)", yantra: "Yantra",
+    forYou: "⭐ For you", presc: "Prescription",
+    whyMoolank: (lp, pl) => `Based on Moolank ${lp} (${pl})`,
+    whyRashi: (m2, pl) => `Based on Moon sign ${m2} (${pl})`,
     rudraHow: "Purify with Gangajal on Monday and wear.",
     yantraHow: "Install in prayer space on bhojpatra/metal.",
     jadiHow: "Wear root set in silver or use in havan.",
@@ -454,20 +464,35 @@ export default function Reports() {
             </div>
           </div>
           <div className="grid grid-2" style={{ marginTop: 12 }}>
-            {[{ p: r.ratna1.planet, rudra: r.rudra1, jadi: r.jadi1, yantra: r.yantra1 }, { p: r.ratna2.planet, rudra: r.rudra2, jadi: r.jadi2, yantra: r.yantra2 }].map((m, i) => (
-              <div key={i} className="card">
-                <h3>{gName(m.p, lang)} — {P.pg_upay}</h3>
-                <div style={{ fontSize: "2rem" }}>📿</div>
-                <p style={{ fontWeight: 700, marginTop: 4 }}>{T.rudra}: {m.rudra}</p>
-                <p style={{ fontSize: ".85rem" }}>{T.rudraHow}</p>
-                <div style={{ fontSize: "2rem", marginTop: 8 }}>🔯</div>
-                <p style={{ fontWeight: 700, marginTop: 4 }}>{T.yantra}: {m.yantra}</p>
-                <p style={{ fontSize: ".85rem" }}>{T.yantraHow}</p>
-                <div style={{ fontSize: "2rem", marginTop: 8 }}>🌿</div>
-                <p style={{ fontWeight: 700, marginTop: 4 }}>{T.jadi}: {m.jadi}</p>
-                <p style={{ fontSize: ".85rem" }}>{T.jadiHow}</p>
-              </div>
-            ))}
+            {[
+              { p: r.ratna1.planet, why: T.whyMoolank(r.nums.lifePath, gName(r.ratna1.planet, lang)) },
+              { p: r.ratna2.planet, why: T.whyRashi(rashiName(r.moonR, lang), gName(r.ratna2.planet, lang)) },
+            ].map((m, i) => {
+              const key = GRAHA_KEY[m.p];
+              const rd = RUDRAKSHA_GUIDE.find((x) => x.planet === m.p) || {};
+              const jd = JADI_GUIDE.find((x) => x.planet === m.p) || {};
+              const yn = YANTRA_GUIDE.find((x) => x.planet === m.p) || {};
+              return (
+                <div key={i} className="card" style={{ borderColor: "var(--gold)" }}>
+                  <span className="badge">{T.forYou}</span>
+                  <h3 style={{ marginTop: 8 }}>{gName(m.p, lang)} — {P.pg_upay}</h3>
+                  <p style={{ fontSize: ".85rem" }}>{m.why}</p>
+                  <div style={{ fontSize: "2rem", marginTop: 8 }}>📿</div>
+                  <p style={{ fontWeight: 700, marginTop: 4 }}>{T.rudra}: {rd.m || r.rudra1} ({gName(m.p, lang)})</p>
+                  <p style={{ fontSize: ".85rem" }}>{rd.fayda}</p>
+                  <p style={{ fontSize: ".85rem" }}>{P.pg_mantra}: {rd.mantra || PLANET_MANTRA[key]}</p>
+                  <p style={{ fontSize: ".85rem" }}>{T.rudraHow}</p>
+                  <div style={{ fontSize: "2rem", marginTop: 8 }}>🔯</div>
+                  <p style={{ fontWeight: 700, marginTop: 4 }}>{T.yantra}: {yn.yantra || r.yantra1} — {yn.sthapana}</p>
+                  <p style={{ fontSize: ".85rem" }}>{yn.fayda}</p>
+                  <p style={{ fontSize: ".85rem" }}>{T.yantraHow}</p>
+                  <div style={{ fontSize: "2rem", marginTop: 8 }}>🌿</div>
+                  <p style={{ fontWeight: 700, marginTop: 4 }}>{T.jadi}: {jd.herb || r.jadi1}</p>
+                  <p style={{ fontSize: ".85rem" }}>{jd.upyog} {jd.dharan}</p>
+                  <p style={{ fontSize: ".85rem" }}>{T.jadiHow}</p>
+                </div>
+              );
+            })}
           </div>
 
           <ShareButtons title="Report share karein" text={`${name.trim()} — Chandra ${r.moonR}, ${r.nak.name}! Apni report banao — Numerology VIP`} />
