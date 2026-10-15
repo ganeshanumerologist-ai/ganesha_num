@@ -25,6 +25,7 @@ import Muhurat from "./pages/Muhurat.jsx";
 import Reports from "./pages/Reports.jsx";
 import Charts from "./pages/Charts.jsx";
 import Loshu from "./pages/Loshu.jsx";
+import Remedies from "./pages/Remedies.jsx";
 import WhatsAppButton from "./components/WhatsAppButton.jsx";
 
 import Admin from "./pages/Admin.jsx";
@@ -79,6 +80,7 @@ export default function App() {
           <Route path="/reports" element={<Reports />} />
           <Route path="/charts" element={<Charts />} />
           <Route path="/loshu" element={<Loshu />} />
+          <Route path="/remedies" element={<Remedies />} />
           <Route path="/admin" element={<Admin />} />
         </Routes>
       </main>

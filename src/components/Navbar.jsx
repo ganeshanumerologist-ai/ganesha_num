@@ -28,6 +28,7 @@ export default function Navbar() {
     { to: "/gochar", label: "Gochar" },
     { to: "/muhurat", label: "Muhurat" },
     { to: "/reports", label: "Reports" },
+    { to: "/remedies", label: "Rudraksha-Yantra" },
     { to: "/daily", label: "Daily Lucky" },
     { to: "/calendar", label: "Calendar" },
     { to: "/blog", label: "Blog" },

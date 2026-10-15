@@ -43,6 +43,9 @@ const STR = {
     market: "Share-bazaar me nivesh apne jokhim par — expert salah zaroor lein. Ank-shastra disha deta hai, guarantee nahi. Dhan-yog Personal Year 8 me prabal.",
     business: "Vyapar ke liye Bhagyank 5-8 aur Moolank 1-3-5 shubh. Naya vyapar Personal Year 1 me shuru karein. Naam + tarikh bhejein, poore ank batata hoon.",
     mental: "Maan ki shanti ke liye dhyaan, gehri saans aur Somvaar ko chandra-darshan. Tension zyada ho to vishwas-patra se baat karein.",
+    rudra: "Rudraksha Moolank-grah se chunein: Surya-1/12, Chandra-2, Mangal-3, Budh-4, Guru-5, Shukra-6, Shani-7, Rahu-8, Ketu-9 mukhi. Poori guide Remedies page par hai.",
+    yantra: "Har grah ka apna yantra: Surya-Chandra-Mangal-Budh-Guru-Shukra-Shani-Rahu-Ketu. Sthapana-vidhi Remedies page par dekhein.",
+    jadi: "Navagraha samidha: Aak-Surya, Palash-Chandra, Khair-Mangal, Apamarg-Budh, Peepal-Guru, Gular-Shukra, Shami-Shani, Durva-Rahu, Kusha-Ketu. Detail Remedies page par.",
   },
   mr: {
     head: (n) => `${n} — संपूर्ण माहिती:`,
@@ -69,6 +72,9 @@ const STR = {
     market: "Share-bazarat guntavanuk swatachya jokhamivar — tadnyancha salla ghya. Ank-shastra disha dete, guarantee nahi.",
     business: "Vyaparasathi Bhagyank 5-8 aani Moolank 1-3-5 shubh. Nava vyapar Personal Year 1 madhe suru kara.",
     mental: "Manachya shantisathi dhyan, khol shvas aani Somvari chandra-darshan. Tension jast asel tar vishvasu vyaktishi bola.",
+    rudra: "Rudraksha Moolank-grahanusar nivda: Surya-1/12, Chandra-2, Mangal-3, Budh-4, Guru-5, Shukra-6, Shani-7, Rahu-8, Ketu-9 mukhi. Sampoorna margadarshan Remedies page var aahe.",
+    yantra: "Pratyek grahache swatache yantra aahe. Sthapana-vidhi Remedies page var paha.",
+    jadi: "Navagraha samidha: Aak-Surya, Palash-Chandra, Khair-Mangal, Apamarg-Budh, Peepal-Guru, Gular-Shukra, Shami-Shani, Durva-Rahu, Kusha-Ketu.",
   },
   en: {
     head: (n) => `${n} — your complete reading:`,
@@ -95,6 +101,9 @@ const STR = {
     market: "Invest at your own risk — take expert advice. Numerology shows direction, not guarantee.",
     business: "Bhagyank 5-8 and Moolank 1-3-5 suit business. Start new ventures in Personal Year 1.",
     mental: "For peace of mind: meditation, deep breathing and Monday moon-gazing. Talk to someone trusted if stressed.",
+    rudra: "Choose Rudraksha by Moolank planet: Sun-1/12, Moon-2, Mars-3, Mercury-4, Jupiter-5, Venus-6, Saturn-7, Rahu-8, Ketu-9 mukhi. Full guide on Remedies page.",
+    yantra: "Each planet has its yantra. See installation method on the Remedies page.",
+    jadi: "Navagraha samidha: Aak-Sun, Palash-Moon, Khair-Mars, Apamarg-Mercury, Peepal-Jupiter, Gular-Venus, Shami-Saturn, Durva-Rahu, Kusha-Ketu.",
   },
 };
 const S = (lang, key) => (STR[lang] && STR[lang][key] !== undefined ? STR[lang][key] : STR.en[key]);
@@ -187,6 +196,9 @@ function aiReply(text, lang) {
   if (/vyavasay|business|udyog|dukan|shop|व्यवसाय|उद्योग/.test(t)) return S(lang, "business");
   if (/mansik|tension|stress|depression|neend|मानसिक|तणाव/.test(t)) return S(lang, "mental");
   if (/paramarsh|advisor|salahkar|consultant/.test(t)) return S(lang, "book");
+  if (/rudraksh|rudraksha|रुद्राक्ष|pehna|pehno|dharan|wear|ghalave|घालावे/.test(t)) return S(lang, "rudra");
+  if (/yantra|यंत्र/.test(t)) return S(lang, "yantra");
+  if (/jadi|jadibooti|jadi-booti|herb|samidha|जड़ी|जडी/.test(t)) return S(lang, "jadi");
   if (/\baaj\b|today|daily|rashifal|innru|ivval/.test(t)) {
     const d = new Date();
     const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;

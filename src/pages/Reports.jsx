@@ -437,6 +437,9 @@ export default function Reports() {
           </div>
 
           <h2 id="ratna" style={{ marginTop: 24 }}>{T.secRatna}</h2>
+          <div style={{ marginTop: 8 }}>
+            <Link to="/remedies" className="btn secondary" style={{ padding: "8px 14px" }}>📿 Rudraksha · 🌿 Jadi · 🔯 Yantra Guide</Link>
+          </div>
           <div className="grid grid-2" style={{ marginTop: 12 }}>
             <div className="card">
               <h3>{P.pg_ratna}</h3>
