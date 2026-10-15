@@ -519,7 +519,7 @@ function vimshottari(birthdate, nak) {
 }
 
 export default function Reports() {
-  const { lang } = useLanguage();
+  const { lang, t } = useLanguage();
   const P = pgT(lang);
   const X = pgX(lang);
   const L = kundliT(lang);
