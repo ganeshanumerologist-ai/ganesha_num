@@ -16,6 +16,10 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
+export const isFirebaseConfigured =
+  !String(firebaseConfig.apiKey || "").includes("YOUR_API_KEY") &&
+  !String(firebaseConfig.projectId || "").includes("YOUR_PROJECT_ID");
+
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
