@@ -29,6 +29,7 @@ import {
   PLANET_MANTRA,
 } from "../data/jyotish.js";
 import CITIES, { STATES } from "../data/cities.js";
+import { loadProfile, saveProfile } from "../profile/profile.js";
 import ShareButtons from "../components/ShareButtons.jsx";
 
 const GRAHAS = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"];
@@ -182,10 +183,10 @@ export default function Reports() {
   const X = pgX(lang);
   const L = kundliT(lang);
   const T = TX[lang] || TX.en;
-  const [name, setName] = useState("");
-  const [dob, setDob] = useState("");
-  const [time, setTime] = useState("");
-  const [city, setCity] = useState("");
+  const [name, setName] = useState(() => loadProfile().name || "");
+  const [dob, setDob] = useState(() => loadProfile().birthdate || "");
+  const [time, setTime] = useState(() => loadProfile().time || "");
+  const [city, setCity] = useState(() => loadProfile().place || "");
   const [r, setR] = useState(null);
 
   // Bhasha badalne par result usi bhasha me dobara banao
@@ -201,6 +202,7 @@ export default function Reports() {
 
   const runCalc = () => {
     if (!name.trim() || !dob) return;
+    saveProfile({ name: name.trim(), birthdate: dob, time, place: city });
     const nums = allNumbers({ name: name.trim(), birthdate: dob });
     const jd = jdFromDateStr(dob, 12);
     const aya = lahiriAyanamsa(jd);

@@ -4,6 +4,7 @@ import { pgT } from "../i18n/jyotish_b.js";
 import kundliT from "../i18n/kundli.js";
 import { jdFromDateStr, sunTropical, moonTropical, lahiriAyanamsa, rev, nakshatraOf, tithiOf, karanaOf, taraBala } from "../utils/astro.js";
 import { MUHURAT_RULES } from "../data/jyotish.js";
+import { loadProfile, saveProfile } from "../profile/profile.js";
 import { VAAR } from "../data/daily.js";
 
 const KARYAS = Object.keys(MUHURAT_RULES);
@@ -50,13 +51,14 @@ export default function Muhurat() {
   const L = kundliT(lang);
   const T = TX[lang] || TX.en;
   const [karya, setKarya] = useState("vivah");
-  const [dob, setDob] = useState("");
+  const [dob, setDob] = useState(() => loadProfile().birthdate || "");
   const [date, setDate] = useState("");
   const [result, setResult] = useState(null);
 
   const check = (e) => {
     e.preventDefault();
     if (!dob || !date) return;
+    saveProfile({ birthdate: dob });
     const R = MUHURAT_RULES[karya];
     const jdE = jdFromDateStr(date, 12);
     const sun = sunTropical(jdE);

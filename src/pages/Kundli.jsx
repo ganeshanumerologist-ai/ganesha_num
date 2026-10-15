@@ -10,6 +10,7 @@ import { db } from "../firebase.js";
 import { collection, addDoc, serverTimestamp, query, where, getDocs } from "firebase/firestore";
 import ShareButtons from "../components/ShareButtons.jsx";
 import CitySelect from "../components/CitySelect.jsx";
+import { loadProfile, saveProfile } from "../profile/profile.js";
 
 function YearSection({ py, year, lang, L }) {
   if (!py) return null;
@@ -72,7 +73,9 @@ export default function Kundli() {
   const { lang } = useLanguage();
   const { user } = useAuth();
   const L = kundliT(lang);
-  const [form, setForm] = useState({ name: "", birthdate: "", time: "", place: "", gender: "male" });
+  const [form, setForm] = useState(() => ({
+    name: "", birthdate: "", time: "", place: "", gender: "male", ...loadProfile(),
+  }));
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
   const [saved, setSaved] = useState([]);
@@ -83,16 +86,11 @@ export default function Kundli() {
 
   // Pichhli baar bhara data wapas lao — dobara bharna na pade
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem("nv-last-kundli");
-      if (raw) {
-        const f = JSON.parse(raw);
-        if (f && (f.name || f.birthdate)) {
-          setForm((p) => ({ ...p, ...f }));
-          setRestored(true);
-        }
-      }
-    } catch { /* ignore */ }
+    const f = loadProfile();
+    if (f && (f.name || f.birthdate)) {
+      setForm((p) => ({ ...p, ...f }));
+      setRestored(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -118,7 +116,7 @@ export default function Kundli() {
     const day = Number(form.birthdate.split("-")[2]);
     const moolank = reduceNumber(day, true);
     const py = personalYear(form.birthdate, new Date().getFullYear());
-    try { localStorage.setItem("nv-last-kundli", JSON.stringify(form)); } catch { /* ignore */ }
+    saveProfile(form);
     setRestored(false);
     setResult({ ...form, name: form.name.trim(), nums, moolank, py });
   };
@@ -131,7 +129,6 @@ export default function Kundli() {
 
   const reset = () => {
     setForm({ name: "", birthdate: "", time: "", place: "", gender: "male" });
-    try { localStorage.removeItem("nv-last-kundli"); } catch { /* ignore */ }
     setRestored(false);
     setResult(null); setError(""); setMsg("");
   };

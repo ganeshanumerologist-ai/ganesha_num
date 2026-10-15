@@ -4,6 +4,7 @@ import { pgT } from "../i18n/jyotish_b.js";
 import { pgX } from "../i18n/jyotish_c.js";
 import kundliT from "../i18n/kundli.js";
 import { destinyNumber, luckyNumber, reduceNumber } from "../utils/numerology.js";
+import { loadProfile, saveProfile } from "../profile/profile.js";
 import ShareButtons from "../components/ShareButtons.jsx";
 
 const GRID = [[4, 9, 2], [3, 5, 7], [8, 1, 6]];
@@ -54,15 +55,16 @@ export default function Loshu() {
   const L = kundliT(lang);
   const U = UPAY[lang] || UPAY.en;
   const V = VAAR_TX[lang] || VAAR_TX.en;
-  const [name, setName] = useState("");
-  const [dob, setDob] = useState("");
-  const [gender, setGender] = useState("male");
-  const [mobile, setMobile] = useState("");
+  const [name, setName] = useState(() => loadProfile().name || "");
+  const [dob, setDob] = useState(() => loadProfile().birthdate || "");
+  const [gender, setGender] = useState(() => loadProfile().gender || "male");
+  const [mobile, setMobile] = useState(() => loadProfile().mobile || "");
   const [r, setR] = useState(null);
 
   const calc = (e) => {
     e.preventDefault();
     if (!dob) return;
+    saveProfile({ name: name.trim(), birthdate: dob, gender, mobile: mobile.trim() });
     const digits = dob.replace(/\D/g, "").split("").map(Number).filter((d) => d !== 0);
     const digitSum = digits.reduce((a, b) => a + b, 0);
     const counts = {};

@@ -6,6 +6,7 @@ import { useLanguage } from "../i18n/LanguageContext.jsx";
 import { useAuth } from "../auth/AuthContext.jsx";
 import { db } from "../firebase.js";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { loadProfile, saveProfile } from "../profile/profile.js";
 
 const LABELS = {
   lifePath: "Life Path Number",
@@ -20,9 +21,9 @@ const LABELS = {
 export default function Calculator() {
   const { t } = useLanguage();
   const { user } = useAuth();
-  const [name, setName] = useState("");
-  const [birthdate, setBirthdate] = useState("");
-  const [mobile, setMobile] = useState("");
+  const [name, setName] = useState(() => loadProfile().name || "");
+  const [birthdate, setBirthdate] = useState(() => loadProfile().birthdate || "");
+  const [mobile, setMobile] = useState(() => loadProfile().mobile || "");
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
   const [saved, setSaved] = useState("");
@@ -35,6 +36,7 @@ export default function Calculator() {
       return;
     }
     const nums = allNumbers({ name: name.trim(), birthdate, mobile: mobile.trim() });
+    saveProfile({ name: name.trim(), birthdate, mobile: mobile.trim() });
     setResult(nums);
   };
 

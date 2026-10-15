@@ -4,12 +4,13 @@ import { pgT } from "../i18n/jyotish_b.js";
 import kundliT from "../i18n/kundli.js";
 import { personalYear, universalYear } from "../data/forecast.js";
 import { yearMeaning, yearDetail, ycat } from "../data/varshphal_i18n.js";
+import { loadProfile, saveProfile } from "../profile/profile.js";
 
 export default function Forecast() {
   const { lang } = useLanguage();
   const P = pgT(lang);
   const L = kundliT(lang);
-  const [birthdate, setBirthdate] = useState("");
+  const [birthdate, setBirthdate] = useState(() => loadProfile().birthdate || "");
   const [year, setYear] = useState(new Date().getFullYear());
   const [result, setResult] = useState(null);
 
@@ -17,6 +18,7 @@ export default function Forecast() {
     e.preventDefault();
     const py = personalYear(birthdate, Number(year));
     if (!py) return;
+    saveProfile({ birthdate });
     setResult({ py, meaning: yearMeaning(py, lang), detail: yearDetail(py, lang), yc: ycat(lang), uy: universalYear(Number(year)) });
   };
 

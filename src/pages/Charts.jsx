@@ -7,6 +7,7 @@ import {
   navamshaSign, dashamshaSign, dwadasamshaSign, RASHIS,
 } from "../utils/astro.js";
 import CITIES, { STATES } from "../data/cities.js";
+import { loadProfile, saveProfile } from "../profile/profile.js";
 import NorthChart from "../components/NorthChart.jsx";
 
 const GRAHAS = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn", "Rahu", "Ketu"];
@@ -48,9 +49,9 @@ export default function Charts() {
   for (const g of GRAHAS) abbr[g] = (T.graha[g] || g).slice(0, 2);
   abbr.La = T.c_lagna.slice(0, 1);
 
-  const [dob, setDob] = useState("");
-  const [time, setTime] = useState("");
-  const [city, setCity] = useState("Delhi");
+  const [dob, setDob] = useState(() => loadProfile().birthdate || "");
+  const [time, setTime] = useState(() => loadProfile().time || "");
+  const [city, setCity] = useState(() => loadProfile().place || "Delhi");
   const [manualLat, setManualLat] = useState("");
   const [manualLon, setManualLon] = useState("");
   const [cityQ, setCityQ] = useState("");
@@ -59,6 +60,7 @@ export default function Charts() {
   const calc = (e) => {
     e.preventDefault();
     if (!dob || !time) return;
+    saveProfile({ birthdate: dob, time, place: city === "OTHER" ? "" : city });
     let lat, lon;
     if (city === "OTHER") {
       lat = Number(manualLat); lon = Number(manualLon);

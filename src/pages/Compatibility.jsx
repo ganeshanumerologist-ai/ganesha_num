@@ -3,6 +3,7 @@ import { useLanguage } from "../i18n/LanguageContext.jsx";
 import { pgT } from "../i18n/jyotish_b.js";
 import kundliT from "../i18n/kundli.js";
 import { personNumbers, matchScore } from "../utils/compatibility.js";
+import { loadProfile, saveProfile } from "../profile/profile.js";
 import ShareButtons from "../components/ShareButtons.jsx";
 
 const TX = {
@@ -61,7 +62,7 @@ export default function Compatibility() {
   const P = pgT(lang);
   const L = kundliT(lang);
   const T = TX[lang] || TX.en;
-  const [a, setA] = useState({ name: "", birthdate: "" });
+  const [a, setA] = useState(() => ({ name: loadProfile().name || "", birthdate: loadProfile().birthdate || "" }));
   const [b, setB] = useState({ name: "", birthdate: "" });
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
@@ -77,6 +78,7 @@ export default function Compatibility() {
     const nb = personNumbers({ name: b.name.trim(), birthdate: b.birthdate });
     const m = matchScore(na, nb);
     if (!m) { setError(T.err); return; }
+    saveProfile({ name: a.name.trim(), birthdate: a.birthdate });
     const v = T.verdict[m.verdict] || [m.verdict, m.advice];
     setResult({ na, nb, ...m, vTitle: v[0], vAdvice: v[1] });
   };

@@ -4,6 +4,7 @@ import { pgT } from "../i18n/jyotish_b.js";
 import kundliT from "../i18n/kundli.js";
 import { DAY_INFO, VAAR, universalDay, personalDay } from "../data/daily.js";
 import { dayInfo } from "../data/day_i18n.js";
+import { loadProfile, saveProfile } from "../profile/profile.js";
 import ShareButtons from "../components/ShareButtons.jsx";
 
 const VAAR_TX = {
@@ -22,7 +23,7 @@ export default function Daily() {
   const P = pgT(lang);
   const L = kundliT(lang);
   const V = VAAR_TX[lang] || VAAR;
-  const [birthdate, setBirthdate] = useState("");
+  const [birthdate, setBirthdate] = useState(() => loadProfile().birthdate || "");
   const [date, setDate] = useState(todayISO());
   const [result, setResult] = useState(null);
 
@@ -31,6 +32,7 @@ export default function Daily() {
     const u = universalDay(date);
     const p = birthdate ? personalDay(birthdate, date) : null;
     const main = p || u;
+    saveProfile({ birthdate });
     const d = new Date(date + "T00:00:00");
     setResult({ u, p, main, info: dayInfo(main, lang), vaar: V[d.getDay()] });
   };
