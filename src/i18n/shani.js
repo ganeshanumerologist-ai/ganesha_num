@@ -12,7 +12,7 @@ const EN = {
   sh_optional: "optional — for accurate Lagna",
   sh_submit: "Check My Sade Sati",
   sh_need_detail: "Please enter your name and date of birth.",
-  sh_no_lagna: "Birth time not given — Lagna calculated from Moon sign. Time de kar aur exact result milega.",
+  sh_no_lagna: "Birth time not given — Lagna calculated from Moon sign. Give time for a more exact result.",
 
   sh_your_points: "Your Shani Points",
   sh_baakut: "Shani Baakut (Ashtakavarga)",
