@@ -28,17 +28,21 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!user) return;
+    let alive = true;
+    const timer = setTimeout(() => { if (alive) setFetching(false); }, 20000);
     (async () => {
       try {
         const rSnap = await getDocs(query(collection(db, "readings"), where("uid", "==", user.uid)));
-        setReadings(byDateDesc(rSnap.docs.map((d) => ({ id: d.id, ...d.data() }))));
-      } catch { setReadings([]); }
+        if (alive) setReadings(byDateDesc(rSnap.docs.map((d) => ({ id: d.id, ...d.data() }))));
+      } catch { if (alive) setReadings([]); }
       try {
         const bSnap = await getDocs(query(collection(db, "bookings"), where("uid", "==", user.uid)));
-        setBookings(byDateDesc(bSnap.docs.map((d) => ({ id: d.id, ...d.data() }))));
-      } catch { setBookings([]); }
-      setFetching(false);
+        if (alive) setBookings(byDateDesc(bSnap.docs.map((d) => ({ id: d.id, ...d.data() }))));
+      } catch { if (alive) setBookings([]); }
+      if (alive) setFetching(false);
+      clearTimeout(timer);
     })();
+    return () => { alive = false; clearTimeout(timer); };
   }, [user]);
 
   const remove = async (id) => {

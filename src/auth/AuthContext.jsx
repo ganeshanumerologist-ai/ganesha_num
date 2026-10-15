@@ -14,6 +14,10 @@ import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 const AuthContext = createContext();
 const googleProvider = new GoogleAuthProvider();
 
+// Firestore atak jaye to app na atke — 15 sec timeout
+const withTimeout = (p, ms = 15000) =>
+  Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), ms))]);
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
@@ -25,15 +29,19 @@ export function AuthProvider({ children }) {
       if (u) {
         try {
           const ref = doc(db, "users", u.uid);
-          const snap = await getDoc(ref);
+          const snap = await withTimeout(getDoc(ref));
           if (!snap.exists()) {
-            await setDoc(ref, {
+            await withTimeout(setDoc(ref, {
               name: u.displayName || "",
               email: u.email || "",
               createdAt: serverTimestamp(),
-            });
+            })).catch(() => {});
           }
-          setProfile((await getDoc(ref)).data() || null);
+          try {
+            setProfile((await withTimeout(getDoc(ref))).data() || null);
+          } catch {
+            setProfile(null);
+          }
         } catch {
           setProfile(null);
         }
@@ -49,24 +57,29 @@ export function AuthProvider({ children }) {
 
   const signup = async (name, email, password) => {
     const cred = await createUserWithEmailAndPassword(auth, email, password);
-    await updateProfile(cred.user, { displayName: name });
-    await setDoc(doc(db, "users", cred.user.uid), {
-      name, email, createdAt: serverTimestamp(),
-    });
+    // Profile save fail ho to bhi signup safal rahe — atakna nahi chahiye
+    try {
+      await withTimeout(updateProfile(cred.user, { displayName: name }), 10000);
+      await withTimeout(setDoc(doc(db, "users", cred.user.uid), {
+        name, email, createdAt: serverTimestamp(),
+      }), 10000);
+    } catch { /* ignore — login phir bhi safal */ }
     return cred;
   };
 
   const googleLogin = async () => {
     const cred = await signInWithPopup(auth, googleProvider);
-    const ref = doc(db, "users", cred.user.uid);
-    const snap = await getDoc(ref);
-    if (!snap.exists()) {
-      await setDoc(ref, {
-        name: cred.user.displayName || "",
-        email: cred.user.email || "",
-        createdAt: serverTimestamp(),
-      });
-    }
+    try {
+      const ref = doc(db, "users", cred.user.uid);
+      const snap = await withTimeout(getDoc(ref));
+      if (!snap.exists()) {
+        await withTimeout(setDoc(ref, {
+          name: cred.user.displayName || "",
+          email: cred.user.email || "",
+          createdAt: serverTimestamp(),
+        }));
+      }
+    } catch { /* ignore */ }
     return cred;
   };
 
