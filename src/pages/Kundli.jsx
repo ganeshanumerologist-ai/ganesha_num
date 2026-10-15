@@ -74,6 +74,10 @@ export default function Kundli() {
 
   const open = (e) => {
     e.preventDefault();
+    runOpen();
+  };
+
+  const runOpen = () => {
     setError(""); setMsg("");
     if (!form.name.trim() || !form.birthdate) { setError(L.k_fill); return; }
     const nums = allNumbers({ name: form.name.trim(), birthdate: form.birthdate });
@@ -83,8 +87,13 @@ export default function Kundli() {
     try { localStorage.setItem("nv-last-kundli", JSON.stringify(form)); } catch { /* ignore */ }
     setRestored(false);
     setResult({ ...form, name: form.name.trim(), nums, moolank, py });
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  // Bhasha badalne par khuli kundli usi bhasha me dobara banao
+  useEffect(() => {
+    if (result && form.name.trim() && form.birthdate) runOpen();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lang]);
 
   const reset = () => {
     setForm({ name: "", birthdate: "", time: "", place: "", gender: "male" });

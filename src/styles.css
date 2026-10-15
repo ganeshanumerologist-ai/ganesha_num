@@ -103,6 +103,13 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 }
 .brand { font-weight: 800; font-size: 1.3rem; display: flex; align-items: center; }
 .lang-select { width: auto; padding: 8px 10px; font-size: .85rem; margin-left: 6px; }
+.lang-wrap {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 2px solid var(--gold); border-radius: 999px; padding: 4px 6px 4px 12px;
+  background: rgba(251,191,36,.12); font-size: .9rem; font-weight: 700; color: var(--gold);
+}
+.lang-wrap .lang-select { border: none; background: transparent; margin-left: 0; font-weight: 700; color: var(--text); cursor: pointer; }
+.lang-wrap .lang-select option { color: #000; }
 .navbar .inner { gap: 12px; flex-wrap: wrap; }
 .footer { border-top: 1px solid var(--border); padding: 30px 20px; text-align: center; color: var(--muted); font-size: .85rem; }
 .hero { padding: 60px 0 40px; text-align: center; }

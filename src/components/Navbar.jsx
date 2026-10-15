@@ -99,16 +99,18 @@ export default function Navbar() {
               {l.label}
             </Link>
           ))}
-          <select
-            value={lang}
-            onChange={(e) => setLang(e.target.value)}
-            className="lang-select"
-            title={t("language")}
-          >
-            {LANGUAGES.map((l) => (
-              <option key={l.code} value={l.code}>{l.native}</option>
-            ))}
-          </select>
+          <span className="lang-wrap" title={t("language")}>
+            🌐 {t("language")}
+            <select
+              value={lang}
+              onChange={(e) => setLang(e.target.value)}
+              className="lang-select"
+            >
+              {LANGUAGES.map((l) => (
+                <option key={l.code} value={l.code}>{l.native}</option>
+              ))}
+            </select>
+          </span>
           {user ? (
             <button className="btn secondary" style={{ padding: "8px 14px" }} onClick={onLogout}>
               {t("nav_logout")}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../i18n/LanguageContext.jsx";
 import { pgT } from "../i18n/jyotish_b.js";
@@ -178,8 +178,18 @@ export default function Reports() {
   const [city, setCity] = useState("");
   const [r, setR] = useState(null);
 
+  // Bhasha badalne par result usi bhasha me dobara banao
+  useEffect(() => {
+    if (r && name.trim() && dob) runCalc();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lang]);
+
   const calc = (e) => {
     e.preventDefault();
+    runCalc();
+  };
+
+  const runCalc = () => {
     if (!name.trim() || !dob) return;
     const nums = allNumbers({ name: name.trim(), birthdate: dob });
     const jd = jdFromDateStr(dob, 12);
