@@ -94,4 +94,52 @@ export function yearMeaning(py, lang) {
   const T = YEAR_MEAN[lang] || YEAR_MEAN.en;
   return T[py] || YEAR_MEAN.en[py];
 }
+
+// Varshphal vistar — padhai, shaadi, share, business, samman (hi/mr/en)
+const YDET_HI = [
+  { edu: "Naya course shuru karne ka uttam saal.", mar: "Naye rishte; shaadi ki baatcheet shuru ho sakti hai.", share: "Lambe samay ka nivesh shuru karein.", biz: "Naya business shuru karne ka sabse shubh saal.", rep: "Nayi pehchan banegi." },
+  { edu: "Sahyog se padhai; group-study labhdayak.", mar: "Rishte gehre honge; sagaai yog.", share: "Dhairya rakhein; SIP jaari rakhein.", biz: "Sajhedari me soch-samajhkar aage badhein.", rep: "Vinamrata se sammaan milega." },
+  { edu: "Rachnatmak vishayon me safalta.", mar: "Mangal-karya me khushi; prem-parinay yog.", share: "Chhota-mota labh; afwah se bachein.", biz: "Prachar-marketing se vyapar badhega.", rep: "Samajik mel-jol se pratishtha." },
+  { edu: "Mehnat ka saal; niyamit abhyas safalta dega.", mar: "Parivarik sahamati se baat aage badhegi.", share: "Jokhim na lein; surakshit nivesh rakhein.", biz: "Neenv majboot karein; vistaar agle saal.", rep: "Karmathata ki tareef hogi." },
+  { edu: "Naya vishay/shahar badlav sambhav.", mar: "Achanak prastaav; soch-samajhkar haan kahein.", share: "Utaar-chadhav; stop-loss zaroor lagayein.", biz: "Naye prayog ka saal; yatra se labh.", rep: "Badlav se pehchan banegi." },
+  { edu: "Kala-sangeet padhai me safalta.", mar: "Vivah ka sabse shubh saal.", share: "Sthir nivesh labhdayak.", biz: "Parivarik vyapar phalega.", rep: "Ghar-samaj dono me sammaan." },
+  { edu: "Shodh-adhyan ka saal; gehrai se padhein.", mar: "Jaldi na karein; rishte par vichar karein.", share: "Bazaar se door rahein; adhyayan karein.", biz: "Naya nivesh rokein; yojana banayein.", rep: "Gyaan se pratishtha milegi." },
+  { edu: "Pratiyogita me safalta.", mar: "Dhoom-dhaam se vivah yog.", share: "Dhan-yog prabal; samajh se nivesh karein.", biz: "Vistaar ka saal; bada faisla shubh.", rep: "Pad-pratishtha charam par." },
+  { edu: "Purani padhai poori karein.", mar: "Purane rishte sudhrenge; naye me jaldbazi na karein.", share: "Munafa book karein; naya paisa na lagayein.", biz: "Hisaab niptayein; udhaar vasool karein.", rep: "Seva-bhaav se sammaan." },
+];
+const YDET_MR = [
+  { edu: "Nava course suru karnyache uttam varsha.", mar: "Nave nate; lagna-bolani suru hou shakte.", share: "Dirghakalin guntavanuk suru kara.", biz: "Nava vyapar suru karnyache sarvottam varsha.", rep: "Navi olakh banel." },
+  { edu: "Sahkaryane abhyas; group-study labhdayak.", mar: "Nati khol hotil; sakharpuda yog.", share: "Dhirya theva; SIP chalu theva.", biz: "Bhagidarit vichar karoon pudhe ja.", rep: "Vinamratene sanman milel." },
+  { edu: "Rachnatmak vishayat yash.", mar: "Mangal-karyat anand; prem-vivah yog.", share: "Chhota-motha labh; afvapasoon dura raha.", biz: "Prachar-marketingne vyapar vadhel.", rep: "Samajik melavyanmule pratishtha." },
+  { edu: "Mehnatiche varsha; niyamit abhyas yash deil.", mar: "Kutumb-sammatine goshta pudhe jail.", share: "Jokhim gheu naka.", biz: "Paya majboot kara.", rep: "Kashtachi tareef hoil." },
+  { edu: "Nava vishay/shahar badal shakya.", mar: "Achanak prastav; vichar karoon ho mhano.", share: "Chadh-utaar; stop-loss lava.", biz: "Navya prayoganche varsha.", rep: "Badalane olakh banel." },
+  { edu: "Kala-sangeet abhyasat yash.", mar: "Lagnache sarvottam varsha.", share: "Sthir guntavanuk labhdayak.", biz: "Kautumbik vyapar phalel.", rep: "Ghar-samajat sanman." },
+  { edu: "Sanshodhan-abhyasache varsha.", mar: "Ghai karu naka.", share: "Bazarapasoon dura raha.", biz: "Navi guntavanuk thambva.", rep: "Dnyanane pratishtha milel." },
+  { edu: "Spardhet yash.", mar: "Dhoom-dhadakyat vivah yog.", share: "Dhan-yog prabal.", biz: "Vistarache varsha.", rep: "Pad-pratishtha shikharavar." },
+  { edu: "Juni padhai purna kara.", mar: "Juni nati sudhartil.", share: "Napha book kara.", biz: "Hisheb nikta kara.", rep: "Seva-bhavane sanman." },
+];
+const YDET_EN = [
+  { edu: "Best year to start a new course.", mar: "New bonds; marriage talks may begin.", share: "Start long-term investment.", biz: "Best year to start business.", rep: "A new identity forms." },
+  { edu: "Study with support; group study pays.", mar: "Bonds deepen; engagement yog.", share: "Stay patient; continue SIP.", biz: "Move ahead carefully in partnerships.", rep: "Humility earns respect." },
+  { edu: "Success in creative subjects.", mar: "Joy in family events; love-marriage yog.", share: "Small gains; avoid rumours.", biz: "Publicity-marketing grows business.", rep: "Socialising builds prestige." },
+  { edu: "Year of effort; regular study wins.", mar: "Talks progress with family consent.", share: "Avoid risk; stay safe.", biz: "Strengthen foundations.", rep: "Hard work gets praised." },
+  { edu: "New subject/city change possible.", mar: "Sudden proposal; decide thoughtfully.", share: "Volatile; always use stop-loss.", biz: "Year of experiments; gains via travel.", rep: "Change builds identity." },
+  { edu: "Success in arts-music studies.", mar: "Most auspicious year for marriage.", share: "Stable investments pay.", biz: "Family business blooms.", rep: "Honour at home and society." },
+  { edu: "Year of research; study deeply.", mar: "Don't rush; reflect on relations.", share: "Stay away from markets.", biz: "Hold new investments; plan.", rep: "Knowledge earns prestige." },
+  { edu: "Win competitions.", mar: "Grand marriage yog.", share: "Strong wealth yog; invest wisely.", biz: "Year of expansion.", rep: "Rank and fame peak." },
+  { edu: "Finish old studies.", mar: "Old bonds heal; don't rush new ones.", share: "Book profits; invest no fresh money.", biz: "Settle accounts.", rep: "Service earns honour." },
+];
+const YDET = { hi: YDET_HI, mr: YDET_MR, en: YDET_EN };
+export function yearDetail(py, lang) {
+  const T = YDET[lang] || YDET.en;
+  return T[py - 1] || YDET.en[py - 1];
+}
+export const YCAT = {
+  hi: { edu: "पढ़ाई", mar: "विवाह", share: "शेयर बाज़ार", biz: "व्यापार", rep: "सम्मान", health: "सेहत", color: "शुभ रंग", adv: "सलाह" },
+  mr: { edu: "अभ्यास", mar: "विवाह", share: "शेअर बाजार", biz: "व्यापार", rep: "सन्मान", health: "आरोग्य", color: "शुभ रंग", adv: "सल्ला" },
+  en: { edu: "Studies", mar: "Marriage", share: "Stock Market", biz: "Business", rep: "Prestige", health: "Health", color: "Lucky Colour", adv: "Advice" },
+};
+export function ycat(lang) {
+  return YCAT[lang] || YCAT.en;
+}
 export default YEAR_MEAN;

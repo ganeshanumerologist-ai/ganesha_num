@@ -3,12 +3,46 @@ import { useLanguage } from "../i18n/LanguageContext.jsx";
 import { useAuth } from "../auth/AuthContext.jsx";
 import kundliT from "../i18n/kundli.js";
 import { getMeaning } from "../data/meanings_all.js";
+import { yearMeaning, yearDetail, ycat } from "../data/varshphal_i18n.js";
 import { allNumbers, reduceNumber } from "../utils/numerology.js";
 import { personalYear } from "../data/forecast.js";
 import { db } from "../firebase.js";
 import { collection, addDoc, serverTimestamp, query, where, getDocs } from "firebase/firestore";
 import ShareButtons from "../components/ShareButtons.jsx";
 import CitySelect from "../components/CitySelect.jsx";
+
+function YearSection({ py, year, lang, L }) {
+  if (!py) return null;
+  const m = yearMeaning(py, lang);
+  const d = yearDetail(py, lang);
+  const Y = ycat(lang);
+  return (
+    <div className="card">
+      <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+        <div className="num" style={{ fontSize: "3rem", fontWeight: 800, lineHeight: 1 }}>
+          <span className="text-gradient">{py}</span>
+        </div>
+        <div>
+          <h3>{L.k_year} ({year})</h3>
+          <p style={{ fontWeight: 700 }}>{m.t}</p>
+        </div>
+      </div>
+      <p style={{ marginTop: 10 }}>{m.d}</p>
+      <div style={{ marginTop: 10 }}>
+        <div className="kv"><span className="k">{Y.edu}</span><span className="v">{d.edu}</span></div>
+        <div className="kv"><span className="k">{Y.mar}</span><span className="v">{d.mar}</span></div>
+        <div className="kv"><span className="k">{L.k_career}</span><span className="v">{m.c}</span></div>
+        <div className="kv"><span className="k">{L.k_love}</span><span className="v">{m.love}</span></div>
+        <div className="kv"><span className="k">{Y.health}</span><span className="v">{m.h}</span></div>
+        <div className="kv"><span className="k">{Y.share}</span><span className="v">{d.share}</span></div>
+        <div className="kv"><span className="k">{Y.biz}</span><span className="v">{d.biz}</span></div>
+        <div className="kv"><span className="k">{Y.rep}</span><span className="v">{d.rep}</span></div>
+        <div className="kv"><span className="k">{Y.color}</span><span className="v">{m.col}</span></div>
+        <div className="kv"><span className="k">{Y.adv}</span><span className="v">{m.adv}</span></div>
+      </div>
+    </div>
+  );
+}
 
 function Section({ num, label, meaning, L }) {
   if (num == null || !meaning) return null;
@@ -209,7 +243,7 @@ export default function Kundli() {
             <Section num={result.nums.destiny} label={L.k_naamank} meaning={getMeaning(result.nums.destiny, lang)} L={L} />
             <Section num={result.nums.soulUrge} label={L.k_soul} meaning={getMeaning(result.nums.soulUrge, lang)} L={L} />
             <Section num={result.nums.personality} label={L.k_persona} meaning={getMeaning(result.nums.personality, lang)} L={L} />
-            <Section num={result.py} label={`${L.k_year} (${new Date().getFullYear()})`} meaning={getMeaning(result.py, lang)} L={L} />
+            <YearSection py={result.py} year={new Date().getFullYear()} lang={lang} L={L} />
           </div>
 
           <ShareButtons title={L.k_title} text={`${result.name} — ${L.k_moolank} ${result.moolank}, ${L.k_bhagyank} ${result.nums.lifePath}`} />

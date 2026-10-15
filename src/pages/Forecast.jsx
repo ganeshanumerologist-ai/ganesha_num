@@ -3,7 +3,7 @@ import { useLanguage } from "../i18n/LanguageContext.jsx";
 import { pgT } from "../i18n/jyotish_b.js";
 import kundliT from "../i18n/kundli.js";
 import { personalYear, universalYear } from "../data/forecast.js";
-import { yearMeaning } from "../data/varshphal_i18n.js";
+import { yearMeaning, yearDetail, ycat } from "../data/varshphal_i18n.js";
 
 export default function Forecast() {
   const { lang } = useLanguage();
@@ -17,7 +17,7 @@ export default function Forecast() {
     e.preventDefault();
     const py = personalYear(birthdate, Number(year));
     if (!py) return;
-    setResult({ py, meaning: yearMeaning(py, lang), uy: universalYear(Number(year)) });
+    setResult({ py, meaning: yearMeaning(py, lang), detail: yearDetail(py, lang), yc: ycat(lang), uy: universalYear(Number(year)) });
   };
 
   return (
@@ -50,9 +50,15 @@ export default function Forecast() {
           </div>
           <div className="grid grid-2" style={{ marginTop: 20 }}>
             <div className="card"><h3>{P.pg_varshik}</h3><p style={{ marginTop: 8 }}>{result.meaning.d}</p></div>
+            <div className="card"><h3>{result.yc.edu}</h3><p style={{ marginTop: 8 }}>{result.detail.edu}</p></div>
+            <div className="card"><h3>{result.yc.mar}</h3><p style={{ marginTop: 8 }}>{result.detail.mar}</p></div>
             <div className="card"><h3>{P.pg_career}</h3><p style={{ marginTop: 8 }}>{result.meaning.c}</p></div>
             <div className="card"><h3>{L.k_love}</h3><p style={{ marginTop: 8 }}>{result.meaning.love}</p></div>
-            <div className="card"><h3>{L.k_upay}</h3><p style={{ marginTop: 8 }}>{result.meaning.adv}</p></div>
+            <div className="card"><h3>{result.yc.health}</h3><p style={{ marginTop: 8 }}>{result.meaning.h}</p></div>
+            <div className="card"><h3>{result.yc.share}</h3><p style={{ marginTop: 8 }}>{result.detail.share}</p></div>
+            <div className="card"><h3>{result.yc.biz}</h3><p style={{ marginTop: 8 }}>{result.detail.biz}</p></div>
+            <div className="card"><h3>{result.yc.rep}</h3><p style={{ marginTop: 8 }}>{result.detail.rep}</p></div>
+            <div className="card"><h3>{result.yc.color} / {L.k_upay}</h3><p style={{ marginTop: 8 }}>{result.meaning.col} · {result.meaning.adv}</p></div>
           </div>
           <div className="card" style={{ marginTop: 20 }}>
             <h3>{P.pg_year} 1–9</h3>
