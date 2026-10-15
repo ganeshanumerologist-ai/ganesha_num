@@ -1,0 +1,12 @@
+{
+  "name": "Numerology VIP",
+  "short_name": "NumerologyVIP",
+  "description": "Unlock your destiny with numerology, expert guidance and AI chat.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b1020",
+  "theme_color": "#8b5cf6",
+  "icons": [
+    { "src": "/logo.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

@@ -1,0 +1,211 @@
+import React, { useEffect, useState } from "react";
+import { useLanguage } from "../i18n/LanguageContext.jsx";
+import { useAuth } from "../auth/AuthContext.jsx";
+import kundliT from "../i18n/kundli.js";
+import { getMeaning } from "../data/meanings_all.js";
+import { allNumbers, reduceNumber } from "../utils/numerology.js";
+import { personalYear } from "../data/forecast.js";
+import { db } from "../firebase.js";
+import { collection, addDoc, serverTimestamp, query, where, getDocs } from "firebase/firestore";
+import ShareButtons from "../components/ShareButtons.jsx";
+import CitySelect from "../components/CitySelect.jsx";
+
+function Section({ num, label, meaning, L }) {
+  if (num == null || !meaning) return null;
+  return (
+    <div className="card">
+      <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+        <div className="num" style={{ fontSize: "3rem", fontWeight: 800, lineHeight: 1 }}>
+          <span className="text-gradient">{num}</span>
+        </div>
+        <div>
+          <h3>{label}</h3>
+          <p style={{ fontWeight: 700 }}>{meaning.title}</p>
+          <p style={{ fontSize: ".85rem" }}>{meaning.keywords}</p>
+        </div>
+      </div>
+      <p style={{ marginTop: 10 }}>{meaning.desc}</p>
+      <div style={{ marginTop: 10 }}>
+        <div className="kv"><span className="k">{L.k_career}</span><span className="v">{meaning.career}</span></div>
+        <div className="kv"><span className="k">{L.k_love}</span><span className="v">{meaning.love}</span></div>
+        <div className="kv"><span className="k">{L.k_upay}</span><span className="v">{meaning.upay}</span></div>
+      </div>
+    </div>
+  );
+}
+
+export default function Kundli() {
+  const { lang } = useLanguage();
+  const { user } = useAuth();
+  const L = kundliT(lang);
+  const [form, setForm] = useState({ name: "", birthdate: "", time: "", place: "", gender: "male" });
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState("");
+  const [saved, setSaved] = useState([]);
+  const [msg, setMsg] = useState("");
+  const [restored, setRestored] = useState(false);
+
+  const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
+
+  // Pichhli baar bhara data wapas lao — dobara bharna na pade
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("nv-last-kundli");
+      if (raw) {
+        const f = JSON.parse(raw);
+        if (f && (f.name || f.birthdate)) {
+          setForm((p) => ({ ...p, ...f }));
+          setRestored(true);
+        }
+      }
+    } catch { /* ignore */ }
+  }, []);
+
+  useEffect(() => {
+    if (!user) { setSaved([]); return; }
+    (async () => {
+      try {
+        const snap = await getDocs(query(collection(db, "readings"), where("uid", "==", user.uid)));
+        const all = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        setSaved(all.filter((r) => r.kind === "kundli"));
+      } catch { /* ignore */ }
+    })();
+  }, [user]);
+
+  const open = (e) => {
+    e.preventDefault();
+    setError(""); setMsg("");
+    if (!form.name.trim() || !form.birthdate) { setError(L.k_fill); return; }
+    const nums = allNumbers({ name: form.name.trim(), birthdate: form.birthdate });
+    const day = Number(form.birthdate.split("-")[2]);
+    const moolank = reduceNumber(day, true);
+    const py = personalYear(form.birthdate, new Date().getFullYear());
+    try { localStorage.setItem("nv-last-kundli", JSON.stringify(form)); } catch { /* ignore */ }
+    setRestored(false);
+    setResult({ ...form, name: form.name.trim(), nums, moolank, py });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const reset = () => {
+    setForm({ name: "", birthdate: "", time: "", place: "", gender: "male" });
+    try { localStorage.removeItem("nv-last-kundli"); } catch { /* ignore */ }
+    setRestored(false);
+    setResult(null); setError(""); setMsg("");
+  };
+
+  const save = async () => {
+    if (!user) { setMsg(L.k_need_login); return; }
+    try {
+      const ref = await addDoc(collection(db, "readings"), {
+        uid: user.uid, kind: "kundli",
+        name: result.name, birthdate: result.birthdate,
+        time: result.time, place: result.place, gender: result.gender,
+        numbers: { moolank: result.moolank, ...result.nums, personalYear: result.py },
+        createdAt: serverTimestamp(),
+      });
+      setSaved((p) => [{ id: ref.id, name: result.name, birthdate: result.birthdate, time: result.time, place: result.place, gender: result.gender, kind: "kundli" }, ...p]);
+      setMsg(L.k_saved);
+    } catch (e) {
+      setMsg(e.message);
+    }
+  };
+
+  const openSaved = (s) => {
+    const nums = allNumbers({ name: s.name, birthdate: s.birthdate });
+    const day = Number((s.birthdate || "").split("-")[2]);
+    setResult({
+      name: s.name, birthdate: s.birthdate, time: s.time || "", place: s.place || "", gender: s.gender || "male",
+      nums, moolank: reduceNumber(day || 0, true) || null, py: personalYear(s.birthdate, new Date().getFullYear()),
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const genderLabel = result
+    ? result.gender === "female" ? L.k_female : result.gender === "other" ? L.k_other : L.k_male
+    : "";
+
+  return (
+    <div>
+      {!result ? (
+        <>
+          <h1 className="text-gradient">{L.k_title}</h1>
+          <p>{L.k_sub}</p>
+          {user && saved.length > 0 && (
+            <div className="card" style={{ marginTop: 16 }}>
+              <label className="label">{L.k_open_saved}</label>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                {saved.map((s) => (
+                  <button key={s.id} className="btn secondary" style={{ padding: "8px 14px" }} onClick={() => openSaved(s)}>
+                    {s.name} · {s.birthdate}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+          <div className="card" style={{ marginTop: 16 }}>
+            <form onSubmit={open} className="grid grid-2">
+              <div>
+                <label className="label">{L.k_name} *</label>
+                <input className="input" value={form.name} onChange={(e) => set("name", e.target.value)} />
+              </div>
+              <div>
+                <label className="label">{L.k_dob} *</label>
+                <input className="input" type="date" value={form.birthdate} onChange={(e) => set("birthdate", e.target.value)} />
+              </div>
+              <div>
+                <label className="label">{L.k_time}</label>
+                <input className="input" type="time" value={form.time} onChange={(e) => set("time", e.target.value)} />
+              </div>
+              <div>
+                <label className="label">{L.k_place}</label>
+                <CitySelect value={form.place} onChange={(v) => set("place", v)} placeholder="Type karke sheher chunein..." />
+              </div>
+              <div>
+                <label className="label">{L.k_gender}</label>
+                <select className="input" value={form.gender} onChange={(e) => set("gender", e.target.value)}>
+                  <option value="male">{L.k_male}</option>
+                  <option value="female">{L.k_female}</option>
+                  <option value="other">{L.k_other}</option>
+                </select>
+              </div>
+              <div style={{ display: "flex", alignItems: "end" }}>
+                <button className="btn" type="submit">{L.k_open}</button>
+              </div>
+            </form>
+            {restored && <p style={{ color: "var(--accent-2)", marginTop: 10, fontSize: ".85rem" }}>Pichhli baar ka data bhar diya hai — badalna ho to badal lein.</p>}
+            {error && <p style={{ color: "var(--danger)", marginTop: 10 }}>{error}</p>}
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="card number-card">
+            <span className="badge">{L.k_title}</span>
+            <h1 style={{ marginTop: 10 }}>{result.name}</h1>
+            <p style={{ marginTop: 6 }}>
+              {result.birthdate}
+              {result.time ? ` · ${result.time}` : ""}
+              {result.place ? ` · ${result.place}` : ""}
+              {` · ${genderLabel}`}
+            </p>
+            <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 14, flexWrap: "wrap" }}>
+              <button className="btn secondary" onClick={reset}>{L.k_new}</button>
+              <button className="btn secondary" onClick={save}>{L.k_save}</button>
+            </div>
+            {msg && <p style={{ color: "var(--accent-2)", marginTop: 10 }}>{msg}</p>}
+          </div>
+
+          <div className="grid grid-2" style={{ marginTop: 20 }}>
+            <Section num={result.moolank} label={L.k_moolank} meaning={getMeaning(result.moolank, lang)} L={L} />
+            <Section num={result.nums.lifePath} label={L.k_bhagyank} meaning={getMeaning(result.nums.lifePath, lang)} L={L} />
+            <Section num={result.nums.destiny} label={L.k_naamank} meaning={getMeaning(result.nums.destiny, lang)} L={L} />
+            <Section num={result.nums.soulUrge} label={L.k_soul} meaning={getMeaning(result.nums.soulUrge, lang)} L={L} />
+            <Section num={result.nums.personality} label={L.k_persona} meaning={getMeaning(result.nums.personality, lang)} L={L} />
+            <Section num={result.py} label={`${L.k_year} (${new Date().getFullYear()})`} meaning={getMeaning(result.py, lang)} L={L} />
+          </div>
+
+          <ShareButtons title={L.k_title} text={`${result.name} — ${L.k_moolank} ${result.moolank}, ${L.k_bhagyank} ${result.nums.lifePath}`} />
+        </>
+      )}
+    </div>
+  );
+}

@@ -1,0 +1,72 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===== Apna admin email yahan bhi likhein (quotes ke andar, comma se alag) =====
+    function adminEmails() {
+      return ["admin@example.com"];
+    }
+    function isAdminEmail() {
+      return request.auth != null && request.auth.token.email in adminEmails();
+    }
+    function isAdmin() {
+      return isAdminEmail()
+        || (request.auth != null && exists(/databases/$(database)/documents/admins/$(request.auth.uid)));
+    }
+
+    match /admins/{uid} {
+      // khud ka admin doc banana: sirf allowlist email wale
+      allow create: if request.auth != null && request.auth.uid == uid && isAdminEmail();
+      allow read: if request.auth != null && (request.auth.uid == uid || isAdmin());
+      allow update, delete: if isAdmin();
+    }
+
+    match /inquiries/{doc} {
+      allow create: if request.resource.data.keys().hasAll(['name','email','message']);
+      allow read, delete: if isAdmin();
+      allow update: if false;
+    }
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+    match /readings/{doc} {
+      allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
+      allow read, delete: if request.auth != null && (resource.data.uid == request.auth.uid || isAdmin());
+      allow update: if false;
+    }
+    match /bookings/{doc} {
+      allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
+      allow read: if request.auth != null && (resource.data.uid == request.auth.uid || isAdmin());
+      allow update: if request.auth != null && (resource.data.uid == request.auth.uid || isAdmin());
+      allow delete: if isAdmin();
+    }
+    match /experts/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /expert_photos/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /gallery/{doc} {
+      allow read: if true;
+      allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if request.auth != null && (resource.data.uid == request.auth.uid || isAdmin());
+    }
+    match /settings/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /reviews/{doc} {
+      allow read: if true;
+      allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+    match /posts/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
