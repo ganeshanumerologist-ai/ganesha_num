@@ -14,7 +14,35 @@ const byDateDesc = (arr) => [...arr].sort((a, b) => {
 
 export default function Dashboard() {
   const { user, loading } = useAuth();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const T = {
+    hi: {
+      welcome: "Namaste", bookings: "Meri Bookings", noBooking: "Abhi koi booking nahi. Experts page se session book karein.",
+      noReading: "Abhi kuch save nahi hai. Calculator par jayein.", del: "Delete", confirm: "Delete karein?",
+      errFile: "Image file chunein.", kundliDone: "Kundli jud gayi! Expert session me ise dekhega.",
+      status: "Status", paid: "Paid", unpaid: "Unpaid", kundli: "Kundli", view: "Dekhein", noKundli: "Nahi judi",
+      uploading: "Upload ho raha hai...", change: "Kundli Badlein", attach: "Kundli Jodein",
+    },
+    mr: {
+      welcome: "Namaskar", bookings: "Mazhya Bookings", noBooking: "Ajun booking nahi. Experts page varoon session book kara.",
+      noReading: "Ajun kahi save nahi. Calculator var ja.", del: "Delete", confirm: "Delete karayche?",
+      errFile: "Image file nivda.", kundliDone: "Kundli jodli! Expert session madhe pahanar.",
+      status: "Status", paid: "Paid", unpaid: "Unpaid", kundli: "Kundli", view: "Paha", noKundli: "Jodli nahi",
+      uploading: "Upload hot aahe...", change: "Kundli Badla", attach: "Kundli Joda",
+    },
+    en: {
+      welcome: "Welcome", bookings: "My Bookings", noBooking: "No bookings yet. Book a session from Experts page.",
+      noReading: "No saved readings yet. Go to Calculator.", del: "Delete", confirm: "Delete?",
+      errFile: "Please choose an image file.", kundliDone: "Kundli attached! Expert will see it in session.",
+      status: "Status", paid: "Paid", unpaid: "Unpaid", kundli: "Kundli", view: "View", noKundli: "Not attached",
+      uploading: "Uploading...", change: "Change Kundli", attach: "Attach Kundli",
+    },
+  }[lang] || {
+    welcome: "Welcome", bookings: "Bookings", noBooking: "No bookings.", noReading: "Nothing saved.",
+    del: "Delete", confirm: "Delete?", errFile: "Image only.", kundliDone: "Attached!",
+    status: "Status", paid: "Paid", unpaid: "Unpaid", kundli: "Kundli", view: "View", noKundli: "-",
+    uploading: "...", change: "Change", attach: "Attach",
+  };
   const nav = useNavigate();
   const [readings, setReadings] = useState([]);
   const [bookings, setBookings] = useState([]);
@@ -46,7 +74,7 @@ export default function Dashboard() {
   }, [user]);
 
   const remove = async (id) => {
-    if (!window.confirm("Delete?")) return;
+    if (!window.confirm(T.confirm)) return;
     await deleteDoc(doc(db, "readings", id));
     setReadings((p) => p.filter((r) => r.id !== id));
   };
@@ -54,7 +82,7 @@ export default function Dashboard() {
   // Kundli photo booking ke saath jodo (expert dekh payega)
   const uploadKundli = async (booking, file) => {
     if (!file) return;
-    if (!file.type.startsWith("image/")) { setMsg("Image file chunein."); return; }
+    if (!file.type.startsWith("image/")) { setMsg(T.errFile); return; }
     setUploading(booking.id);
     try {
       const path = `kundli/${user.uid}/${booking.id}_${Date.now()}_${file.name}`;
@@ -63,7 +91,7 @@ export default function Dashboard() {
       const url = await getDownloadURL(r);
       await updateDoc(doc(db, "bookings", booking.id), { kundliUrl: url, kundliPath: path });
       setBookings((p) => p.map((b) => (b.id === booking.id ? { ...b, kundliUrl: url, kundliPath: path } : b)));
-      setMsg("Kundli jud gayi! Expert session me ise dekhega.");
+      setMsg(T.kundliDone);
     } catch (e) {
       setMsg(e.message);
     } finally {
@@ -76,21 +104,21 @@ export default function Dashboard() {
   return (
     <div>
       <h1 className="text-gradient">{t("dashboard_title")}</h1>
-      <p>Welcome, {user?.displayName || user?.email}</p>
+      <p>{T.welcome}, {user?.displayName || user?.email}</p>
       {msg && <p style={{ color: "var(--accent-2)", marginTop: 10 }}>{msg}</p>}
 
-      <h2 style={{ marginTop: 24 }}>My Bookings ({bookings.length})</h2>
-      {bookings.length === 0 && <p>Abhi koi booking nahi. Experts page se session book karein.</p>}
+      <h2 style={{ marginTop: 24 }}>{T.bookings} ({bookings.length})</h2>
+      {bookings.length === 0 && <p>{T.noBooking}</p>}
       <div className="grid grid-2" style={{ marginTop: 12 }}>
         {bookings.map((b) => (
           <div key={b.id} className="card">
             <h3>{b.expertName}</h3>
             <div style={{ marginTop: 8 }}>
-              <div className="kv"><span className="k">Status</span><span className="v">{b.status}{b.paid ? " · ✅ Paid" : " · ⏳ Unpaid"}</span></div>
-              <div className="kv"><span className="k">Kundli</span><span className="v">{b.kundliUrl ? <a href={b.kundliUrl} target="_blank" rel="noreferrer" style={{ color: "var(--accent-2)" }}>Dekhein</a> : "Nahi judi"}</span></div>
+              <div className="kv"><span className="k">{T.status}</span><span className="v">{b.status}{b.paid ? " · ✅ " + T.paid : " · ⏳ " + T.unpaid}</span></div>
+              <div className="kv"><span className="k">{T.kundli}</span><span className="v">{b.kundliUrl ? <a href={b.kundliUrl} target="_blank" rel="noreferrer" style={{ color: "var(--accent-2)" }}>{T.view}</a> : T.noKundli}</span></div>
             </div>
             <label className="btn secondary" style={{ marginTop: 10, cursor: "pointer" }}>
-              {uploading === b.id ? "Uploading..." : b.kundliUrl ? "Kundli Badlein" : "Kundli Jodein"}
+              {uploading === b.id ? T.uploading : b.kundliUrl ? T.change : T.attach}
               <input
                 type="file" accept="image/*" style={{ display: "none" }}
                 disabled={uploading === b.id}
@@ -102,7 +130,7 @@ export default function Dashboard() {
       </div>
 
       <h2 style={{ marginTop: 24 }}>{t("saved_readings")} ({readings.length})</h2>
-      {readings.length === 0 && <p>No saved readings yet. Go to Calculator.</p>}
+      {readings.length === 0 && <p>{T.noReading}</p>}
       <div className="grid grid-2" style={{ marginTop: 12 }}>
         {readings.map((r) => (
           <div key={r.id} className="card">
@@ -115,7 +143,7 @@ export default function Dashboard() {
                 <div key={k} className="kv"><span className="k">{k}</span><span className="v">{String(v)}</span></div>
               ))}
             </div>
-            <button className="btn danger" style={{ marginTop: 10 }} onClick={() => remove(r.id)}>Delete</button>
+            <button className="btn danger" style={{ marginTop: 10 }} onClick={() => remove(r.id)}>{T.del}</button>
           </div>
         ))}
       </div>

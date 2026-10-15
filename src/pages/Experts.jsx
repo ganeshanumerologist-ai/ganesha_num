@@ -12,7 +12,51 @@ import { WHATSAPP_DEFAULT, waLink } from "../config/contact.js";
 import { PAYMENT_DEFAULTS, upiLink, parsePrice } from "../config/payment.js";
 
 export default function Experts() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const T = {
+    hi: {
+      needLogin: "Session book karne ke liye pehle login karein.",
+      booked: (n) => `${n} ke saath book ho gaya! Hum sampark karenge.`,
+      errFile: "Kripya image file chunein.",
+      adminOnly: "Sirf admin photo update kar sakta hai. /admin me jayein.",
+      updated: (n) => `${n} ki photo update ho gayi!`,
+      sub: "Live numerologist se baat karein — expert margdarshan.",
+      adminNote: "Aap admin hain — poora edit Admin Panel me karein.",
+      search: "Bhasha ya naam se khojein...",
+      uploading: "Upload ho raha hai...", updatePhoto: "Photo Badlein",
+      onlinePay: "Online Pay",
+    },
+    mr: {
+      needLogin: "Session book करण्यासाठी आधी लॉगिन करा.",
+      booked: (n) => `${n} यांच्यासोबत book झाले! आम्ही संपर्क करू.`,
+      errFile: "कृपया image file निवडा.",
+      adminOnly: "फक्त admin फोटो update करू शकतो. /admin मध्ये जा.",
+      updated: (n) => `${n} यांचा फोटो update झाला!`,
+      sub: "Live numerologist शी बोला — तज्ज्ञ मार्गदर्शन.",
+      adminNote: "तुम्ही admin आहात — पूर्ण edit Admin Panel मध्ये करा.",
+      search: "भाषा किंवा नावाने शोधा...",
+      uploading: "Upload होत आहे...", updatePhoto: "फोटो बदला",
+      onlinePay: "Online Pay",
+    },
+    en: {
+      needLogin: "Please login first to book a session.",
+      booked: (n) => `Booked with ${n}! We will contact you.`,
+      errFile: "Please select an image file.",
+      adminOnly: "Only admin can update photos. Go to /admin.",
+      updated: (n) => `${n}'s photo updated!`,
+      sub: "Talk to a live numerologist — expert guidance.",
+      adminNote: "You are admin — full edit in Admin Panel.",
+      search: "Search by language or name...",
+      uploading: "Uploading...", updatePhoto: "Update Photo",
+      onlinePay: "Online Pay",
+    },
+  }[lang] || null;
+  const TX = T || {
+    needLogin: "Please login first.", booked: (n) => `Booked with ${n}!`,
+    errFile: "Image file only.", adminOnly: "Admin only.", updated: (n) => `${n} updated.`,
+    sub: "Expert guidance.", adminNote: "Admin panel.", search: "Search...",
+    uploading: "...", updatePhoto: "Update", onlinePay: "Pay",
+  };
   const { user } = useAuth();
   const { isAdmin } = useAdmin();
   const [msg, setMsg] = useState("");
@@ -57,7 +101,7 @@ export default function Experts() {
 
   const book = async (expert) => {
     if (!user) {
-      setMsg("Please login first to book a session.");
+      setMsg(TX.needLogin);
       return;
     }
     try {
@@ -66,7 +110,7 @@ export default function Experts() {
         expertId: expert.id, expertName: expert.name,
         createdAt: serverTimestamp(), status: "pending",
       });
-      setMsg(`Booked with ${expert.name}! We will contact you.`);
+      setMsg(TX.booked(expert.name));
     } catch (e) {
       setMsg(e.message);
     }
@@ -75,8 +119,8 @@ export default function Experts() {
   // Admin-only quick photo update (full edit Admin panel me hai)
   const updatePhoto = async (expert, file) => {
     if (!file) return;
-    if (!file.type.startsWith("image/")) { setMsg("Please select an image file."); return; }
-    if (!isAdmin) { setMsg("Sirf admin photo update kar sakta hai. /admin me jayein."); return; }
+    if (!file.type.startsWith("image/")) { setMsg(TX.errFile); return; }
+    if (!isAdmin) { setMsg(TX.adminOnly); return; }
     setUploadingId(expert.id);
     setMsg("");
     try {
@@ -88,7 +132,7 @@ export default function Experts() {
         url, path, updatedAt: serverTimestamp(), updatedBy: user.uid,
       });
       setExperts((p) => p.map((x) => (x.id === expert.id ? { ...x, photo: url } : x)));
-      setMsg(`${expert.name} ki photo update ho gayi!`);
+      setMsg(TX.updated(expert.name));
     } catch (e) {
       setMsg(e.message || "Upload failed. Storage rules check karein.");
     } finally {
@@ -105,14 +149,14 @@ export default function Experts() {
   return (
     <div>
       <h1 className="text-gradient">{t("experts_title")}</h1>
-      <p>AstroSage AI jaisa expert guidance — live numerologist se baat karein.</p>
+      <p>{TX.sub}</p>
       {isAdmin && (
         <p style={{ fontSize: ".85rem", marginTop: 6 }}>
-          Aap admin hain — poora edit <Link to="/admin" style={{ color: "var(--accent-2)" }}>Admin Panel</Link> me karein.
+          {TX.adminNote} <Link to="/admin" style={{ color: "var(--accent-2)" }}>Admin Panel</Link>
         </p>
       )}
       <div style={{ marginTop: 16, maxWidth: 400 }}>
-        <input className="input" placeholder="Search by language or name... (e.g. Hindi, Tamil)" value={filter} onChange={(e) => setFilter(e.target.value)} />
+        <input className="input" placeholder={TX.search} value={filter} onChange={(e) => setFilter(e.target.value)} />
       </div>
       {msg && <p style={{ color: "var(--accent-2)", marginTop: 12 }}>{msg}</p>}
       <div className="grid grid-3" style={{ marginTop: 20 }}>
@@ -140,7 +184,7 @@ export default function Experts() {
                       WhatsApp
                     </a>
                     {payment.paymentLink && (
-                      <a className="btn secondary" href={payment.paymentLink} target="_blank" rel="noreferrer">Online Pay</a>
+                      <a className="btn secondary" href={payment.paymentLink} target="_blank" rel="noreferrer">{TX.onlinePay}</a>
                     )}
                   </>
                 );
@@ -149,7 +193,7 @@ export default function Experts() {
             {isAdmin && (
               <div style={{ marginTop: 10 }}>
                 <label className="btn secondary" style={{ padding: "8px 14px", fontSize: ".8rem", cursor: "pointer" }}>
-                  {uploadingId === e.id ? "Uploading..." : "Update Photo"}
+                  {uploadingId === e.id ? TX.uploading : TX.updatePhoto}
                   <input
                     type="file" accept="image/*" style={{ display: "none" }}
                     disabled={uploadingId === e.id}

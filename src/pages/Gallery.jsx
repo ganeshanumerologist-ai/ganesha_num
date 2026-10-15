@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
+import { useLanguage } from "../i18n/LanguageContext.jsx";
 import { db, storage } from "../firebase.js";
 import {
   ref as storageRef,
@@ -13,7 +14,33 @@ import {
 import { useAuth } from "../auth/AuthContext.jsx";
 import { useAdmin } from "../auth/useAdmin.js";
 
+const TX = {
+  hi: {
+    sub: "फोटो अपलोड करें — admin approve करेगा तभी public gallery में दिखेगी।",
+    drop: "अपलोड के लिए चित्र चुनें", mine: "मेरे अपलोड", approved: "Gallery",
+    del: "Delete", confirm: "Delete करें?", noImg: "अभी कोई फोटो नहीं है।",
+    needLogin: "अपलोड के लिए पहले लॉगिन करें।", done: "अपलोड हो गया! Admin approve करेगा तब दिखेगा।",
+    errFile: "कृपया चित्र फाइल चुनें।",
+  },
+  mr: {
+    sub: "फोटो अपलोड करा — admin मान्यता देईल तेव्हाच public gallery मध्ये दिसेल.",
+    drop: "अपलोडसाठी चित्र निवडा", mine: "माझे अपलोड", approved: "Gallery",
+    del: "Delete", confirm: "Delete करायचे?", noImg: "अजून कोणताही फोटो नाही.",
+    needLogin: "अपलोडसाठी आधी लॉगिन करा.", done: "अपलोड झाले! Admin मान्यता देईल तेव्हा दिसेल.",
+    errFile: "कृपया चित्र फाइल निवडा.",
+  },
+  en: {
+    sub: "Upload a photo — it appears in the public gallery after admin approval.",
+    drop: "Click to select an image", mine: "My Uploads", approved: "Gallery",
+    del: "Delete", confirm: "Delete this image?", noImg: "No photos yet.",
+    needLogin: "Please login first to upload.", done: "Uploaded! Visible after admin approval.",
+    errFile: "Please select an image file.",
+  },
+};
+
 export default function Gallery() {
+  const { t, lang } = useLanguage();
+  const T = TX[lang] || TX.en;
   const { user } = useAuth();
   const { isAdmin } = useAdmin();
   const [files, setFiles] = useState([]);
@@ -30,7 +57,6 @@ export default function Gallery() {
     return tb - ta;
   });
 
-  // Sirf approved photos sabko dikhengi
   const loadFiles = useCallback(async () => {
     setLoading(true);
     setError("");
@@ -39,11 +65,11 @@ export default function Gallery() {
       const all = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
       setFiles(byDateDesc(all.filter((g) => g.status === "approved")));
     } catch (err) {
-      setError(err?.message || "Gallery load nahi hui. Firestore rules check karein.");
+      setError(err?.message || t("gallery_empty"));
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   const loadMine = useCallback(async () => {
     if (!user) { setMine([]); return; }
@@ -61,11 +87,11 @@ export default function Gallery() {
     if (!fileList || !fileList.length) return;
     const file = fileList[0];
     if (!file.type.startsWith("image/")) {
-      setError("Please select an image file.");
+      setError(T.errFile);
       return;
     }
     if (!user) {
-      setError("Upload ke liye pehle login karein. Approve hone ke baad photo sabko dikhegi.");
+      setError(T.needLogin);
       return;
     }
     setError("");
@@ -79,7 +105,7 @@ export default function Gallery() {
       "state_changed",
       (snap) => setProgress(Math.round((snap.bytesTransferred / snap.totalBytes) * 100)),
       (err) => {
-        setError(err?.message || "Upload failed.");
+        setError(err?.message || T.errFile);
         setUploading(false);
       },
       async () => {
@@ -93,7 +119,7 @@ export default function Gallery() {
             status: "pending",
             createdAt: serverTimestamp(),
           });
-          setMessage("Upload ho gaya! Admin approve karega tab sabko dikhega.");
+          setMessage(T.done);
           loadMine();
         } catch (e) {
           setError(e.message);
@@ -105,14 +131,14 @@ export default function Gallery() {
   };
 
   const handleDelete = async (item, setter) => {
-    if (!window.confirm("Delete this image?")) return;
+    if (!window.confirm(T.confirm)) return;
     try {
       await deleteObject(storageRef(storage, item.path)).catch(() => {});
       await deleteDoc(doc(db, "gallery", item.id));
       setter((prev) => prev.filter((f) => f.id !== item.id));
       if (setter === mine) loadFiles();
     } catch (err) {
-      setError(err?.message || "Delete failed.");
+      setError(err?.message || T.confirm);
     }
   };
 
@@ -120,13 +146,13 @@ export default function Gallery() {
 
   return (
     <div>
-      <h1 className="text-gradient">Image Gallery</h1>
-      <p>Photo upload karein — admin approve karega tabhi public gallery me dikhegi.</p>
+      <h1 className="text-gradient">{t("gallery_title")}</h1>
+      <p>{T.sub}</p>
 
       <div style={{ marginTop: 20 }} className="card">
-        <label className="label">Upload Image (login zaroori)</label>
+        <label className="label">{t("gallery_upload")}</label>
         <div className="dropzone" onClick={() => document.getElementById("file-input").click()}>
-          <p>Click to select an image to upload</p>
+          <p>{T.drop}</p>
           <input
             id="file-input"
             type="file"
@@ -147,7 +173,7 @@ export default function Gallery() {
 
       {user && mine.length > 0 && (
         <div style={{ marginTop: 24 }}>
-          <h3>Meri Uploads (pending / approved)</h3>
+          <h3>{T.mine}</h3>
           <div className="gallery-grid" style={{ marginTop: 10 }}>
             {mine.map((f) => (
               <div key={f.id} style={{ position: "relative" }}>
@@ -159,7 +185,7 @@ export default function Gallery() {
                     style={{ position: "absolute", top: 8, right: 8, padding: "6px 10px", fontSize: ".75rem" }}
                     onClick={() => handleDelete(f, setMine)}
                   >
-                    Delete
+                    {T.del}
                   </button>
                 )}
               </div>
@@ -170,11 +196,11 @@ export default function Gallery() {
 
       <div style={{ marginTop: 24 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-          <h3>Approved Gallery ({files.length})</h3>
-          <button className="btn secondary" onClick={loadFiles} disabled={loading}>Refresh</button>
+          <h3>{T.approved} ({files.length})</h3>
+          <button className="btn secondary" onClick={loadFiles} disabled={loading}>{t("gallery_refresh")}</button>
         </div>
         {loading && <div className="spinner" />}
-        {!loading && files.length === 0 && <p>Abhi koi approved photo nahi hai.</p>}
+        {!loading && files.length === 0 && <p>{t("gallery_empty")}</p>}
         <div className="gallery-grid">
           {files.map((f) => (
             <div key={f.id} style={{ position: "relative" }}>
@@ -185,7 +211,7 @@ export default function Gallery() {
                   style={{ position: "absolute", top: 8, right: 8, padding: "6px 10px", fontSize: ".75rem" }}
                   onClick={() => handleDelete(f, setFiles)}
                 >
-                  Delete
+                  {T.del}
                 </button>
               )}
             </div>
