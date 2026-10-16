@@ -114,7 +114,7 @@ export default function Kundli() {
     if (!form.name.trim() || !form.birthdate) { setError(L.k_fill); return; }
     const nums = allNumbers({ name: form.name.trim(), birthdate: form.birthdate });
     const day = Number(form.birthdate.split("-")[2]);
-    const moolank = reduceNumber(day, true);
+    const moolank = reduceNumber(day, false);
     const py = personalYear(form.birthdate, new Date().getFullYear());
     saveProfile(form);
     setRestored(false);
@@ -155,7 +155,7 @@ export default function Kundli() {
     const day = Number((s.birthdate || "").split("-")[2]);
     setResult({
       name: s.name, birthdate: s.birthdate, time: s.time || "", place: s.place || "", gender: s.gender || "male",
-      nums, moolank: reduceNumber(day || 0, true) || null, py: personalYear(s.birthdate, new Date().getFullYear()),
+      nums, moolank: reduceNumber(day || 0, false) || null, py: personalYear(s.birthdate, new Date().getFullYear()),
     });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -236,14 +236,14 @@ export default function Kundli() {
 
           <div className="grid grid-2" style={{ marginTop: 20 }}>
             <Section num={result.moolank} label={L.k_moolank} meaning={getMeaning(result.moolank, lang)} L={L} />
-            <Section num={result.nums.lifePath} label={L.k_bhagyank} meaning={getMeaning(result.nums.lifePath, lang)} L={L} />
+            <Section num={result.nums.bhagyank} label={L.k_bhagyank} meaning={getMeaning(result.nums.bhagyank, lang)} L={L} />
             <Section num={result.nums.destiny} label={L.k_naamank} meaning={getMeaning(result.nums.destiny, lang)} L={L} />
             <Section num={result.nums.soulUrge} label={L.k_soul} meaning={getMeaning(result.nums.soulUrge, lang)} L={L} />
             <Section num={result.nums.personality} label={L.k_persona} meaning={getMeaning(result.nums.personality, lang)} L={L} />
             <YearSection py={result.py} year={new Date().getFullYear()} lang={lang} L={L} />
           </div>
 
-          <ShareButtons title={L.k_title} text={`${result.name} — ${L.k_moolank} ${result.moolank}, ${L.k_bhagyank} ${result.nums.lifePath}`} />
+          <ShareButtons title={L.k_title} text={`${result.name} — ${L.k_moolank} ${result.moolank}, ${L.k_bhagyank} ${result.nums.bhagyank}`} />
         </>
       )}
     </div>

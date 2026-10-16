@@ -6,6 +6,7 @@ import shaniTX from "../i18n/shani.js";
 import { langChain } from "../i18n/registry.js";
 import { useAuth } from "../auth/AuthContext.jsx";
 import { useAdmin } from "../auth/useAdmin.js";
+import Logo3D from "./Logo3D.jsx";
 
 export default function Navbar() {
   const loc = useLocation();
@@ -95,7 +96,7 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="inner">
         <Link to="/" className="brand" onClick={close}>
-          <img src="/logo.svg" alt="logo" style={{ width: 34, height: 34, verticalAlign: "middle" }} />
+          <Logo3D size={34} />
           <span className="text-gradient" style={{ marginLeft: 8 }}>{t("app_name")}</span>
         </Link>
         <button className="hamburger" onClick={() => setOpen(!open)} aria-label="Menu">

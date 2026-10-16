@@ -1,0 +1,13 @@
+﻿APNA LOGO YAHAN RAKHIYE
+========================
+
+File ka naam:   logo.png
+Size:          512 x 512 ya usse bada (square)
+Format:        PNG, transparent background (background hata hua)
+
+Bas file yahan copy kar dijiye — website par apne aap aa jayega.
+Code me kuch nahi badalna.
+
+Tip: logo me "GANESHA SUYOG ASTROLOGY" likha hua transparent background
+ke saath achha lagta hai, aur pehle se design hua matka (mandala + ॐ)
+uske peeche chamakta hua dikhta rahega.

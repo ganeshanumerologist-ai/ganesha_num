@@ -187,26 +187,24 @@ export default function JyotishBackdrop() {
             );
           })}
 
-          {/* 9 sankhya ka chakra */}
+          {/* 9 sankhya ka chakra — ghair (circle) bachi hai,
+              lekin usme digit LIKHA NAHI hai. User ne kaha tha ki
+              landing par 9 number na dikhe, isliye yahan sirf
+              structure hai. */}
           <circle r="150" fill="none" stroke="url(#jyg)" strokeWidth="1.1" opacity="0.7" />
           {Array.from({ length: 9 }, (_, i) => {
             const a = (i * 2 * Math.PI) / 9 - Math.PI / 2;
             return (
-              <g key={i}>
-                <circle cx={Math.cos(a) * 150} cy={Math.sin(a) * 150} r="17" fill="none"
-                  stroke="#fbbf24" strokeWidth="0.8" opacity="0.5" />
-                <text
-                  x={Math.cos(a) * 150}
-                  y={Math.sin(a) * 150 + 6}
-                  textAnchor="middle"
-                  fontSize="17"
-                  fontWeight="800"
-                  fill="#fbbf24"
-                  opacity="0.75"
-                >
-                  {i + 1}
-                </text>
-              </g>
+              <circle
+                key={i}
+                cx={Math.cos(a) * 150}
+                cy={Math.sin(a) * 150}
+                r="17"
+                fill="none"
+                stroke="#fbbf24"
+                strokeWidth="0.8"
+                opacity="0.42"
+              />
             );
           })}
 
@@ -231,16 +229,21 @@ export default function JyotishBackdrop() {
             );
           })}
 
-          {/* 12 rashiyon ke akshar (latin fallback — halka, decorative) */}
+          {/* 12 rashi bhed ke andar ka akshar bhi hata diya —
+              sirf bhed lines bachi hain. */}
           {Array.from({ length: 12 }, (_, i) => {
             const a = (i * Math.PI) / 6 - Math.PI / 2;
             return (
-              <text key={i}
-                x={Math.cos(a) * 66} y={Math.sin(a) * 66 + 5}
-                textAnchor="middle" fontSize="13" fontWeight="700"
-                fill="#e8ecff" opacity="0.22">
-                {i + 1}
-              </text>
+              <circle
+                key={i}
+                cx={Math.cos(a) * 66}
+                cy={Math.sin(a) * 66}
+                r="9"
+                fill="none"
+                stroke="#e8ecff"
+                strokeWidth="0.6"
+                opacity="0.16"
+              />
             );
           })}
 
@@ -276,20 +279,23 @@ export default function JyotishBackdrop() {
           <line x1="200" y1="0" x2="0" y2="200" />
           <polygon points={pts([MT, MR, MB, ML])} />
         </g>
-        {/* sankhya */}
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => {
-          const idx = (n * 2) % 12;
-          const h = HOUSES[idx];
-          const xs = h.split(" ").map((p) => +p.split(",")[0]);
-          const ys = h.split(" ").map((p) => +p.split(",")[1]);
+        {/* NOTE: is chart me jo 1-9 likha tha wo hata diya gaya hai —
+            user ne kaha tha ki landing par number na dikhe.
+            Ab har ghar me ek chhoti gol rekha hai (ghar ka nishan). */}
+        {HOUSES.map((p, i) => {
+          const xs = p.split(" ").map((q) => +q.split(",")[0]);
+          const ys = p.split(" ").map((q) => +q.split(",")[1]);
           return (
-            <text key={n}
-              x={(Math.min(...xs) + Math.max(...xs)) / 2}
-              y={(Math.min(...ys) + Math.max(...ys)) / 2 + 5}
-              textAnchor="middle" fontSize="13" fontWeight="800"
-              fill="#fbbf24" opacity="0.5">
-              {n}
-            </text>
+            <circle
+              key={i}
+              cx={(Math.min(...xs) + Math.max(...xs)) / 2}
+              cy={(Math.min(...ys) + Math.max(...ys)) / 2}
+              r="4.5"
+              fill="none"
+              stroke="#fbbf24"
+              strokeWidth="0.8"
+              opacity="0.32"
+            />
           );
         })}
       </svg>
@@ -307,17 +313,7 @@ export default function JyotishBackdrop() {
         </g>
       </svg>
 
-      {/* ---------- 5. swastik watermark ---------- */}
-      <svg className="jy-layer jy-swastik" viewBox="-60 -60 120 120">
-        <g stroke="#fbbf24" strokeWidth="5" fill="none" strokeLinecap="square" opacity="0.30">
-          <path d="M-34 0 H34" />
-          <path d="M0 -34 V34" />
-          <path d="M0 -34 h20 a8 8 0 0 1 0 16 H-20" />
-          <path d="M0 34 h-20 a8 8 0 0 1 0 -16 H20" />
-        </g>
-      </svg>
-
-      {/* ---------- 6. kalash ---------- */}
+      {/* ---------- 5. kalash ---------- */}
       <svg className="jy-layer jy-kalash" viewBox="0 0 120 160">
         <defs>
           <linearGradient id="jkp" x1="0" y1="0" x2="1" y2="0">

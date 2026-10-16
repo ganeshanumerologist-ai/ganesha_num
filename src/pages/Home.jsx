@@ -5,6 +5,7 @@ import { useAuth } from "../auth/AuthContext.jsx";
 import { loadProfile } from "../profile/profile.js";
 import { getMeaning } from "../data/meanings_all.js";
 import JyotishBackdrop from "../components/JyotishBackdrop.jsx";
+import Logo3D from "../components/Logo3D.jsx";
 import { numSecTX } from "../i18n/numSecTx.js";
 
 // NOTE: Sankhya (numbers) ab LANDING par nahi dikhti.
@@ -156,9 +157,7 @@ export default function Home() {
 
       {/* ============ HERO ============ */}
       <section className="hero">
-        <div className="logo-ring">
-          <img src="/logo.svg" alt="" />
-        </div>
+        <Logo3D size={148} />
         <div><span className="badge">✦ {t("app_name")} ✦</span></div>
         <h1 style={{ marginTop: 18 }}>
           <span className="text-gradient">{t("hero_title")}</span>

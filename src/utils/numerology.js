@@ -23,27 +23,55 @@ export function reduceNumber(n, allowMaster = true) {
   return v;
 }
 
+/* ------------------------------------------------------------------
+   DO number alag-alag hain, dono ko mix mat kijiye:
+
+   Moolank / Life Path  =  din + mah + saal  → hamesha 1..9
+   Bhagyank / Destiny   =  POORI janm-tithi ke
+                           har digit ka jod  → hamesha 1..9
+
+   Pehle yahan bug tha: lifePathNumber poori date ka jod le raha tha
+   (yaani wahi Bhagyank) AUR master number (11/22/33) ko bhi chhod
+   deta tha. Isliye Kundli page par "Bhagyank" galat dikha raha tha.
+
+   Master numbers (11, 22, 33) sirf NAAM wale numbers me chalti hain —
+   Destiny, Soul Urge, Personality. Date wale kabhi nahi.
+   ------------------------------------------------------------------ */
+
+const parts = (birthdate) => {
+  const p = String(birthdate || "").split("-");
+  if (p.length < 3) return null;
+  const d = Number(p[2]), m = Number(p[1]), y = Number(p[0]);
+  if (!d || !m || !y) return null;
+  return { d, m, y };
+};
+
+/** Moolank / Life Path — din + mahina + saal. Hamesha 1..9. */
 export function lifePathNumber(birthdate) {
-  // birthdate: YYYY-MM-DD
-  const digits = (birthdate || "").replace(/\D/g, "");
+  const p = parts(birthdate);
+  if (!p) return null;
+  return reduceNumber(p.d + p.m + p.y, false);
+}
+
+/** Bhagyank / Destiny Number — poori janm-tithi ke har digit ka jod. Hamesha 1..9. */
+export function bhagyankNumber(birthdate) {
+  const digits = String(birthdate || "").replace(/\D/g, "");
   if (!digits) return null;
   const sum = digits.split("").reduce((a, b) => a + Number(b), 0);
-  return reduceNumber(sum, true);
+  return reduceNumber(sum, false);
 }
 
 export function birthdayNumber(birthdate) {
   const d = (birthdate || "").split("-")[2];
   if (!d) return null;
-  return reduceNumber(Number(d), true);
+  // Date wale number me master nahi aata (29 → 11 → 2, sirf 2)
+  return reduceNumber(Number(d), false);
 }
 
 export function attitudeNumber(birthdate) {
-  if (!birthdate) return null;
-  const parts = birthdate.split("-");
-  if (parts.length < 3) return null;
-  const month = Number(parts[1]);
-  const day = Number(parts[2]);
-  return reduceNumber(month + day, true);
+  const p = parts(birthdate);
+  if (!p) return null;
+  return reduceNumber(p.m + p.d, false);
 }
 
 export function destinyNumber(name) {
@@ -71,17 +99,18 @@ export function nameNumber(name) {
   return destinyNumber(name);
 }
 
-// Mobile / vehicle / lucky number
+// Mobile / vehicle / lucky number — single digit (master nahi)
 export function luckyNumber(value) {
   const digits = (value || "").replace(/\D/g, "");
   if (!digits) return null;
   const sum = digits.split("").reduce((a, b) => a + Number(b), 0);
-  return reduceNumber(sum, true);
+  return reduceNumber(sum, false);
 }
 
 export function allNumbers({ name, birthdate, mobile }) {
   return {
     lifePath: lifePathNumber(birthdate),
+    bhagyank: bhagyankNumber(birthdate),
     birthday: birthdayNumber(birthdate),
     attitude: attitudeNumber(birthdate),
     destiny: destinyNumber(name),
@@ -92,7 +121,9 @@ export function allNumbers({ name, birthdate, mobile }) {
 }
 
 export default {
+  reduceNumber,
   lifePathNumber,
+  bhagyankNumber,
   birthdayNumber,
   attitudeNumber,
   destinyNumber,

@@ -5,7 +5,7 @@
 // har bhasha ke liye key poori tarah likhi jaati hai.
 
 const EN = {
-  app_name: "Numerology VIP",
+  app_name: "GANESHA SUYOG ASTROLOGY",
   loading: "Loading...",
   language: "Language",
   error_generic: "Something went wrong.",
@@ -99,7 +99,7 @@ const D = {
   hi: mk({
     nav_kundli_page: "कुंडली", nav_charts: "कुंडली चार्ट", nav_loshu: "लो शु ग्रिड", nav_match: "मिलान", nav_varshphal: "वर्षफल", nav_rashifal: "राशिफल", nav_gochar: "गोचर", nav_shani: "शनि", nav_muhurat: "मुहूर्त", nav_reports: "रिपोर्ट", nav_remedies: "रुद्राक्ष-यंत्र", nav_daily: "दैनिक शुभ", nav_calendar: "कैलेंडर", nav_blog: "ब्लॉग", nav_admin: "एडमिन", nav_shani_title: "शनि सदे साती",
     nav_kundli: "कुंडली", nav_phaladesh: "फलदेश", nav_jyotish: "ज्योतिष",
-    app_name: "न्यूमरोलॉजी वीआईपी",
+    app_name: "GANESHA SUYOG ASTROLOGY",
     loading: "लोड हो रहा है...", language: "भाषा", error_generic: "कुछ गड़बड़ हो गई।",
       city_search: "शहर खोजने के लिए लिखें...", city_choose: "— चुनें —",
     footer_tagline: "संख्याओं की शक्ति से अपनी किस्मत खोलें।",
@@ -142,7 +142,7 @@ const D = {
   mr: mk({
     nav_kundli_page: "कुंडली", nav_charts: "कुंडली चार्ट", nav_loshu: "लो शू ग्रिड", nav_match: "जुळणी", nav_varshphal: "वर्षफळ", nav_rashifal: "राशिफल", nav_gochar: "गोचर", nav_shani: "शनी", nav_muhurat: "मुहूर्त", nav_reports: "अहवाल", nav_remedies: "रुद्राक्ष-यंत्र", nav_daily: "दैनिक शुभ", nav_calendar: "दैनिकी", nav_blog: "ब्लॉग", nav_admin: "प्रशासक", nav_shani_title: "शनी साडेसाती",
     nav_kundli: "कुंडली", nav_phaladesh: "फळदेश", nav_jyotish: "ज्योतिष",
-    app_name: "न्यूमेरोलॉजी व्हीआयपी",
+    app_name: "GANESHA SUYOG ASTROLOGY",
     loading: "लोड होत आहे...", language: "भाषा", error_generic: "काहीतरी चूक झाली.",
       city_search: "शहर शोधण्यासाठी लिहा...", city_choose: "— निवडा —",
     footer_tagline: "संख्यांच्या शक्तीने तुमचे नशीब सोडवा.",
@@ -185,7 +185,7 @@ const D = {
   bn: mk({
     nav_kundli_page: "কুণ্ডলী", nav_charts: "কুণ্ডলী চার্ট", nav_loshu: "লো শু গ্রিড", nav_match: "মিলন", nav_varshphal: "বর্ষফল", nav_rashifal: "রাশিফল", nav_gochar: "গোচর", nav_shani: "শনি", nav_muhurat: "মুহূর্ত", nav_reports: "রিপোর্ট", nav_remedies: "রুদ্রাক্ষ-যন্ত্র", nav_daily: "দৈনিক শুভ", nav_calendar: "ক্যালেন্ডার", nav_blog: "ব্লগ", nav_admin: "অ্যাডমিন", nav_shani_title: "শনি সদে সাতি",
     nav_kundli: "কুণ্ডলী", nav_phaladesh: "ফলদেশ", nav_jyotish: "জ্যোতিষ",
-    app_name: "নিউমেরোলজি ভিআইপি",
+    app_name: "GANESHA SUYOG ASTROLOGY",
     loading: "লোড হচ্ছে...", language: "ভাষা", error_generic: "কিছু একটা সমস্যা হয়েছে।",
       city_search: "শহর খুঁজতে লিখুন...", city_choose: "— বেছে নিন —",
     footer_tagline: "সংখ্যার শক্তি দিয়ে আপনার ভাগ্য খুলুন।",
@@ -228,7 +228,7 @@ const D = {
   te: mk({
     nav_kundli_page: "కుండలి", nav_charts: "కుండలి చార్ట్‌లు", nav_loshu: "లో షూ గ్రిడ్", nav_match: "సరిపోలు", nav_varshphal: "వర్షఫలం", nav_rashifal: "రాశిఫల్", nav_gochar: "గోచరం", nav_shani: "శని", nav_muhurat: "ముహూర్తం", nav_reports: "నివేదిక", nav_remedies: "రుద్రాక్ష-యంత్రం", nav_daily: "రోజువారీ శుభం", nav_calendar: "క్యాలెండర్", nav_blog: "బ్లాగ్", nav_admin: "అడ్మిన్", nav_shani_title: "శని సదే సాతి",
     nav_kundli: "కుండలి", nav_phaladesh: "ఫలదేశం", nav_jyotish: "జ్యోతిష్యం",
-    app_name: "న్యూమెరాలజీ వీఐపీ",
+    app_name: "GANESHA SUYOG ASTROLOGY",
     loading: "లోడవుతోంది...", language: "భాష", error_generic: "ఏదో తప్పు జరిగింది.",
       city_search: "నగరం వెతకడానికి టైప్ చేయండి...", city_choose: "— ఎంచుకోండి —",
     footer_tagline: "సంఖ్యల శక్తితో మీ విధి తెరవండి.",
@@ -271,7 +271,7 @@ const D = {
   ta: mk({
     nav_kundli_page: "குண்டளி", nav_charts: "குண்டளி வரைபடங்கள்", nav_loshu: "லோ சு கிரிட்", nav_match: "பொருத்தம்", nav_varshphal: "ஆண்டுபலன்", nav_rashifal: "ராசிபல்", nav_gochar: "கோசர்", nav_shani: "சனி", nav_muhurat: "முஹூர்த்தம்", nav_reports: "அறிக்கை", nav_remedies: "ருத்ராக்ஷ-யந்திர", nav_daily: "நாள் நல்ல", nav_calendar: "நாட்காட்டி", nav_blog: "வலைப்பதிவு", nav_admin: "நிர்வாகம்", nav_shani_title: "சனி சதைஸதி",
     nav_kundli: "குண்டளி", nav_phaladesh: "பலதேசம்", nav_jyotish: "ஜ்யோதிஷம்",
-    app_name: "நியூமராலஜி விஐபி",
+    app_name: "GANESHA SUYOG ASTROLOGY",
     loading: "ஏற்றுகிறது...", language: "மொழி", error_generic: "ஏதோ தவறு நடந்துவிட்டது.",
       city_search: "நகரத்தைத் தேட உரையிடுங்கள்...", city_choose: "— தேர்ந்தெடுக்கவும் —",
     footer_tagline: "எண்களின் சக்தியால் உங்கள் விதியைத் திறக்குங்கள்.",
@@ -314,7 +314,7 @@ const D = {
   gu: mk({
     nav_kundli_page: "કુંડલી", nav_charts: "કુંડલી ચાર્ટ", nav_loshu: "લો શુ ગ્રિડ", nav_match: "મિલન", nav_varshphal: "વર્ષફળ", nav_rashifal: "રાશિફલ", nav_gochar: "ગોચર", nav_shani: "શનિ", nav_muhurat: "મુહૂર્ત", nav_reports: "રિપોર્ટ", nav_remedies: "રુદ્રાક્ષ-યંત્ર", nav_daily: "દૈનિક શુભ", nav_calendar: "કૅલેન્ડર", nav_blog: "બ્લોગ", nav_admin: "એડમિન", nav_shani_title: "શનિ સતી",
     nav_kundli: "કુંડલી", nav_phaladesh: "ફલદેશ", nav_jyotish: "જ્યોતિષ",
-    app_name: "ન્યુમરોલોજી વીઆઈપી",
+    app_name: "GANESHA SUYOG ASTROLOGY",
     loading: "લોડ થઈ રહ્યું છે...", language: "ભાષા", error_generic: "કંઈક ખોટું થયું.",
       city_search: "શહેર શોધવા લખો...", city_choose: "— પસંદ કરો —",
     footer_tagline: "અંકોની શક્તિ સાથે તમારું નસીબ ખોલો.",
@@ -357,7 +357,7 @@ const D = {
   ur: mk({
     nav_kundli_page: "کنڈلی", nav_charts: "کنڈلی چارٹس", nav_loshu: "لو شو گرڈ", nav_match: "ملاقات", nav_varshphal: "سالی فیل", nav_rashifal: "راشی فال", nav_gochar: "گوچر", nav_shani: "شنى", nav_muhurat: "میوقت", nav_reports: "رپورٹ", nav_remedies: "رُद्रاکش-یانترا", nav_daily: "روزانہ مبارک", nav_calendar: "کیلنڈر", nav_blog: "بلاگ", nav_admin: "ایڈمن", nav_shani_title: "شنبہ سادے ساتی",
     nav_kundli: "کنڈلی", nav_phaladesh: "فال دیش", nav_jyotish: "جیوتیش",
-    app_name: "نیومرولوجی وی آئی پی",
+    app_name: "GANESHA SUYOG ASTROLOGY",
     loading: "لوڈ ہو رہا ہے...", language: "زبان", error_generic: "کچھ غلط ہو گیا۔",
       city_search: "شہر تلاش کرنے کے لیے لکھیں...", city_choose: "— منتخب کریں —",
     footer_tagline: "اعداد کی طاقت سے اپنی قسمت کھولیں۔",
@@ -400,7 +400,7 @@ const D = {
   kn: mk({
     nav_kundli_page: "ಕುಂಡಲಿ", nav_charts: "ಕುಂಡಲಿ ಚಾರ್ಟ್‌ಗಳು", nav_loshu: "ಲೋ ಶೂ ಗ್ರಿಡ್", nav_match: "ಹೊಂದಾಣಿಕೆ", nav_varshphal: "ವರ್ಷಫಲ", nav_rashifal: "ರಾಶಿಫಲ", nav_gochar: "ಗೋಚರ", nav_shani: "ಶನಿ", nav_muhurat: "ಮುಹೂರ್ತ", nav_reports: "ವರದಿ", nav_remedies: "ರುದ್ರಾಕ್ಷ-ಯಂತ್ರ", nav_daily: "ದೈನಂದಿನ ಶುಭ", nav_calendar: "ಕ್ಯಾಲೆಂಡರ್", nav_blog: "ಬ್ಲಾಗ್", nav_admin: "ಅಡ್ಮಿನ್", nav_shani_title: "ಶನಿ ಸಾಡೇಸಾತಿ",
     nav_kundli: "ಕುಂಡಲಿ", nav_phaladesh: "ಫಲದೇಶ", nav_jyotish: "ಜ್ಯೋತಿಷ",
-    app_name: "ನ್ಯೂಮರಾಲಜಿ ವಿಐಪಿ",
+    app_name: "GANESHA SUYOG ASTROLOGY",
     loading: "ಲೋಡ್ ಆಗುತ್ತಿದೆ...", language: "ಭಾಷೆ", error_generic: "ಏನೋ ತಪ್ಪಾಗಿದೆ.",
       city_search: "ನಗರ ಹುಡುಕಲು ಟೈಪ್ ಮಾಡಿ...", city_choose: "— ಆಯ್ಕೆಮಾಡಿ —",
     footer_tagline: "ಸಂಖ್ಯೆಗಳ ಶಕ್ತಿಯಿಂದ ನಿಮ್ಮ ವಿಧಿ ತೆರೆಯಿರಿ.",
@@ -443,7 +443,7 @@ const D = {
   ml: mk({
     nav_kundli_page: "കുണ്ഡളി", nav_charts: "കുണ്ഡളി ചാർട്ടുകൾ", nav_loshu: "ലോ ഷൂ ഗ്രിഡ്", nav_match: "പൊരുത്തം", nav_varshphal: "വർഷഫലം", nav_rashifal: "രാശിഫലം", nav_gochar: "ഗോചരം", nav_shani: "ശനി", nav_muhurat: "മുഹൂർത്തം", nav_reports: "റിപ്പോർട്ട്", nav_remedies: "രുദ്രാക്ഷം-യന്ത്രം", nav_daily: "ദിനംദി ശുഭം", nav_calendar: "കലണ്ടർ", nav_blog: "ബ്ലോഗ്", nav_admin: "അഡ്മിൻ", nav_shani_title: "ശനി സാഡേസാതി",
     nav_kundli: "കുണ്ഡളി", nav_phaladesh: "ഫലദേശം", nav_jyotish: "ജ്യോതിഷം",
-    app_name: "ന്യൂമറോളജി വിഐപി",
+    app_name: "GANESHA SUYOG ASTROLOGY",
     loading: "ലോഡ് ചെയ്യുന്നു...", language: "ഭാഷ", error_generic: "എന്തോ കുഴപ്പം സംഭവിച്ചു.",
       city_search: "നഗരം തിരയാൻ ടൈപ്പ് ചെയ്യുക...", city_choose: "— തിരഞ്ഞെടുക —",
     footer_tagline: "സംഖ്യകളുടെ ശക്തിയാൽ നിങ്ങളുടെ വിധി തുറക്കുക.",
@@ -486,7 +486,7 @@ const D = {
   pa: mk({
     nav_kundli_page: "ਕੁੰਡਲੀ", nav_charts: "ਕੁੰਡਲੀ ਚਾਰਟ", nav_loshu: "ਲੋ ਸ਼ੂ ਗ੍ਰਿਡ", nav_match: "ਮਿਲਾਪ", nav_varshphal: "ਵਰਸ਼ਫਲ", nav_rashifal: "ਰਾਸ਼ੀਫਲ", nav_gochar: "ਗੋਚਰ", nav_shani: "ਸ਼ਨਿ", nav_muhurat: "ਮਹੂਰਤ", nav_reports: "ਰਿਪੋਰਟ", nav_remedies: "ਰੁਦਰਾਖ਼-ਯੰਤਰ", nav_daily: "ਰੋਜ਼ਾਨਾ ਸ਼ੁਭ", nav_calendar: "ਕੈਲੰਡਰ", nav_blog: "ਬਲਾਗ", nav_admin: "ਐਡਮਿਨ", nav_shani_title: "ਸ਼ਨਿ ਸਾਢੇਸਾਤੀ",
     nav_kundli: "ਕੁੰਡਲੀ", nav_phaladesh: "ਫਲਦੇਸ਼", nav_jyotish: "ਜ੍ਯੋਤਿਸ਼",
-    app_name: "ਨਿਊਮਰੋਲੋਜੀ ਵੀਆਈਪੀ",
+    app_name: "GANESHA SUYOG ASTROLOGY",
     loading: "ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ...", language: "ਭਾਸ਼ਾ", error_generic: "ਕੁਝ ਗਲਤ ਹੋ ਗਿਆ।",
       city_search: "ਸ਼ਹਿਰ ਲੱਭਣ ਲਈ ਲਿਖੋ...", city_choose: "— ਚੁਣੋ —",
     footer_tagline: "ਅੰਕਾਂ ਦੀ ਸ਼ਕਤੀ ਨਾਲ ਆਪਣੀ ਕਿਸਮਤ ਖੋਲ੍ਹੋ।",
@@ -529,7 +529,7 @@ const D = {
   or: mk({
     nav_kundli_page: "କୁଣ୍ଡଳୀ", nav_charts: "କୁଣ୍ଡଳୀ ଚାର୍ଟ", nav_loshu: "ଲୋ ଶୁ ଗ୍ରିଡ୍", nav_match: "ମିଳାନ", nav_varshphal: "ବର୍ଷଫଳ", nav_rashifal: "ରାଶିଫଲ", nav_gochar: "ଗୋଚର", nav_shani: "ଶନି", nav_muhurat: "ମୁହୂର୍ତ୍ତ", nav_reports: "ରିପୋର୍ଟ", nav_remedies: "ରୁଦ୍ରାକ୍ଷ-ଯନ୍ତ୍ର", nav_daily: "ଦୈନିକ ଶୁଭ", nav_calendar: "କାଲେଣ୍ଡର", nav_blog: "ବ୍ଲଗ୍", nav_admin: "ଆଡମିନ", nav_shani_title: "ଶନି ସାଢେସାତୀ",
     nav_kundli: "କୁଣ୍ଡଳୀ", nav_phaladesh: "ଫଲଦେଶ", nav_jyotish: "ଜ୍ୟୋତିଷ",
-    app_name: "ନ୍ୟୁମେରୋଲୋଜି ଭିଆଇପି",
+    app_name: "GANESHA SUYOG ASTROLOGY",
     loading: "ଲୋଡ ହେଉଛି...", language: "ଭାଷା", error_generic: "କଣିଏ ଭୁଲ ହେଲା।",
       city_search: "ସହର ଖୋଜିବାକୁ ଲେଖନ୍ତୁ...", city_choose: "— ବାଛନ୍ତୁ —",
     footer_tagline: "ସଂଖ୍ୟାର ଶକ୍ତିରେ ଆପଣଙ୍କ ଭାଗ୍ୟ ଖୋଲନ୍ତୁ।",
@@ -572,7 +572,7 @@ const D = {
   as: mk({
     nav_kundli_page: "কুণ্ডলী", nav_charts: "কুণ্ডলী চাৰ্ট", nav_loshu: "লো শু গ্ৰিড", nav_match: "মিলন", nav_varshphal: "বৰষফল", nav_rashifal: "ৰাশিফল", nav_gochar: "গোচৰ", nav_shani: "শনি", nav_muhurat: "মুহূৰ্ত", nav_reports: "ৰিপ'ৰ্ট", nav_remedies: "ৰুদ্ৰাক্ষ-যন্ত্ৰ", nav_daily: "দৈনিক শুভ", nav_calendar: "কেলেণ্ডাৰ", nav_blog: "ব্লগ", nav_admin: "এডমিন", nav_shani_title: "শনি সাদে সতি",
     nav_kundli: "কুণ্ডলী", nav_phaladesh: "ফলদেশ", nav_jyotish: "জ্যোতিষ",
-    app_name: "নিউমেৰলজি ভিআইপি",
+    app_name: "GANESHA SUYOG ASTROLOGY",
     loading: "লোড হৈ আছে...", language: "ভাষা", error_generic: "কিবা এটা ভুল হৈছে।",
       city_search: "নগৰ বিচাৰিবলৈ লিখক...", city_choose: "— বাছনি কৰক —",
     footer_tagline: "সংখ্যাৰ শক্তিৰে আপোনাৰ ভাগ্য খোলক।",
