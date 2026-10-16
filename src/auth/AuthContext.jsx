@@ -10,6 +10,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
+import { toAuthEmail, looksLikePhone, toPhone } from "./identity.js";
 
 const AuthContext = createContext();
 const googleProvider = new GoogleAuthProvider();
@@ -53,15 +54,22 @@ export function AuthProvider({ children }) {
     return () => unsub();
   }, []);
 
-  const login = (email, password) => signInWithEmailAndPassword(auth, email, password);
+  /* `id` ya to email hai ya mobile number — dono me se koi ek chalega. */
+  const login = (id, password) =>
+    signInWithEmailAndPassword(auth, toAuthEmail(id), password);
 
-  const signup = async (name, email, password) => {
-    const cred = await createUserWithEmailAndPassword(auth, email, password);
+  const signup = async (name, id, password) => {
+    const mail = toAuthEmail(id);
+    const isPhone = looksLikePhone(id);
+    const cred = await createUserWithEmailAndPassword(auth, mail, password);
     // Profile save fail ho to bhi signup safal rahe — atakna nahi chahiye
     try {
       await withTimeout(updateProfile(cred.user, { displayName: name }), 10000);
       await withTimeout(setDoc(doc(db, "users", cred.user.uid), {
-        name, email, createdAt: serverTimestamp(),
+        name,
+        email: isPhone ? "" : mail,
+        phone: isPhone ? toPhone(id) : "",
+        createdAt: serverTimestamp(),
       }), 10000);
     } catch { /* ignore — login phir bhi safal */ }
     return cred;
