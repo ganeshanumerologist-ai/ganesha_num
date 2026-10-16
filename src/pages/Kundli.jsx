@@ -70,7 +70,7 @@ function Section({ num, label, meaning, L }) {
 }
 
 export default function Kundli() {
-  const { lang } = useLanguage();
+  const { lang, S } = useLanguage();
   const { user } = useAuth();
   const L = kundliT(lang);
   const [form, setForm] = useState(() => ({
@@ -212,7 +212,7 @@ export default function Kundli() {
                 <button className="btn" type="submit">{L.k_open}</button>
               </div>
             </form>
-            {restored && <p style={{ color: "var(--accent-2)", marginTop: 10, fontSize: ".85rem" }}>Pichhli baar ka data bhar diya hai — badalna ho to badal lein.</p>}
+            {restored && <p style={{ color: "var(--accent-2)", marginTop: 10, fontSize: ".85rem" }}>{S.kundli_prefill}</p>}
             {error && <p style={{ color: "var(--danger)", marginTop: 10 }}>{error}</p>}
           </div>
         </>

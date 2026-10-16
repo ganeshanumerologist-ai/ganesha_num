@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
 import { translations } from "./translations.js";
 import { LANGUAGES, langChain, normalizeLang, fontFor } from "./registry.js";
+import { siteTX } from "./siteTx.js";
 
 const LanguageContext = createContext(null);
 
@@ -32,7 +33,11 @@ export function LanguageProvider({ children }) {
     [lang]
   );
 
-  const value = { lang, setLang, t, LANGUAGES };
+  // Site-wide UI text (Panchang labels, Admin, Blog, Rashifal …).
+  // Ye dict bhi langChain par chalti hai — koi key kabhi English par nahi giregi.
+  const S = useMemo(() => siteTX(lang), [lang]);
+
+  const value = { lang, setLang, t, LANGUAGES, S };
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }
 
@@ -40,6 +45,11 @@ export function useLanguage() {
   const ctx = useContext(LanguageContext);
   if (!ctx) throw new Error("useLanguage must be used inside LanguageProvider");
   return ctx;
+}
+
+// Sirf site dictionary chahiye to: const S = useSiteTx();
+export function useSiteTx() {
+  return useLanguage().S;
 }
 
 export default LanguageProvider;

@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../i18n/LanguageContext.jsx";
 import { pageTX } from "../i18n/pageTx.js";
-import { RUDRAKSHA_GUIDE, JADI_GUIDE, YANTRA_GUIDE } from "../data/remedies.js";
+import { remTX } from "../data/remediesTX.js";
+import { grahaName } from "../i18n/charts.js";
 
 const TX = {
   hi: { title: "रुद्राक्ष · जड़ी-बूटी · यंत्र मार्गदर्शक", sub: "कौन-सा पहनें, क्यों पहनें — पूरी जानकारी। अपने लिए सही चुनाव Reports में जन्मतिथि से जानें।",
@@ -62,6 +63,7 @@ const TX = {
 export default function Remedies() {
   const { lang } = useLanguage();
   const T = pageTX(TX, lang);
+  const G = remTX(lang);
   const [tab, setTab] = useState("r");
 
   return (
@@ -76,9 +78,9 @@ export default function Remedies() {
 
       {tab === "r" && (
         <div className="grid grid-2" style={{ marginTop: 20 }}>
-          {RUDRAKSHA_GUIDE.map((x) => (
-            <div key={x.m} className="card">
-              <h3>📿 {x.m} — {x.planet}</h3>
+          {G.rudraksha.map((x, i) => (
+            <div key={i} className="card">
+              <h3>📿 {x.m} — {grahaName(x.planet, lang)}</h3>
               <div style={{ marginTop: 8 }}>
                 <div className="kv"><span className="k">{T.devta}</span><span className="v">{x.devta}</span></div>
                 <div className="kv"><span className="k">{T.fayda}</span><span className="v">{x.fayda}</span></div>
@@ -91,9 +93,9 @@ export default function Remedies() {
 
       {tab === "j" && (
         <div className="grid grid-2" style={{ marginTop: 20 }}>
-          {JADI_GUIDE.map((x) => (
-            <div key={x.herb} className="card">
-              <h3>🌿 {x.herb} — {x.planet}</h3>
+          {G.jadi.map((x, i) => (
+            <div key={i} className="card">
+              <h3>🌿 {x.herb} — {grahaName(x.planet, lang)}</h3>
               <div style={{ marginTop: 8 }}>
                 <div className="kv"><span className="k">{T.upyog}</span><span className="v">{x.upyog}</span></div>
                 <div className="kv"><span className="k">{T.dharan}</span><span className="v">{x.dharan}</span></div>
@@ -105,9 +107,9 @@ export default function Remedies() {
 
       {tab === "y" && (
         <div className="grid grid-2" style={{ marginTop: 20 }}>
-          {YANTRA_GUIDE.map((x) => (
-            <div key={x.yantra} className="card">
-              <h3>🔯 {x.yantra} — {x.planet}</h3>
+          {G.yantra.map((x, i) => (
+            <div key={i} className="card">
+              <h3>🔯 {x.yantra} — {grahaName(x.planet, lang)}</h3>
               <div style={{ marginTop: 8 }}>
                 <div className="kv"><span className="k">{T.fayda}</span><span className="v">{x.fayda}</span></div>
                 <div className="kv"><span className="k">{T.sthapana}</span><span className="v">{x.sthapana}</span></div>

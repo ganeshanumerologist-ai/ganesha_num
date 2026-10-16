@@ -202,7 +202,7 @@ export default function Dashboard() {
       <div className="grid grid-2" style={{ marginTop: 12 }}>
         {readings.map((r) => (
           <div key={r.id} className="card">
-            <h3>{r.name} · {r.birthdate} {r.kind === "kundli" ? <span className="badge">Kundli</span> : null}</h3>
+            <h3>{r.name} · {r.birthdate} {r.kind === "kundli" ? <span className="badge">{S.kundli_word}</span> : null}</h3>
             {r.kind === "kundli" && (r.time || r.place) && (
               <p style={{ fontSize: ".85rem" }}>{[r.time, r.place].filter(Boolean).join(" · ")}</p>
             )}

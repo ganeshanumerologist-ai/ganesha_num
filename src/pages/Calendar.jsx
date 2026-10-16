@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FESTIVALS_2026, MONTHS, MONTH_GUIDE } from "../data/calendar.js";
+import { calTX } from "../data/calendarTX.js";
 import { useLanguage } from "../i18n/LanguageContext.jsx";
 import { pageTX } from "../i18n/pageTx.js";
 
@@ -22,8 +22,9 @@ const CAL_TX = {
 export default function Calendar() {
   const { t, lang } = useLanguage();
   const T = pageTX(CAL_TX, lang);
+  const C = calTX(lang);
   const [month, setMonth] = useState(new Date().getMonth() + 1);
-  const list = FESTIVALS_2026.filter((f) => f.month === month);
+  const list = C.festivals.filter((f) => f.month === month);
 
   return (
     <div>
@@ -31,23 +32,23 @@ export default function Calendar() {
       <p>{T.sub}</p>
 
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 16 }}>
-        {MONTHS.map((m, i) => (
+        {C.months.map((m, i) => (
           <button key={m} className={month === i + 1 ? "btn" : "btn secondary"} style={{ padding: "8px 14px" }} onClick={() => setMonth(i + 1)}>
-            {m.slice(0, 3)}
+            {m}
           </button>
         ))}
       </div>
 
       <div className="card" style={{ marginTop: 20 }}>
-        <h2>{MONTHS[month - 1]} 2026</h2>
-        <p style={{ marginTop: 6 }}>{MONTH_GUIDE[month]}</p>
+        <h2>{C.months[month - 1]} 2026</h2>
+        <p style={{ marginTop: 6 }}>{C.guide[month]}</p>
       </div>
 
       <div className="grid grid-2" style={{ marginTop: 20 }}>
         {list.length === 0 && <p>{T.empty}</p>}
-        {list.map((f) => (
-          <div key={f.name} className="card">
-            <h3>{f.day} {MONTHS[month - 1]} — {f.name}</h3>
+        {list.map((f, i) => (
+          <div key={i} className="card">
+            <h3>{f.day} {C.months[month - 1]} — {f.name}</h3>
             <p style={{ marginTop: 8 }}>{f.note}</p>
           </div>
         ))}

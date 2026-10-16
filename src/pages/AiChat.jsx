@@ -6,6 +6,7 @@ import { personalYear } from "../data/forecast.js";
 import { yearMeaning } from "../data/varshphal_i18n.js";
 import { getMeaning } from "../data/meanings_all.js";
 import kundliT from "../i18n/kundli.js";
+import { siteTX } from "../i18n/siteTx.js";
 import { universalDay } from "../data/daily.js";
 
 // DD-MM-YYYY ya YYYY-MM-DD → YYYY-MM-DD
@@ -430,10 +431,8 @@ function cleanName(s) {
 function yearText(name, y, py, lang) {
   const m = yearMeaning(py, lang);
   const L = kundliT(lang);
-  const H = lang === "hi" ? "सेहत" : lang === "mr" ? "आरोग्य" : "Health";
-  const C = lang === "hi" || lang === "mr" ? "शुभ रंग" : "Lucky colour";
-  const A = lang === "hi" ? "सलाह" : lang === "mr" ? "सल्ला" : "Advice";
-  return `${name} — ${y} (Personal Year ${py}): ${m.t}\n${m.d}\n${L.k_career}: ${m.c}\n${L.k_love}: ${m.love}\n${H}: ${m.h}\n${C}: ${m.col}\n${A}: ${m.adv}`;
+  const S2 = siteTX(lang);
+  return `${name} — ${y} (${S2.chat_personal_year} ${py}): ${m.t}\n${m.d}\n${L.k_career}: ${m.c}\n${L.k_love}: ${m.love}\n${S2.chat_health}: ${m.h}\n${S2.chat_lucky_color}: ${m.col}\n${S2.chat_advice}: ${m.adv}`;
 }
 
 function aiReply(text, lang) {
@@ -532,10 +531,8 @@ function aiReply(text, lang) {
 }
 
 export default function AiChat() {
-  const { t, lang } = useLanguage();
-  const [msgs, setMsgs] = useState([
-    { from: "ai", text: lang === "hi" ? "नमस्ते! मैं आपका एआई न्यूमेरोलॉजिस्ट हूँ। अपना नाम + जन्मतिथि भेजें।" : lang === "mr" ? "नमस्कार! मी तुमचा एआय न्यूमेरोलॉजिस्ट आहे. तुमचे नाव + जन्मतारीख पाठवा." : lang === "bn" ? "নমস্কার! আমি আপনার এআই নিউমেরোলজিস্ট। আপনার নাম + জন্মতারিখ দিন।" : lang === "te" ? "నమస్కారం! నేను మీ AI న్యూమెరాలజిస్ట్‌ను. మీ పేరు + పుట్టిన తేదీ పంపండి." : lang === "ta" ? "வணக்கம்! நான் உங்கள் AI நியூமராலஜிஸ்ட். உங்கள் பெயர் + பிறந்த தேதியை அனுப்புங்கள்." : lang === "gu" ? "નમસ્તે! હું તમારો AI ન્યુમરોલોજિસ્ટ છું. તમારું નામ + જન્મતારીખ મોકલો." : lang === "ur" ? "سلام! میں آپ کا اے آئی نیومرولوجسٹ ہوں۔ اپنا نام + تاریخِ پیدائش بھیجیں۔" : lang === "kn" ? "ನಮಸ್ಕಾರ! ನಾನು ನಿಮ್ಮ AI ನ್ಯೂಮರಾಲಜಿಸ್ಟ್. ನಿಮ್ಮ ಹೆಸರು + ಹುಟ್ಟಿದ ದಿನ ಕಳುಹಿಸಿ." : lang === "ml" ? "നമസ്കാരം! ഞാൻ നിങ്ങളുടെ AI ന്യൂമറോളജിസ്റ്റാണ്. നിങ്ങളുടെ പേര് + ജനനത്തീയതി അയയ്ക്കൂ." : lang === "pa" ? "ਸਤ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ ਤੁਹਾਡਾ AI ਨਿਊਮਰੋਲੋਜਿਸਟ ਹਾਂ। ਤੁਹਾਡਾ ਨਾਮ + ਜਨਮ ਤਾਰੀਖ ਭੇਜੋ।" : lang === "or" ? "ନମସ୍କାର! ମୁଁ ଆପଣଙ୍କ AI ନ୍ୟୁମେରୋଲୋଜିଷ୍ଟ। ଆପଣଙ୍କ ନାମ + ଜନ୍ମତାରିଖ ପଠାନ୍ତୁ।" : "Hello! I am your AI Numerologist. Send your name + birthdate." },
-  ]);
+  const { t, lang, S } = useLanguage();
+  const [msgs, setMsgs] = useState([{ from: "ai", text: S.chat_greeting }]);
   const [input, setInput] = useState("");
   const bottomRef = useRef(null);
 

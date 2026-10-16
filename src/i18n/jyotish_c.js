@@ -14,7 +14,12 @@ const EXTRA = {
   pa: { pg_mobile: "ਮੋਬਾਈਲ ਨੰਬਰ", pg_build: "ਬਣਾਓ", pg_city: "ਜਨਮ ਸ਼ਹਿਰ" },
   as: { pg_mobile: "ম'বাইল নম্বৰ", pg_build: "বনাওক", pg_city: "জন্ম চহৰ" },
 };
-const FALLBACK = { mai: "hi", ne: "hi", doi: "hi", brx: "hi", sa: "hi", ks: "ur", sd: "ur" };
+// Chhoti bhasha ko parivaar ki bhasha. `sat` → Bengali, `mni` → Hindi.
+const FALLBACK = {
+  mai: "hi", ne: "hi", doi: "hi", brx: "hi", sa: "hi",
+  ks: "ur", sd: "ur",
+  sat: "bn", mni: "hi",
+};
 export function pgX(lang) {
   if (EXTRA[lang]) return EXTRA[lang];
   if (FALLBACK[lang]) return EXTRA[FALLBACK[lang]];

@@ -118,7 +118,15 @@ const AS = mk({
 });
 
 const ALL = { en: EN, hi: HI, mr: MR, bn: BN, te: TE, ta: TA, gu: GU, ur: UR, kn: KN, or: OR, ml: ML, pa: PA, as: AS };
-const FALLBACK = { mai: "hi", ne: "hi", doi: "hi", brx: "hi", sa: "hi", ks: "ur", sd: "ur" };
+// Chhoti bhasha (nepali, dogri, maithili, bodo, sanskrit …) ko apne parivaar
+// ki bhasha — English nahi. `sat` (santali) ko Bengali aur `mni` (manipuri) ko
+// Hindi dete hain, bilkul registry.js ke FAMILY_ORDER ke mutabik.
+// Inke bina ye dono English par gir jaati thi.
+const FALLBACK = {
+  mai: "hi", ne: "hi", doi: "hi", brx: "hi", sa: "hi",
+  ks: "ur", sd: "ur",
+  sat: "bn", mni: "hi",
+};
 
 export function pgT(lang) {
   if (ALL[lang]) return ALL[lang];

@@ -7,3 +7,6 @@ dist/
 .vscode/
 *.log
 .firebase/
+
+# temporary build dir used when dist/ is locked by a preview server
+dist-tmp/

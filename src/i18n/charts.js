@@ -148,8 +148,25 @@ const CH = {
   }),
 };
 
+// Graha/rashi ke naam ab src/i18n/names.js se aate hain — ek hi source,
+// warna ek page "Sun" dikhata aur doosra "Surya".
+// (Pehle charts.js ka apna table tha, jismein RASHI_LORD ke Vedic keys
+//  "Mangal"/"Shukra" the hi nahi — woh English me leak ho jate the.)
+import { namesTX } from "./names.js";
+
+const PLANET_ALIAS = {
+  Sun: "Surya", Moon: "Chandra", Mars: "Mangal", Mercury: "Budh",
+  Jupiter: "Guru", Venus: "Shukra", Saturn: "Shani",
+};
+
 const RASHI_EN = ["Mesha", "Vrishabha", "Mithuna", "Karka", "Simha", "Kanya", "Tula", "Vrishchika", "Dhanu", "Makara", "Kumbha", "Meena"];
-const FALLBACK = { mai: "hi", ne: "hi", doi: "hi", brx: "hi", sa: "hi", ks: "ur", sd: "ur" };
+// Chhoti bhasha ko parivaar ki bhasha (registry.js ke FAMILY_ORDER ke mutabik).
+// `sat` → Bengali, `mni` → Hindi.
+const FALLBACK = {
+  mai: "hi", ne: "hi", doi: "hi", brx: "hi", sa: "hi",
+  ks: "ur", sd: "ur",
+  sat: "bn", mni: "hi",
+};
 
 export function chartT(lang) {
   if (CH[lang]) return CH[lang];
@@ -158,10 +175,11 @@ export function chartT(lang) {
 }
 export function rashiName(en, lang) {
   const i = RASHI_EN.indexOf(en);
-  const arr = chartT(lang).rashi;
-  return (i >= 0 && arr[i]) || en;
+  if (i < 0) return en;
+  return namesTX(lang).rashi[i] || en;
 }
 export function grahaName(en, lang) {
-  return chartT(lang).graha[en] || en;
+  const key = PLANET_ALIAS[en] || en;
+  return namesTX(lang).graha[key] || en;
 }
 export default chartT;

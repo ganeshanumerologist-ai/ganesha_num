@@ -17,6 +17,7 @@ import { universalDay } from "../data/daily.js";
 import { dayInfo } from "../data/day_i18n.js";
 import { yearMeaning } from "../data/varshphal_i18n.js";
 import { grahaName, rashiName } from "../i18n/charts.js";
+import { nakName } from "../i18n/names.js";
 import { rashiLang } from "../data/rashi_i18n.js";
 import { RUDRAKSHA_GUIDE, JADI_GUIDE, YANTRA_GUIDE } from "../data/remedies.js";
 const lagnaTraits = (en, lang) => {
@@ -519,7 +520,7 @@ function vimshottari(birthdate, nak) {
 }
 
 export default function Reports() {
-  const { lang, t } = useLanguage();
+  const { lang, t, S } = useLanguage();
   const P = pgT(lang);
   const X = pgX(lang);
   const L = kundliT(lang);
@@ -601,10 +602,10 @@ export default function Reports() {
     const sunT = sunTropical(jd);
     const vichar = GRAHAS.map((k) => {
       const rashi = g[k].rashi;
-      let bala = "Sama";
-      if (rashi === EXALT[k][0]) bala = "Uchcha";
-      else if (rashi === EXALT[k][1]) bala = "Neecha";
-      else if ((OWN[k] || []).includes(rashi)) bala = "Swa";
+      let bala = "bala_sama";
+      if (rashi === EXALT[k][0]) bala = "bala_uchcha";
+      else if (rashi === EXALT[k][1]) bala = "bala_neecha";
+      else if ((OWN[k] || []).includes(rashi)) bala = "bala_swa";
       const trop = k === "Sun" ? sunT : k === "Moon" ? moonTropical(jd) : planetTropical(k, jd);
       let elong = Math.abs(rev(trop - sunT));
       if (elong > 180) elong = 360 - elong;
@@ -620,9 +621,9 @@ export default function Reports() {
     const pNow = panchToday();
     const kp = [
       { k: "Vaar-swami", v: VAAR_LORD[wd] },
-      { k: "Chandra-rashi swami (aaj)", v: RASHI_LORD[pNow.moonR] || "-" },
-      { k: "Chandra-nakshatra swami (aaj)", v: NAK_LORD[pNow.nak] || "-" },
-      { k: "Janm-Lagna swami", v: lagIdx !== null ? RASHI_LORD[RASHIS[lagIdx]] || "-" : null },
+      { k: "Chandra-rashi swami (aaj)", v: gName(RASHI_LORD[pNow.moonR] || "-", lang) },
+      { k: "Chandra-nakshatra swami (aaj)", v: gName(NAK_LORD[pNow.nak] || "-", lang) },
+      { k: "Janm-Lagna swami", v: lagIdx !== null ? gName(RASHI_LORD[RASHIS[lagIdx]] || "-", lang) : null },
     ];
 
     // Shodashvarga (7 varga)
@@ -705,7 +706,7 @@ export default function Reports() {
           <h2 id="paramparik" style={{ marginTop: 24 }}>{T.chandraR} ({P.pg_paramparik})</h2>
           <div className="card">
             <div className="kv"><span className="k">{T.chandraR}</span><span className="v">{r.moonR} — {r.tattva} tattva, {r.varna} varna</span></div>
-            <div className="kv"><span className="k">{T.naksh}</span><span className="v">{r.nak.name} (Charan {r.nak.pada}) · {T.dashanath} {NAK_LORD[r.nak.name]}</span></div>
+            <div className="kv"><span className="k">{T.naksh}</span><span className="v">{nakName(r.nak.index, lang)} ({T.naksh} {r.nak.pada}) · {T.dashanath} {gName(NAK_LORD[r.nak.name] || "-", lang)}</span></div>
             <div className="kv"><span className="k">{T.letters}</span><span className="v">{r.letters}</span></div>
           </div>
 
@@ -726,7 +727,7 @@ export default function Reports() {
             <div style={{ marginTop: 6 }}>
               {r.kp.map((x) => <div key={x.k} className="kv"><span className="k">{x.k}</span><span className="v">{x.v ? gName(x.v, lang) : T.kpNeed}</span></div>)}
             </div>
-            <h3 style={{ marginTop: 12 }}>{T.tRunning} {r.dasha.cur.lord} {T.adT}</h3>
+            <h3 style={{ marginTop: 12 }}>{T.tRunning} {gName(r.dasha.cur.lord, lang)} {T.adT}</h3>
             <div style={{ marginTop: 6 }}>
               {r.dasha.ads.map((a) => (
                 <div key={a.lord + a.start} className="kv">
@@ -766,7 +767,7 @@ export default function Reports() {
               {r.vichar.map((v) => (
                 <div key={v.key} className="kv">
                   <span className="k">{grahaName(v.key, lang)} ({rashiName(v.rashi, lang)})</span>
-                  <span className="v">{v.bala}{v.asta ? " · Asta" : ""}</span>
+                  <span className="v">{S[v.bala]}{v.asta ? ` · ${S.bala_asta}` : ""}</span>
                 </div>
               ))}
             </div>
@@ -791,7 +792,7 @@ export default function Reports() {
 
           <h2 id="ratna" style={{ marginTop: 24 }}>{T.secRatna}</h2>
           <div style={{ marginTop: 8 }}>
-            <Link to="/remedies" className="btn secondary" style={{ padding: "8px 14px" }}>📿 Rudraksha · 🌿 Jadi · 🔯 Yantra Guide</Link>
+            <Link to="/remedies" className="btn secondary" style={{ padding: "8px 14px" }}>{S.remedies_guide}</Link>
           </div>
           <div className="grid grid-2" style={{ marginTop: 12 }}>
             <div className="card">

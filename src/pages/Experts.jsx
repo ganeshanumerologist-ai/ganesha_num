@@ -171,7 +171,7 @@ const EXP_TX = {
 };
 
 export default function Experts() {
-  const { t, lang } = useLanguage();
+  const { t, lang, S } = useLanguage();
   const TX = pageTX(EXP_TX, lang);
   const { user } = useAuth();
   const { isAdmin } = useAdmin();
@@ -268,7 +268,7 @@ export default function Experts() {
       <p>{TX.sub}</p>
       {isAdmin && (
         <p style={{ fontSize: ".85rem", marginTop: 6 }}>
-          {TX.adminNote} <Link to="/admin" style={{ color: "var(--accent-2)" }}>Admin Panel</Link>
+          {TX.adminNote} <Link to="/admin" style={{ color: "var(--accent-2)" }}>{S.admin_title}</Link>
         </p>
       )}
       <div style={{ marginTop: 16, maxWidth: 400 }}>

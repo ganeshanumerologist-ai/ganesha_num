@@ -100,7 +100,12 @@ export const KUNDLI = {
     k_need_login: "চেভ কৰিবলৈ লগইন কৰক।", k_fill: "নাম আৰু জন্মতাৰিখ দিয়ক।" }),
 };
 
-const FALLBACK_UI = { mai: "hi", ne: "hi", doi: "hi", brx: "hi", sa: "hi", ks: "ur", sd: "ur" };
+// Chhoti bhasha ko parivaar ki bhasha. `sat` → Bengali, `mni` → Hindi.
+const FALLBACK_UI = {
+  mai: "hi", ne: "hi", doi: "hi", brx: "hi", sa: "hi",
+  ks: "ur", sd: "ur",
+  sat: "bn", mni: "hi",
+};
 
 export function kundliT(lang) {
   if (KUNDLI[lang]) return KUNDLI[lang];

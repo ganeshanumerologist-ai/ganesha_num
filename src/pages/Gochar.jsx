@@ -292,7 +292,7 @@ export default function Gochar() {
 
   return (
     <div>
-      <h1 className="text-gradient">{T.title} — Guru, Shani</h1>
+      <h1 className="text-gradient">{T.title} — {grahaName("Guru", lang)}, {grahaName("Shani", lang)}</h1>
       <p>{T.sub}</p>
 
       <div className="grid grid-3" style={{ marginTop: 20 }}>

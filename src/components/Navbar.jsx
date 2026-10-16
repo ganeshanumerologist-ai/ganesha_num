@@ -17,7 +17,7 @@ export default function Navbar() {
       const d = shaniTX[c];
       if (d && d.sh_nav && d !== shaniTX.en) return d.sh_nav;
     }
-    return "Shani Sade Sati";
+    return t("nav_shani_title");
   })();
   const { user, logout, loading } = useAuth();
   const { isAdmin } = useAdmin();
@@ -25,23 +25,23 @@ export default function Navbar() {
 
   const kundliLinks = [
     { to: "/calculator", label: t("nav_calculator") },
-    { to: "/kundli", label: "Kundli" },
-    { to: "/charts", label: "Kundli Charts" },
-    { to: "/loshu", label: "Lo Shu Grid" },
-    { to: "/match", label: "Milan" },
-    { to: "/forecast", label: "Varshphal" },
+    { to: "/kundli", label: t("nav_kundli_page") },
+    { to: "/charts", label: t("nav_charts") },
+    { to: "/loshu", label: t("nav_loshu") },
+    { to: "/match", label: t("nav_match") },
+    { to: "/forecast", label: t("nav_varshphal") },
   ];
   const jyotishLinks = [
-    { to: "/panchang", label: "Panchang" },
-    { to: "/rashifal", label: "Rashifal" },
-    { to: "/gochar", label: "Gochar" },
+    { to: "/panchang", label: t("nav_panchang") },
+    { to: "/rashifal", label: t("nav_rashifal") },
+    { to: "/gochar", label: t("nav_gochar") },
     { to: "/shani", label: shTitle },
-    { to: "/muhurat", label: "Muhurat" },
-    { to: "/reports", label: "Reports" },
-    { to: "/remedies", label: "Rudraksha-Yantra" },
-    { to: "/daily", label: "Daily Lucky" },
-    { to: "/calendar", label: "Calendar" },
-    { to: "/blog", label: "Blog" },
+    { to: "/muhurat", label: t("nav_muhurat") },
+    { to: "/reports", label: t("nav_reports") },
+    { to: "/remedies", label: t("nav_remedies") },
+    { to: "/daily", label: t("nav_daily") },
+    { to: "/calendar", label: t("nav_calendar") },
+    { to: "/blog", label: t("nav_blog") },
   ];
   const sevaLinks = [
     { to: "/experts", label: t("nav_experts") },
@@ -66,7 +66,7 @@ export default function Navbar() {
     { to: "/reports", label: P.pg_nakshatra },
   ];
   if (user) pageLinks.push({ to: "/dashboard", label: t("nav_dashboard") });
-  if (isAdmin) pageLinks.push({ to: "/admin", label: "Admin" });
+  if (isAdmin) pageLinks.push({ to: "/admin", label: t("nav_admin") });
 
   const active = (to) => (loc.pathname === to ? "active" : "");
   const groupActive = (arr) => (arr.some((l) => loc.pathname === l.to) ? "active" : "");
@@ -103,9 +103,9 @@ export default function Navbar() {
         </button>
         <div className={`nav-links ${open ? "open" : ""}`}>
           <Link to="/" className={active("/")} onClick={close}>{t("nav_home")}</Link>
-          <Drop label="Kundli" links={kundliLinks} />
-          <Drop label="Phaladesh" links={phalLinks} />
-          <Drop label="Jyotish" links={jyotishLinks} />
+          <Drop label={t("nav_kundli")} links={kundliLinks} />
+          <Drop label={t("nav_phaladesh")} links={phalLinks} />
+          <Drop label={t("nav_jyotish")} links={jyotishLinks} />
           <Drop label={t("nav_experts")} links={sevaLinks} />
           {pageLinks.map((l) => (
             <Link key={l.to} to={l.to} className={active(l.to)} onClick={close}>

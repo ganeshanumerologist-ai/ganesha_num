@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useLanguage } from "../i18n/LanguageContext.jsx";
 import { pageTX } from "../i18n/pageTx.js";
 import { pgT } from "../i18n/jyotish_b.js";
 import { pgX } from "../i18n/jyotish_c.js";
 import kundliT from "../i18n/kundli.js";
 import { destinyNumber, luckyNumber, reduceNumber } from "../utils/numerology.js";
+import { detectYogs, groupYogs, bazaarProfile, gridProfile, yearOutlook } from "../utils/loshuYog.js";
+import { loshuTX, loshuYog, loshuUpay } from "../data/loshuTX.js";
+import { loshuXTX } from "../data/loshuXTX.js";
+import { paraTX } from "../i18n/paraTx.js";
 import { loadProfile, saveProfile } from "../profile/profile.js";
 import ShareButtons from "../components/ShareButtons.jsx";
 
@@ -27,7 +31,7 @@ const UPAY = {
   },
   bn: {
     1: "আত্মবিশ্বাস বাড়ান; প্রতিদিন সূর্যনমস্কার করুন।", 2: "সম্পর্কে ধৈর্য রাখুন; রূপা ব্যবহার করুন।",
-    3: "ক্রোধ নিয়ন্ত্রণে রাখুন; হনুমান চালিশা পাঠ করুন।", 4: "লিখিতভাবে পরিকল্পনা করুন; সবুজ রঙ ব্যবহার করুন।",
+    3: "ক্রোধ নিয়ন্ত্রণে রাখুন; হনুমান চালিশা পাঠ করুন।", 4: "লিখিতভাবে পরিকল্পনা করুন; সবুজ রং ব্যবহার করুন।",
     5: "ভারসাম্যের জন্য ধ্যান করুন।", 6: "পরিবারের সময় দিন; সাদা পোশাক পরুন।",
     7: "মিষ্টি কথা বলুন; জল দান করুন।", 8: "নিয়মিত সঞ্চয় করুন; শনিবারে সেবা করুন।",
     9: "অন্যদের সেবা করুন; লাল মসুর দান করুন।",
@@ -43,7 +47,7 @@ const UPAY = {
     1: "நம்பிக்கையை வளர்க்கவும்; தினமும் சூரிய நமஸ்காரம் செய்யவும்.", 2: "உறவுகளில் பொறுமை கடைபிடியுங்கள்; வெள்ளியைப் பயன்படுத்துங்கள்.",
     3: "சின்பைக் கட்டுப்படுத்துங்கள்; ஹனுமான் சாலீசா ஓதுங்கள்.", 4: "எழுத்து வழியில் திட்டமிடுங்கள்; பச்சை நிறத்தைப் பயன்படுத்துங்கள்.",
     5: "சமநிலைக்கு தியானம் செய்யவும்.", 6: "குடுமத்திற்கு நேரம் அளியுங்கள்; வெள்ளை ஆடை அணியுங்கள்.",
-    7: "இனிய சொற்களைப் பேசுங்கள்; நீர் தானம் செய்யுங்கள்.", 8: "தொடர்ந்து சேமிக்கவும்; சனிவாரம் நாட்களில் சேவை செய்யவும்.",
+    7: "இனிய சொற்களைப் பேசுங்கள்; நீர் தானம் செய்யுங்கள்.", 8: "தொடர்ந்து சேமிக்கவும்; சனிவாரம் நாட்களில் சேவை செய்யுங்கள்.",
     9: "பிறருக்கு உதவுங்கள்; செம்மசூர் தானம் செய்யுங்கள்.",
   },
   gu: {
@@ -85,7 +89,7 @@ const UPAY = {
     1: "ଆତ୍ମବିଶ୍ୱାସ ବଢ଼ାନ୍ତୁ; ପ୍ରତ୍ୟେକ ଦିନ ସୂର୍ୟନମସ୍କାର କରନ୍ତୁ।", 2: "ସମ୍ପର୍କରେ ଧୈର୍ଯ୍ୟ ରଖନ୍ତୁ; ଚାଁଦର ବ୍ୟବହାର କରନ୍ତୁ।",
     3: "କ୍ରୋଧ ନିୟନ୍ତ୍ରଣ କରନ୍ତୁ; ହନୁମାନ ଚାଳୀସା ପାଠ କରନ୍ତୁ।", 4: "ଲେଖିତ ଭାବେ ଯୋଜନା କରନ୍ତୁ; ହଳଦିଆ ରଙ୍ଗ ବ୍ୟବହାର କରନ୍ତୁ।",
     5: "ସନ୍ତୁଲନ ପାଇଁ ଧ୍ୟାନ ଦିଅନ୍ତୁ।", 6: "ପରିବାରକୁ ସମୟ ଦିଅନ୍ତୁ; ସଧା ପୋଷାକ ପିନଧନ୍ତୁ।",
-    7: "ମଧୁର କଥା କୁହନ୍ତୁ; ଜଳ ଦାନ କରନ୍ତୁ।", 8: "ନିୟମିତ ସଞ୍ଚୟ କରନ୍ତୁ; ଶନିବାରରେ ସେବା କରନ୍ତୁ।",
+    7: "ମଧୁ କଥା କୁହନ୍ତୁ; ଜଳ ଦାନ କରନ୍ତୁ।", 8: "ନିୟମିତ ସଞ୍ଚୟ କରନ୍ତୁ; ଶନିବାରରେ ସେବା କରନ୍ତୁ।",
     9: "ଅନ୍ୟଙ୍କୁ ସେବା କରନ୍ତୁ; ଲାଲ ମସୂର ଦାନ କରନ୍ତୁ।",
   },
   as: {
@@ -130,12 +134,15 @@ function kuaNumber(year, gender) {
 }
 
 export default function Loshu() {
-  const { lang } = useLanguage();
+  const { lang, S } = useLanguage();
   const P = pgT(lang);
   const X = pgX(lang);
   const L = kundliT(lang);
   const U = UPAY[lang] || UPAY.en;
   const V = pageTX(VAAR_TX, lang);
+  const TX = loshuTX(lang);
+  const TX2 = loshuXTX(lang);
+  const PR = paraTX(lang);
   const [name, setName] = useState(() => loadProfile().name || "");
   const [dob, setDob] = useState(() => loadProfile().birthdate || "");
   const [gender, setGender] = useState(() => loadProfile().gender || "male");
@@ -168,6 +175,22 @@ export default function Loshu() {
     }
     const missing = [1, 2, 3, 4, 5, 6, 7, 8, 9].filter((n) => !grid[n]);
     setR({ counts, grid, digitSum, moolank, bhagyank, kua, nameNum, lucky, luckyMob, luckyVaar, luckyDates, missing });
+  };
+
+  // ---- Grid se yoga / upay / crystal / saal ka naksha ----
+  const yogs = useMemo(() => (r ? detectYogs(r.grid) : []), [r]);
+  const groups = useMemo(() => groupYogs(yogs), [yogs]);
+  const bz = useMemo(() => (r ? bazaarProfile(r.grid) : null), [r]);
+  const gp = useMemo(() => (r ? gridProfile(r.grid) : null), [r]);
+  const yo = useMemo(() => {
+    if (!r) return null;
+    const py = reduceNumber(Number(dob.split("-")[2]) + Number(dob.split("-")[1]) + new Date().getFullYear(), false);
+    return yearOutlook(r.grid, py);
+  }, [r, dob]);
+
+  const TAG_LBL = {
+    raj: S.lo_tag_raj, dhan: S.lo_tag_dhan, property: S.lo_tag_property,
+    bazaar: S.lo_tag_bazaar, vyapar: S.lo_tag_vyapar, labh: S.lo_tag_labh,
   };
 
   return (
@@ -243,12 +266,124 @@ export default function Loshu() {
             </div>
           </div>
 
-          {r.missing.length > 0 && (
-            <div className="card" style={{ marginTop: 20 }}>
-              <h3>{P.pg_missing} ({r.missing.join(", ")}) + {L.k_upay}</h3>
-              {r.missing.map((n) => (
-                <div key={n} className="kv"><span className="k">{n}</span><span className="v">{U[n]}</span></div>
+          {/* ================= Aapke grid me kaun kaun se YOG ================= */}
+          <div className="card" style={{ marginTop: 20 }}>
+            <h3 style={{ color: "var(--gold)" }}>{TX.yogHead}</h3>
+            {yogs.length === 0 ? (
+              <p style={{ marginTop: 8, fontSize: ".9rem" }}>{S.lo_grid_head}</p>
+            ) : (
+              groups.map(([tag, list]) => (
+                <div key={tag} style={{ marginTop: 14 }}>
+                  <h4 style={{ color: "var(--accent-2)", fontSize: ".95rem" }}>{TAG_LBL[tag]}</h4>
+                  {list.map((y) => {
+                    const t = loshuYog(y.key, lang);
+                    return (
+                      <div key={y.key} style={{ marginTop: 8 }}>
+                        <strong style={{ color: "var(--gold)" }}>{t.name}</strong>
+                        <span style={{ fontSize: ".75rem", color: "var(--muted)", marginLeft: 8 }}>({y.key})</span>
+                        <p style={{ fontSize: ".88rem", marginTop: 2 }}>{t.desc}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              ))
+            )}
+          </div>
+
+          {/* ================= Share-market yog ================= */}
+          {bz && (
+            <div className="card" style={{ marginTop: 16 }}>
+              <h3 style={{ color: "var(--gold)" }}>{S.lo_bazaar_head}</h3>
+              <p style={{ marginTop: 8, fontSize: ".9rem", fontWeight: 700, color: "var(--accent-2)" }}>
+                {bz.level === "high" ? S.lo_level_high : bz.level === "mid" ? S.lo_level_mid : S.lo_level_low}
+              </p>
+              {(TX2.bazaar[bz.level] || []).map((line, i) => (
+                <p key={i} style={{ marginTop: 6, fontSize: ".9rem" }}>{line}</p>
               ))}
+            </div>
+          )}
+
+          {/* ================= Property yog ================= */}
+          <div className="card" style={{ marginTop: 16 }}>
+            <h3 style={{ color: "var(--gold)" }}>{S.lo_property_head}</h3>
+            {(TX2.property || []).map((line, i) => (
+              <p key={i} style={{ marginTop: 6, fontSize: ".9rem" }}>{line}</p>
+            ))}
+          </div>
+
+          {/* ================= Missing numbers: kya karein / kya na karein / crystal ================= */}
+          {r.missing.length > 0 && (
+            <div className="card" style={{ marginTop: 16 }}>
+              <h3 style={{ color: "var(--gold)" }}>{TX.missingHead} ({r.missing.join(", ")})</h3>
+              {r.missing.map((n) => {
+                const u = loshuUpay(n, lang);
+                return (
+                  <div key={n} style={{ marginTop: 12, padding: "10px 12px", borderRadius: 10, background: "rgba(255,255,255,.025)", border: "1px solid var(--border)" }}>
+                    <div className="kv"><span className="k">{n}</span><span className="v">{U[n]}</span></div>
+                    <div style={{ marginTop: 8 }}>
+                      <strong style={{ fontSize: ".85rem", color: "#34d399" }}>{S.lo_do_head}</strong>
+                      <ul style={{ margin: "4px 0 0 18px", fontSize: ".85rem" }}>
+                        {u.do.map((x, i) => <li key={i}>{x}</li>)}
+                      </ul>
+                    </div>
+                    <div style={{ marginTop: 8 }}>
+                      <strong style={{ fontSize: ".85rem", color: "#f87171" }}>{S.lo_dont_head}</strong>
+                      <ul style={{ margin: "4px 0 0 18px", fontSize: ".85rem" }}>
+                        {u.dont.map((x, i) => <li key={i}>{x}</li>)}
+                      </ul>
+                    </div>
+                    {u.gem && (
+                      <div style={{ marginTop: 8, fontSize: ".85rem" }}>
+                        <strong style={{ color: "var(--accent-2)" }}>{TX.gemHead}: </strong>{u.gem}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* ================= Grid ka hissa ================= */}
+          <div className="card" style={{ marginTop: 16 }}>
+            <h3 style={{ color: "var(--gold)" }}>{S.lo_grid_head}</h3>
+            {gp && (
+              <div style={{ marginTop: 6 }}>
+                {gp.repeated.length > 0 && (
+                  <div className="kv">
+                    <span className="k">{TX.strongHead}</span>
+                    <span className="v">{gp.repeated.join(", ")}</span>
+                  </div>
+                )}
+                <div className="kv">
+                  <span className="k">{P.pg_missing}</span>
+                  <span className="v">{gp.missing.length ? gp.missing.join(", ") : "—"}</span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* ================= Saal ka faisla ================= */}
+          {yo && (
+            <div className="card" style={{ marginTop: 16 }}>
+              <h3 style={{ color: "var(--gold)" }}>{S.lo_year_head}</h3>
+              <div className="kv" style={{ marginTop: 6 }}>
+                <span className="k">{S.lo_py_head}</span>
+                <span className="v">{yo.personalYear}</span>
+              </div>
+              <p style={{ marginTop: 8, fontSize: ".95rem" }}>{TX.yearOverall}</p>
+              <p style={{ marginTop: 8, fontSize: ".92rem", color: "#34d399" }}>{TX.yearGood}</p>
+              <p style={{ marginTop: 8, fontSize: ".92rem", color: "#f87171" }}>{TX.yearCaution}</p>
+              <div style={{ marginTop: 14 }}>
+                <div className="kv"><span className="k">{P.pg_career}</span><span className="v">{TX2.year.career}</span></div>
+                <div className="kv"><span className="k">{PR.dhan}</span><span className="v">{TX2.year.money}</span></div>
+                <div className="kv"><span className="k">{PR.arogya}</span><span className="v">{TX2.year.health}</span></div>
+                <div className="kv"><span className="k">{P.pg_prem}</span><span className="v">{TX2.year.relation}</span></div>
+                <div className="kv"><span className="k">{PR.samman}</span><span className="v">{TX2.year.social}</span></div>
+              </div>
+              <div style={{ marginTop: 10, fontSize: ".82rem", color: "var(--muted)" }}>
+                <p>{TX.monthsGood}</p>
+                <p>{TX.monthsAvoid}</p>
+              </div>
             </div>
           )}
 

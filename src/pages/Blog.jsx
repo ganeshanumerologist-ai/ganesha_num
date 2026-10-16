@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import { POSTS } from "../data/blog.js";
 import { db } from "../firebase.js";
 import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
+import { useLanguage } from "../i18n/LanguageContext.jsx";
 
 export default function Blog() {
+  const { S } = useLanguage();
   const [posts, setPosts] = useState(POSTS);
 
   useEffect(() => {
@@ -26,8 +28,8 @@ export default function Blog() {
 
   return (
     <div>
-      <h1 className="text-gradient">Blog & Upay</h1>
-      <p>Ank-shastra ke saral upay, milan-niyam aur dhan-yog — Hindi me.</p>
+      <h1 className="text-gradient">{S.blog_title}</h1>
+      <p>{S.blog_sub}</p>
       <div className="grid grid-2" style={{ marginTop: 20 }}>
         {posts.map((p) => (
           <Link key={p.id} to={`/blog/${p.id}`} className="card">

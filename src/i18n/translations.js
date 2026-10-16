@@ -23,6 +23,10 @@ const EN = {
   nav_contact: "Contact",
   nav_dashboard: "Dashboard",
   nav_experts: "Experts",
+  nav_kundli: "Kundli",
+  nav_phaladesh: "Phaladesh",
+  nav_jyotish: "Jyotish",
+  nav_kundli_page: "Kundli", nav_charts: "Kundli Charts", nav_loshu: "Lo Shu Grid", nav_match: "Matching", nav_varshphal: "Varshphal", nav_rashifal: "Rashifal", nav_gochar: "Gochar", nav_shani: "Shani", nav_muhurat: "Muhurat", nav_reports: "Reports", nav_remedies: "Rudraksha-Yantra", nav_daily: "Daily Lucky", nav_calendar: "Calendar", nav_blog: "Blog", nav_admin: "Admin", nav_shani_title: "Shani Sade Sati",
   nav_chat: "AI Chat",
   nav_login: "Login",
   nav_logout: "Logout",
@@ -93,11 +97,13 @@ const mk = (o) => ({ ...EN, ...o });
 const D = {
   en: EN,
   hi: mk({
+    nav_kundli_page: "कुंडली", nav_charts: "कुंडली चार्ट", nav_loshu: "लो शु ग्रिड", nav_match: "मिलान", nav_varshphal: "वर्षफल", nav_rashifal: "राशिफल", nav_gochar: "गोचर", nav_shani: "शनि", nav_muhurat: "मुहूर्त", nav_reports: "रिपोर्ट", nav_remedies: "रुद्राक्ष-यंत्र", nav_daily: "दैनिक शुभ", nav_calendar: "कैलेंडर", nav_blog: "ब्लॉग", nav_admin: "एडमिन", nav_shani_title: "शनि सदे साती",
+    nav_kundli: "कुंडली", nav_phaladesh: "फलदेश", nav_jyotish: "ज्योतिष",
     app_name: "न्यूमरोलॉजी वीआईपी",
     loading: "लोड हो रहा है...", language: "भाषा", error_generic: "कुछ गड़बड़ हो गई।",
       city_search: "शहर खोजने के लिए लिखें...", city_choose: "— चुनें —",
     footer_tagline: "संख्याओं की शक्ति से अपनी किस्मत खोलें।",
-    footer_powered: "React + Firebase द्वारा संचालित (Hosting और Storage)",
+    footer_powered: "React + Firebase द्वारा संचालित (होस्टिंग और स्टोरेज)",
     nav_home: "होम", nav_calculator: "कैलकुलेटर",
       nav_grid: "लो शु ग्रिड", nav_panchang: "पंचांग", nav_gallery: "गैलरी", nav_about: "हमारे बारे में",
     nav_contact: "संपर्क", nav_dashboard: "डैशबोर्ड", nav_experts: "विशेषज्ञ", nav_chat: "एआई चैट",
@@ -134,11 +140,13 @@ const D = {
   }),
 
   mr: mk({
+    nav_kundli_page: "कुंडली", nav_charts: "कुंडली चार्ट", nav_loshu: "लो शू ग्रिड", nav_match: "जुळणी", nav_varshphal: "वर्षफळ", nav_rashifal: "राशिफल", nav_gochar: "गोचर", nav_shani: "शनी", nav_muhurat: "मुहूर्त", nav_reports: "अहवाल", nav_remedies: "रुद्राक्ष-यंत्र", nav_daily: "दैनिक शुभ", nav_calendar: "दैनिकी", nav_blog: "ब्लॉग", nav_admin: "प्रशासक", nav_shani_title: "शनी साडेसाती",
+    nav_kundli: "कुंडली", nav_phaladesh: "फळदेश", nav_jyotish: "ज्योतिष",
     app_name: "न्यूमेरोलॉजी व्हीआयपी",
     loading: "लोड होत आहे...", language: "भाषा", error_generic: "काहीतरी चूक झाली.",
       city_search: "शहर शोधण्यासाठी लिहा...", city_choose: "— निवडा —",
     footer_tagline: "संख्यांच्या शक्तीने तुमचे नशीब सोडवा.",
-    footer_powered: "React + Firebase द्वारे चालवले (Hosting आणि Storage)",
+    footer_powered: "React + Firebase द्वारे चालवले (होस्टिंग आणि स्टोरेज)",
     nav_home: "होम", nav_calculator: "कॅल्क्युलेटर",
       nav_grid: "लो शू ग्रिड", nav_panchang: "पंचांग", nav_gallery: "गॅलरी", nav_about: "आमच्याबद्दल",
     nav_contact: "संपर्क", nav_dashboard: "डॅशबोर्ड", nav_experts: "तज्ज्ञ", nav_chat: "एआय चॅट",
@@ -175,11 +183,13 @@ const D = {
   }),
 
   bn: mk({
+    nav_kundli_page: "কুণ্ডলী", nav_charts: "কুণ্ডলী চার্ট", nav_loshu: "লো শু গ্রিড", nav_match: "মিলন", nav_varshphal: "বর্ষফল", nav_rashifal: "রাশিফল", nav_gochar: "গোচর", nav_shani: "শনি", nav_muhurat: "মুহূর্ত", nav_reports: "রিপোর্ট", nav_remedies: "রুদ্রাক্ষ-যন্ত্র", nav_daily: "দৈনিক শুভ", nav_calendar: "ক্যালেন্ডার", nav_blog: "ব্লগ", nav_admin: "অ্যাডমিন", nav_shani_title: "শনি সদে সাতি",
+    nav_kundli: "কুণ্ডলী", nav_phaladesh: "ফলদেশ", nav_jyotish: "জ্যোতিষ",
     app_name: "নিউমেরোলজি ভিআইপি",
     loading: "লোড হচ্ছে...", language: "ভাষা", error_generic: "কিছু একটা সমস্যা হয়েছে।",
       city_search: "শহর খুঁজতে লিখুন...", city_choose: "— বেছে নিন —",
     footer_tagline: "সংখ্যার শক্তি দিয়ে আপনার ভাগ্য খুলুন।",
-    footer_powered: "React + Firebase দ্বারা চালিত (Hosting ও Storage)",
+    footer_powered: "React + Firebase দ্বারা চালিত (হোস্টিং ও স্টোরেজ)",
     nav_home: "হোম", nav_calculator: "ক্যালকুলেটর",
       nav_grid: "লো শু গ্রিড", nav_panchang: "পঞ্চাঙ্গ", nav_gallery: "গ্যালারি", nav_about: "আমাদের সম্পর্কে",
     nav_contact: "যোগাযোগ", nav_dashboard: "ড্যাশবোর্ড", nav_experts: "বিশেষজ্ঞ", nav_chat: "এআই চ্যাট",
@@ -216,11 +226,13 @@ const D = {
   }),
 
   te: mk({
+    nav_kundli_page: "కుండలి", nav_charts: "కుండలి చార్ట్‌లు", nav_loshu: "లో షూ గ్రిడ్", nav_match: "సరిపోలు", nav_varshphal: "వర్షఫలం", nav_rashifal: "రాశిఫల్", nav_gochar: "గోచరం", nav_shani: "శని", nav_muhurat: "ముహూర్తం", nav_reports: "నివేదిక", nav_remedies: "రుద్రాక్ష-యంత్రం", nav_daily: "రోజువారీ శుభం", nav_calendar: "క్యాలెండర్", nav_blog: "బ్లాగ్", nav_admin: "అడ్మిన్", nav_shani_title: "శని సదే సాతి",
+    nav_kundli: "కుండలి", nav_phaladesh: "ఫలదేశం", nav_jyotish: "జ్యోతిష్యం",
     app_name: "న్యూమెరాలజీ వీఐపీ",
     loading: "లోడవుతోంది...", language: "భాష", error_generic: "ఏదో తప్పు జరిగింది.",
       city_search: "నగరం వెతకడానికి టైప్ చేయండి...", city_choose: "— ఎంచుకోండి —",
     footer_tagline: "సంఖ్యల శక్తితో మీ విధి తెరవండి.",
-    footer_powered: "React + Firebase ద్వారా నిర్వహించబడింది (Hosting మరియు Storage)",
+    footer_powered: "React + Firebase ద్వారా నిర్వహించబడింది (హోస్టింగ్ మరియు స్టోరేజ్)",
     nav_home: "హోమ్", nav_calculator: "కాలిక్యులేటర్",
       nav_grid: "లో షూ గ్రిడ్", nav_panchang: "పంచాంగం", nav_gallery: "గ్యాలరీ", nav_about: "మన గురించి",
     nav_contact: "సంప్రదించండి", nav_dashboard: "డ్యాష్‌బోర్డ్", nav_experts: "నిపుణులు", nav_chat: "ఏఐ చాట్",
@@ -257,11 +269,13 @@ const D = {
   }),
 
   ta: mk({
+    nav_kundli_page: "குண்டளி", nav_charts: "குண்டளி வரைபடங்கள்", nav_loshu: "லோ சு கிரிட்", nav_match: "பொருத்தம்", nav_varshphal: "ஆண்டுபலன்", nav_rashifal: "ராசிபல்", nav_gochar: "கோசர்", nav_shani: "சனி", nav_muhurat: "முஹூர்த்தம்", nav_reports: "அறிக்கை", nav_remedies: "ருத்ராக்ஷ-யந்திர", nav_daily: "நாள் நல்ல", nav_calendar: "நாட்காட்டி", nav_blog: "வலைப்பதிவு", nav_admin: "நிர்வாகம்", nav_shani_title: "சனி சதைஸதி",
+    nav_kundli: "குண்டளி", nav_phaladesh: "பலதேசம்", nav_jyotish: "ஜ்யோதிஷம்",
     app_name: "நியூமராலஜி விஐபி",
     loading: "ஏற்றுகிறது...", language: "மொழி", error_generic: "ஏதோ தவறு நடந்துவிட்டது.",
       city_search: "நகரத்தைத் தேட உரையிடுங்கள்...", city_choose: "— தேர்ந்தெடுக்கவும் —",
     footer_tagline: "எண்களின் சக்தியால் உங்கள் விதியைத் திறக்குங்கள்.",
-    footer_powered: "React + Firebase மூலம் இயக்கப்படுகிறது (Hosting மற்றும் Storage)",
+    footer_powered: "React + Firebase மூலம் இயக்கப்படுகிறது (ஹோஸ்டிங் மற்றும் சேமிப்பு)",
     nav_home: "முகப்பு", nav_calculator: "கால்குலேட்டர்",
       nav_grid: "லோ சு கிரிட்", nav_panchang: "பஞ்சாங்கம்", nav_gallery: "கேலரி", nav_about: "எங்களைப் பற்றி",
     nav_contact: "தொடர்பு", nav_dashboard: "டாஷ்போர்ட்", nav_experts: "நிபுணர்கள்", nav_chat: "ஏஐ சாட்",
@@ -298,11 +312,13 @@ const D = {
   }),
 
   gu: mk({
+    nav_kundli_page: "કુંડલી", nav_charts: "કુંડલી ચાર્ટ", nav_loshu: "લો શુ ગ્રિડ", nav_match: "મિલન", nav_varshphal: "વર્ષફળ", nav_rashifal: "રાશિફલ", nav_gochar: "ગોચર", nav_shani: "શનિ", nav_muhurat: "મુહૂર્ત", nav_reports: "રિપોર્ટ", nav_remedies: "રુદ્રાક્ષ-યંત્ર", nav_daily: "દૈનિક શુભ", nav_calendar: "કૅલેન્ડર", nav_blog: "બ્લોગ", nav_admin: "એડમિન", nav_shani_title: "શનિ સતી",
+    nav_kundli: "કુંડલી", nav_phaladesh: "ફલદેશ", nav_jyotish: "જ્યોતિષ",
     app_name: "ન્યુમરોલોજી વીઆઈપી",
     loading: "લોડ થઈ રહ્યું છે...", language: "ભાષા", error_generic: "કંઈક ખોટું થયું.",
       city_search: "શહેર શોધવા લખો...", city_choose: "— પસંદ કરો —",
     footer_tagline: "અંકોની શક્તિ સાથે તમારું નસીબ ખોલો.",
-    footer_powered: "React + Firebase દ્વારા ચલાવવામાં આવે છે (Hosting અને Storage)",
+    footer_powered: "React + Firebase દ્વારા ચલાવવામાં આવે છે (હોસ્ટિંગ અને સ્ટોરેજ)",
     nav_home: "હોમ", nav_calculator: "કેલ્ક્યુલેટર",
       nav_grid: "લો શુ ગ્રિડ", nav_panchang: "પંચાંગ", nav_gallery: "ગેલરી", nav_about: "અમારા વિશે",
     nav_contact: "સંપર્ક", nav_dashboard: "ડેશબોર્ડ", nav_experts: "નિષ્ણાત", nav_chat: "એઆઈ ચેટ",
@@ -339,11 +355,13 @@ const D = {
   }),
 
   ur: mk({
+    nav_kundli_page: "کنڈلی", nav_charts: "کنڈلی چارٹس", nav_loshu: "لو شو گرڈ", nav_match: "ملاقات", nav_varshphal: "سالی فیل", nav_rashifal: "راشی فال", nav_gochar: "گوچر", nav_shani: "شنى", nav_muhurat: "میوقت", nav_reports: "رپورٹ", nav_remedies: "رُद्रاکش-یانترا", nav_daily: "روزانہ مبارک", nav_calendar: "کیلنڈر", nav_blog: "بلاگ", nav_admin: "ایڈمن", nav_shani_title: "شنبہ سادے ساتی",
+    nav_kundli: "کنڈلی", nav_phaladesh: "فال دیش", nav_jyotish: "جیوتیش",
     app_name: "نیومرولوجی وی آئی پی",
     loading: "لوڈ ہو رہا ہے...", language: "زبان", error_generic: "کچھ غلط ہو گیا۔",
       city_search: "شہر تلاش کرنے کے لیے لکھیں...", city_choose: "— منتخب کریں —",
     footer_tagline: "اعداد کی طاقت سے اپنی قسمت کھولیں۔",
-    footer_powered: "React + Firebase کے ذریعے چلایا جاتا ہے (Hosting اور Storage)",
+    footer_powered: "React + Firebase کے ذریعے چلایا جاتا ہے (ہوسٹنگ اور اسٹوریج)",
     nav_home: "ہوم", nav_calculator: "کیلکولیٹر",
       nav_grid: "لو شو گرڈ", nav_panchang: "پنچانگ", nav_gallery: "گیلری", nav_about: "ہمارے بارے",
     nav_contact: "رابطہ", nav_dashboard: "ڈیش بورڈ", nav_experts: "ماہر", nav_chat: "اے آئی چیٹ",
@@ -380,11 +398,13 @@ const D = {
   }),
 
   kn: mk({
+    nav_kundli_page: "ಕುಂಡಲಿ", nav_charts: "ಕುಂಡಲಿ ಚಾರ್ಟ್‌ಗಳು", nav_loshu: "ಲೋ ಶೂ ಗ್ರಿಡ್", nav_match: "ಹೊಂದಾಣಿಕೆ", nav_varshphal: "ವರ್ಷಫಲ", nav_rashifal: "ರಾಶಿಫಲ", nav_gochar: "ಗೋಚರ", nav_shani: "ಶನಿ", nav_muhurat: "ಮುಹೂರ್ತ", nav_reports: "ವರದಿ", nav_remedies: "ರುದ್ರಾಕ್ಷ-ಯಂತ್ರ", nav_daily: "ದೈನಂದಿನ ಶುಭ", nav_calendar: "ಕ್ಯಾಲೆಂಡರ್", nav_blog: "ಬ್ಲಾಗ್", nav_admin: "ಅಡ್ಮಿನ್", nav_shani_title: "ಶನಿ ಸಾಡೇಸಾತಿ",
+    nav_kundli: "ಕುಂಡಲಿ", nav_phaladesh: "ಫಲದೇಶ", nav_jyotish: "ಜ್ಯೋತಿಷ",
     app_name: "ನ್ಯೂಮರಾಲಜಿ ವಿಐಪಿ",
     loading: "ಲೋಡ್ ಆಗುತ್ತಿದೆ...", language: "ಭಾಷೆ", error_generic: "ಏನೋ ತಪ್ಪಾಗಿದೆ.",
       city_search: "ನಗರ ಹುಡುಕಲು ಟೈಪ್ ಮಾಡಿ...", city_choose: "— ಆಯ್ಕೆಮಾಡಿ —",
     footer_tagline: "ಸಂಖ್ಯೆಗಳ ಶಕ್ತಿಯಿಂದ ನಿಮ್ಮ ವಿಧಿ ತೆರೆಯಿರಿ.",
-    footer_powered: "React + Firebase ಮೂಲಕ ನಡೆಸಲಾಗುತ್ತದೆ (Hosting ಮತ್ತು Storage)",
+    footer_powered: "React + Firebase ಮೂಲಕ ನಡೆಸಲಾಗುತ್ತದೆ (ಹೋಸ್ಟಿಂಗ್ ಮತ್ತು ಸ್ಟೋರೇಜ್)",
     nav_home: "ಮುಖಪುಟ", nav_calculator: "ಕ್ಯಾಲ್ಕುಲೇಟರ್",
       nav_grid: "ಲೋ ಶು ಗ್ರಿಡ್", nav_panchang: "ಪಂಚಾಂಗ", nav_gallery: "ಗ್ಯಾಲರಿ", nav_about: "ನಮ್ಮ ಬಗ್ಗೆ",
     nav_contact: "ಸಂಪರ್ಕ", nav_dashboard: "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್", nav_experts: "ತಜ್ಞರು", nav_chat: "ಎಐ ಚಾಟ್",
@@ -421,11 +441,13 @@ const D = {
   }),
 
   ml: mk({
+    nav_kundli_page: "കുണ്ഡളി", nav_charts: "കുണ്ഡളി ചാർട്ടുകൾ", nav_loshu: "ലോ ഷൂ ഗ്രിഡ്", nav_match: "പൊരുത്തം", nav_varshphal: "വർഷഫലം", nav_rashifal: "രാശിഫലം", nav_gochar: "ഗോചരം", nav_shani: "ശനി", nav_muhurat: "മുഹൂർത്തം", nav_reports: "റിപ്പോർട്ട്", nav_remedies: "രുദ്രാക്ഷം-യന്ത്രം", nav_daily: "ദിനംദി ശുഭം", nav_calendar: "കലണ്ടർ", nav_blog: "ബ്ലോഗ്", nav_admin: "അഡ്മിൻ", nav_shani_title: "ശനി സാഡേസാതി",
+    nav_kundli: "കുണ്ഡളി", nav_phaladesh: "ഫലദേശം", nav_jyotish: "ജ്യോതിഷം",
     app_name: "ന്യൂമറോളജി വിഐപി",
     loading: "ലോഡ് ചെയ്യുന്നു...", language: "ഭാഷ", error_generic: "എന്തോ കുഴപ്പം സംഭവിച്ചു.",
       city_search: "നഗരം തിരയാൻ ടൈപ്പ് ചെയ്യുക...", city_choose: "— തിരഞ്ഞെടുക —",
     footer_tagline: "സംഖ്യകളുടെ ശക്തിയാൽ നിങ്ങളുടെ വിധി തുറക്കുക.",
-    footer_powered: "React + Firebase വഴി പ്രവർത്തിക്കുന്നു (Hosting, Storage)",
+    footer_powered: "React + Firebase വഴി പ്രവർത്തിക്കുന്നു (ഹോസ്റ്റിങ്, സ്റ്റോറേജ്)",
     nav_home: "ഹോം", nav_calculator: "കാൽക്കുലേറ്റർ",
       nav_grid: "ലോ ഷൂ ഗ്രിഡ്", nav_panchang: "പഞ്ചാങ്ങം", nav_gallery: "ഗാലറി", nav_about: "ഞങ്ങളെക്കുറിച്ച്",
     nav_contact: "ബന്ധപ്പെടുക", nav_dashboard: "ഡാഷ്ബോർഡ്", nav_experts: "വിദഗ്ധർ", nav_chat: "എഐ ചാറ്റ്",
@@ -462,11 +484,13 @@ const D = {
   }),
 
   pa: mk({
+    nav_kundli_page: "ਕੁੰਡਲੀ", nav_charts: "ਕੁੰਡਲੀ ਚਾਰਟ", nav_loshu: "ਲੋ ਸ਼ੂ ਗ੍ਰਿਡ", nav_match: "ਮਿਲਾਪ", nav_varshphal: "ਵਰਸ਼ਫਲ", nav_rashifal: "ਰਾਸ਼ੀਫਲ", nav_gochar: "ਗੋਚਰ", nav_shani: "ਸ਼ਨਿ", nav_muhurat: "ਮਹੂਰਤ", nav_reports: "ਰਿਪੋਰਟ", nav_remedies: "ਰੁਦਰਾਖ਼-ਯੰਤਰ", nav_daily: "ਰੋਜ਼ਾਨਾ ਸ਼ੁਭ", nav_calendar: "ਕੈਲੰਡਰ", nav_blog: "ਬਲਾਗ", nav_admin: "ਐਡਮਿਨ", nav_shani_title: "ਸ਼ਨਿ ਸਾਢੇਸਾਤੀ",
+    nav_kundli: "ਕੁੰਡਲੀ", nav_phaladesh: "ਫਲਦੇਸ਼", nav_jyotish: "ਜ੍ਯੋਤਿਸ਼",
     app_name: "ਨਿਊਮਰੋਲੋਜੀ ਵੀਆਈਪੀ",
     loading: "ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ...", language: "ਭਾਸ਼ਾ", error_generic: "ਕੁਝ ਗਲਤ ਹੋ ਗਿਆ।",
       city_search: "ਸ਼ਹਿਰ ਲੱਭਣ ਲਈ ਲਿਖੋ...", city_choose: "— ਚੁਣੋ —",
     footer_tagline: "ਅੰਕਾਂ ਦੀ ਸ਼ਕਤੀ ਨਾਲ ਆਪਣੀ ਕਿਸਮਤ ਖੋਲ੍ਹੋ।",
-    footer_powered: "React + Firebase ਰਾਹੀਂ ਚੱਲਾਇਆ ਜਾਂਦਾ ਹੈ (Hosting ਅਤੇ Storage)",
+    footer_powered: "React + Firebase ਰਾਹੀਂ ਚੱਲਾਇਆ ਜਾਂਦਾ ਹੈ (ਹੋਸਟਿੰਗ ਅਤੇ ਸਟੋਰੇਜ)",
     nav_home: "ਹੋਮ", nav_calculator: "ਕੈਲਕੁਲੇਟਰ",
       nav_grid: "ਲੋ ਸ਼ੂ ਗ੍ਰਿਡ", nav_panchang: "ਪੰਚਾਂਗ", nav_gallery: "ਗੈਲਰੀ", nav_about: "ਸਾਡੇ ਬਾਰੇ",
     nav_contact: "ਸੰਪਰਕ", nav_dashboard: "ਡੈਸ਼ਬੋਰਡ", nav_experts: "ਮਾਹਰ", nav_chat: "ਏਆਈ ਚੈਟ",
@@ -503,11 +527,13 @@ const D = {
   }),
 
   or: mk({
+    nav_kundli_page: "କୁଣ୍ଡଳୀ", nav_charts: "କୁଣ୍ଡଳୀ ଚାର୍ଟ", nav_loshu: "ଲୋ ଶୁ ଗ୍ରିଡ୍", nav_match: "ମିଳାନ", nav_varshphal: "ବର୍ଷଫଳ", nav_rashifal: "ରାଶିଫଲ", nav_gochar: "ଗୋଚର", nav_shani: "ଶନି", nav_muhurat: "ମୁହୂର୍ତ୍ତ", nav_reports: "ରିପୋର୍ଟ", nav_remedies: "ରୁଦ୍ରାକ୍ଷ-ଯନ୍ତ୍ର", nav_daily: "ଦୈନିକ ଶୁଭ", nav_calendar: "କାଲେଣ୍ଡର", nav_blog: "ବ୍ଲଗ୍", nav_admin: "ଆଡମିନ", nav_shani_title: "ଶନି ସାଢେସାତୀ",
+    nav_kundli: "କୁଣ୍ଡଳୀ", nav_phaladesh: "ଫଲଦେଶ", nav_jyotish: "ଜ୍ୟୋତିଷ",
     app_name: "ନ୍ୟୁମେରୋଲୋଜି ଭିଆଇପି",
     loading: "ଲୋଡ ହେଉଛି...", language: "ଭାଷା", error_generic: "କଣିଏ ଭୁଲ ହେଲା।",
       city_search: "ସହର ଖୋଜିବାକୁ ଲେଖନ୍ତୁ...", city_choose: "— ବାଛନ୍ତୁ —",
     footer_tagline: "ସଂଖ୍ୟାର ଶକ୍ତିରେ ଆପଣଙ୍କ ଭାଗ୍ୟ ଖୋଲନ୍ତୁ।",
-    footer_powered: "React + Firebase ଦ୍ୱାରା ଚାଳନାହିଁ (Hosting ଓ Storage)",
+    footer_powered: "React + Firebase ଦ୍ୱାରା ଚାଳନାହିଁ (ହୋଷ୍ଟିଙ୍ଗ ଓ ଷ୍ଟୋରେଜ)",
     nav_home: "ହୋମ", nav_calculator: "କାଲକୁଲେଟର",
       nav_grid: "ଲୋ ଶୁ ଗ୍ରିଡ୍", nav_panchang: "ପଞ୍ଚାଙ୍ଗ", nav_gallery: "ଗ୍ୟାଲେରୀ", nav_about: "ଆମ ବିଷୟରେ",
     nav_contact: "ଯୋଗାଯୋଗ", nav_dashboard: "ଡ୍ୟାସବୋର୍ଡ", nav_experts: "ବିଶେଷଜ୍ଞ", nav_chat: "ଏଆଇ ଚାଟ",
@@ -544,11 +570,13 @@ const D = {
   }),
 
   as: mk({
+    nav_kundli_page: "কুণ্ডলী", nav_charts: "কুণ্ডলী চাৰ্ট", nav_loshu: "লো শু গ্ৰিড", nav_match: "মিলন", nav_varshphal: "বৰষফল", nav_rashifal: "ৰাশিফল", nav_gochar: "গোচৰ", nav_shani: "শনি", nav_muhurat: "মুহূৰ্ত", nav_reports: "ৰিপ'ৰ্ট", nav_remedies: "ৰুদ্ৰাক্ষ-যন্ত্ৰ", nav_daily: "দৈনিক শুভ", nav_calendar: "কেলেণ্ডাৰ", nav_blog: "ব্লগ", nav_admin: "এডমিন", nav_shani_title: "শনি সাদে সতি",
+    nav_kundli: "কুণ্ডলী", nav_phaladesh: "ফলদেশ", nav_jyotish: "জ্যোতিষ",
     app_name: "নিউমেৰলজি ভিআইপি",
     loading: "লোড হৈ আছে...", language: "ভাষা", error_generic: "কিবা এটা ভুল হৈছে।",
       city_search: "নগৰ বিচাৰিবলৈ লিখক...", city_choose: "— বাছনি কৰক —",
     footer_tagline: "সংখ্যাৰ শক্তিৰে আপোনাৰ ভাগ্য খোলক।",
-    footer_powered: "React + Firebase দ্বাৰা চালিত (Hosting আৰু Storage)",
+    footer_powered: "React + Firebase দ্বাৰা চালিত (হোষ্টিং আৰু ষ্টোৰেজ)",
     nav_home: "হোম", nav_calculator: "কেলকুলেটৰ", nav_grid: "লো শু গ্ৰিড", nav_panchang: "পঞ্চাঙ", nav_gallery: "গেলাৰী", nav_about: "আমাৰ বিষয়ে",
     nav_contact: "যোগাযোগ", nav_dashboard: "ডেশ্বব’ৰ্ড", nav_experts: "বিশেষজ্ঞ", nav_chat: "এআই চেট",
     nav_login: "লগইন", nav_logout: "লগ আউট",
@@ -584,16 +612,19 @@ const D = {
   }),
 
   // Neeche wali chhoti bhashayein apne parivaar ki bhasha se text lete hain —
-  // english seedha nahi. Missing keys registry.js ke langChain se resolve hote hain.
-  ne: mk({}),
-  mai: mk({}),
-  doi: mk({}),
-  brx: mk({}),
-  sa: mk({}),
-  ks: mk({}),
-  sd: mk({}),
-  sat: mk({}),
-  mni: mk({}),
+  // english seedha nahi. Ye SAKHT khali hote hain (mk({}) nahi): LanguageContext
+  // ka t() langChain me chalta hai aur chain ke pehle hi step par English mil
+  // jaata tha, isliye poora chhoti-bhasha UI English dikhta raha.
+  // Ab dict khali hai → chain aage badhta hai → bn/hi/ur parivaar ki bhasha milti hai.
+  ne: {},
+  mai: {},
+  doi: {},
+  brx: {},
+  sa: {},
+  ks: {},
+  sd: {},
+  sat: {},
+  mni: {},
 };
 
 export const translations = D;
