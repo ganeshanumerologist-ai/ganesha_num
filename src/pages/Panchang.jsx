@@ -5,6 +5,10 @@ import {
   panchang, jdFromDateStr, sunTropical, moonTropical, karanaOf, lagnaSidereal,
 } from "../utils/astro.js";
 import {
+  sunTimes, fmtMin, shakaSamvat, samvatsaraName, vikramSamvat,
+  tithiAt, nakshatraAt, amritKaal, sthanikSamay, grihaPravishTime, vivahMuhur,
+} from "../utils/panchang.js";
+import {
   RAHUKAAL, YAMAGANDA, GULIKA, ABHIJIT, HORA_ORDER, HORA_START, HORA_HI,
   CHOG_CYCLE, CHOG_START, CHOG_SHUBH,
 } from "../data/jyotish.js";
@@ -12,13 +16,15 @@ import { STATES } from "../data/cities.js";
 import CITIES_FLAT from "../data/cities.js";
 import { VAAR } from "../data/daily.js";
 import { FESTIVALS_2026, MONTHS } from "../data/calendar.js";
+import { loadProfile } from "../profile/profile.js";
+import { jdFromDateStr as jdDOB, moonTropical as moonTrop, lahiriAyanamsa as ayaD, rev as revD, nakshatraOf as nakOf } from "../utils/astro.js";
 
 const todayISO = () => {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 };
 
-const TABS = ["Dainik", "Mahina", "Hora", "Panchak-Bhadra", "Lagna"];
+const TABS = ["Dainik", "Mahina", "Hora", "Panchak-Bhadra", "Lagna", "Muhurat"];
 
 // Panchak: Dhanishta uttarardh + Shatabhisha + Bhadrapadadwaya + Revati
 function isPanchak(nak) {
@@ -52,7 +58,7 @@ function fmtH(h) {
 export default function Panchang() {
   const { lang } = useLanguage();
   const P = pgT(lang);
-  const TABL = { Dainik: P.pg_dainik, Mahina: P.pg_masik, Hora: "Hora", "Panchak-Bhadra": "Panchak-Bhadra", Lagna: P.pg_lagna };
+  const TABL = { Dainik: P.pg_dainik, Mahina: P.pg_masik, Hora: "Hora", "Panchak-Bhadra": "Panchak-Bhadra", Lagna: P.pg_lagna, Muhurat: "Muhurat" };
   const [tab, setTab] = useState("Dainik");
   const [date, setDate] = useState(todayISO());
   const [p, setP] = useState(() => panchang(todayISO()));
@@ -67,7 +73,23 @@ export default function Panchang() {
 
   const weekday = new Date(date + "T12:00:00").getDay();
   const [dy, dm] = date.split("-").map(Number);
-  const samvat = { vs: dm >= 4 ? dy + 57 : dy + 56, sh: dm >= 4 ? dy - 78 : dy - 79 };
+  const samvat = { vs: vikramSamvat(date), sh: shakaSamvat(dy), samvatsara: samvatsaraName(dy) };
+
+  // Chune sheher ka data (suryodaya/suyast ke liye)
+  const cityData = CITIES_FLAT.find((x) => x[0] === city) || CITIES_FLAT[0];
+  const sun = sunTimes(date, cityData[1], cityData[2]);
+
+  // Amrit Kaal — user ke janma-nakshatra se
+  const prof = loadProfile();
+  let janmaNakIdx = null;
+  if (prof.birthdate) {
+    try {
+      const jdB = jdDOB(prof.birthdate, 12);
+      janmaNakIdx = nakOf(revD(moonTrop(jdB) - ayaD(jdB))).index;
+    } catch { /* ignore */ }
+  }
+  const amrit = amritKaal(date, janmaNakIdx, null);
+  const sthanik = sthanikSamay(weekday);
 
   // Hora: 6:00 se 1-1 ghante, vaar-swami se shuru
   const horas = [];
@@ -143,7 +165,9 @@ export default function Panchang() {
                 <p>{VAAR[weekday]} · {date}</p>
                 <h2 style={{ marginTop: 6 }}>{p.tithi.paksha} {p.tithi.name}</h2>
                 <p>{p.nakshatra.name} · Charan {p.nakshatra.pada}</p>
-                <p style={{ fontSize: ".85rem", marginTop: 8 }}>Vikram Samvat {samvat.vs} · Shaka Samvat {samvat.sh} (lagbhag)</p>
+                <p style={{ fontSize: ".85rem", marginTop: 8 }}>
+                  Vikram Samvat {samvat.vs} · Shaka Samvat {samvat.sh} · Samvatsara {samvat.samvatsara}
+                </p>
               </div>
               <div className="grid grid-2" style={{ marginTop: 16 }}>
                 <div className="card"><h3>{P.pg_tithi}</h3><p style={{ marginTop: 8 }}>{p.tithi.paksha} Paksha — {p.tithi.name}</p></div>
@@ -157,6 +181,19 @@ export default function Panchang() {
                 <div className="card"><h3>Godhuli ({P.pg_shubh})</h3><p style={{ marginTop: 8 }}>17:12 – 18:00 (maanak suryast)</p></div>
                 <div className="card"><h3>Yamaganda</h3><p style={{ marginTop: 8 }}>{YAMAGANDA[weekday]}</p></div>
                 <div className="card"><h3>Gulika Kaal</h3><p style={{ marginTop: 8 }}>{GULIKA[weekday]}</p></div>
+                <div className="card"><h3>Suryodaya (Sunrise) — {city}</h3><p style={{ marginTop: 8 }}>{fmtMin(sun.sunrise)}</p></div>
+                <div className="card"><h3>Suyast (Sunset)</h3><p style={{ marginTop: 8 }}>{fmtMin(sun.sunset)}</p></div>
+                <div className="card"><h3>Day Length</h3><p style={{ marginTop: 8 }}>{Math.floor(sun.dayLength / 60)} ghante {Math.round(sun.dayLength % 60)} minute</p></div>
+                <div className="card"><h3>Amrit Kaal</h3><p style={{ marginTop: 8 }}>
+                    {janmaNakIdx == null
+                      ? "Apni janm-tariakh daalein to Amrit Kaal nikalega."
+                      : amrit.exists
+                        ? `${fmtMin(amrit.from)} – ${fmtMin(amrit.to)}`
+                        : "Aaj Amrit Kaal nahi hai."}
+                  </p></div>
+                <div className="card"><h3>Sthanik Samay</h3><p style={{ marginTop: 8, fontSize: ".82rem" }}>
+                    {sthanik.map((s, i) => `${i + 1}. ${s}`).join(" · ")}
+                  </p></div>
               </div>
             </div>
           )}
@@ -264,6 +301,73 @@ export default function Panchang() {
             </div>
             <p style={{ fontSize: ".8rem", marginTop: 8 }}>Maanak ganana — sthaniya suryodaya anusaar ±15 min antar sambhav.</p>
           </div>
+        </div>
+      )}
+
+      {tab === "Muhurat" && (
+        <div style={{ marginTop: 16 }}>
+          <div className="card">
+            <form onSubmit={show} style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              <input className="input" style={{ maxWidth: 260 }} type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+              <button className="btn" type="submit">{P.pg_view}</button>
+            </form>
+          </div>
+          {p && (() => {
+            const ti = tithiAt(date, 12);
+            const nak = nakshatraAt(date, 12);
+            const hasPanchak = isPanchak(p.nakshatra);
+            const hasBhadra = bhadra.length > 0;
+            const griha = grihaPravishTime(ti, weekday, nak.index);
+            const vivah = vivahMuhur(ti, weekday, nak.index, hasPanchak, hasBhadra);
+            const Y = (b, label, desc) => (
+              <div className="card">
+                <h3>{label}</h3>
+                <p style={{ marginTop: 8, color: b.ok ? "var(--accent-2)" : "var(--danger)" }}>
+                  {b.ok ? "SHUBH — aaj ye muhurat hai" : "Aaj shubh nahi"}
+                </p>
+                <div style={{ marginTop: 10 }}>
+                  <div className="kv"><span className="k">Tithi</span><span className="v" style={{ color: b.tithiOk ? "var(--accent-2)" : "var(--danger)" }}>{b.tithiOk ? "✓" : "✗"} {ti.paksha} {ti.n}</span></div>
+                  <div className="kv"><span className="k">Vaar</span><span className="v" style={{ color: b.vaarOk ? "var(--accent-2)" : "var(--danger)" }}>{b.vaarOk ? "✓" : "✗"} {VAAR[weekday]}</span></div>
+                  <div className="kv"><span className="k">Nakshatra</span><span className="v" style={{ color: b.nakOk ? "var(--accent-2)" : "var(--danger)" }}>{b.nakOk ? "✓" : "✗"} {nak.name}</span></div>
+                </div>
+                <p style={{ fontSize: ".8rem", marginTop: 8 }}>{desc}</p>
+              </div>
+            );
+            return (
+              <>
+                <div className="card" style={{ marginTop: 16 }}>
+                  <h3>Samvatsara (Shash Samvatsara Chakra)</h3>
+                  <div className="kv"><span className="k">Samvatsara</span><span className="v">{samvat.samvatsara}</span></div>
+                  <div className="kv"><span className="k">Vikram Samvat</span><span className="v">{samvat.vs}</span></div>
+                  <div className="kv"><span className="k">Shaka Samvat</span><span className="v">{samvat.sh}</span></div>
+                  <p style={{ fontSize: ".8rem", marginTop: 8 }}>Samvatsara Chaitra Shukla Pratipada se badalta hai (Gudi Padwa).</p>
+                </div>
+                <div className="grid grid-2" style={{ marginTop: 16 }}>
+                  {Y(griha, "Griha Pravesh", "Krishna paksha, shubh nakshatra, Som/Budh/Guruvaar.")}
+                  {Y(vivah, "Vivah Muhurat", "Shukla paksha, rikta tithi (4,9,14) aur Mangal/Shanivaar varjit, Panchak-Bhadra varjit.")}
+                </div>
+                <div className="grid grid-2" style={{ marginTop: 16 }}>
+                  <div className="card">
+                    <h3>Suryodaya / Suyast — {city}</h3>
+                    <div className="kv"><span className="k">Suryodaya</span><span className="v">{fmtMin(sun.sunrise)}</span></div>
+                    <div className="kv"><span className="k">Suyast</span><span className="v">{fmtMin(sun.sunset)}</span></div>
+                    <div className="kv"><span className="k">Sthanik Samay</span><span className="v" style={{ fontSize: ".8rem" }}>{sthanik.join(" · ")}</span></div>
+                  </div>
+                  <div className="card">
+                    <h3>Amrit Kaal</h3>
+                    <p style={{ marginTop: 8 }}>
+                      {janmaNakIdx == null
+                        ? "Apni janm-tariakh daalein to Amrit Kaal nikalega."
+                        : amrit.exists
+                          ? `${fmtMin(amrit.from)} – ${fmtMin(amrit.to)}`
+                          : "Aaj Amrit Kaal nahi hai."}
+                    </p>
+                    {janmaNakIdx != null && <p style={{ fontSize: ".8rem", marginTop: 8 }}>Ashtami tithi + janma-nakshatra ke anusar.</p>}
+                  </div>
+                </div>
+              </>
+            );
+          })()}
         </div>
       )}
     </div>

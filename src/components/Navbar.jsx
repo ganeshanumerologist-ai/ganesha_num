@@ -49,6 +49,8 @@ export default function Navbar() {
     { to: "/gallery", label: t("nav_gallery") },
   ];
   const pageLinks = [
+    { to: "/loshu", label: t("nav_grid") },
+    { to: "/panchang", label: t("nav_panchang") },
     { to: "/about", label: t("nav_about") },
     { to: "/contact", label: t("nav_contact") },
   ];
