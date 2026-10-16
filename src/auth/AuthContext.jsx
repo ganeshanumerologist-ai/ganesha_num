@@ -117,15 +117,51 @@ export function AuthProvider({ children }) {
 
   const [otpConfirmation, setOtpConfirmation] = useState(null);
 
+  /* ---------------------------------------------------------------
+     TEST MODE
+     ---------------------------------------------------------------
+     Firebase ka Phone Auth asli SMS ke liye Blaze (billing) plan
+     maangta hai. Lekin Firebase TEST phone numbers free (Spark) plan
+     par bhi chalte hain — unke liye koi SMS nahi jaata, har baar
+     wahi fixed OTP milta hai.
+
+     Console  →  Authentication  →  Phone  →  "Phone numbers for
+     testing" section me test numbers add karke unhe yahan list karo.
+     Fir VITE_FIREBASE_TEST_PHONES="+911234567890,+91..." .env me daal do.
+
+     Ye sirf development/testing ke liye hai — production me isko hata do.
+     --------------------------------------------------------------- */
+  const TEST_PHONES = (import.meta.env.VITE_FIREBASE_TEST_PHONES || "")
+    .split(",")
+    .map((x) => x.trim())
+    .filter(Boolean);
+
+  useEffect(() => {
+    // Firebase ko batao ki in numbers par verification skip kar do
+    if (TEST_PHONES.length) {
+      auth.settings.appVerificationDisabledForTesting = true;
+      // Firebase har test number ke liye ek fixed code chunta hai; wo
+      // confirmation.result se milta hai. Hum use yahan nahi rakhenge —
+      // wo confirm() ke waqt khud verify hota hai. Sirf ye setting chahiye.
+    }
+  }, []);
+
   const verifierFor = (containerId) => {
+    // Test number par reCAPTCHA ki zaroorat nahi
+    if (TEST_PHONES.length) return null;
     if (!containerId) return null;
     return new RecaptchaVerifier(auth, containerId, { size: "normal" });
   };
 
+  /** Kya ye number test list me hai? */
+  const isTestPhone = (phone) => TEST_PHONES.includes(toE164(phone));
+
   const sendOtp = async (phone, containerId) => {
     const verifier = verifierFor(containerId);
-    if (!verifier) throw new Error("otp-captcha-missing");
-    const res = await signInWithPhoneNumber(auth, toE164(phone), verifier);
+    // Test number: verifier null chalta hai, Firebase khud fixed code dega
+    const res = verifier
+      ? await signInWithPhoneNumber(auth, toE164(phone), verifier)
+      : await signInWithPhoneNumber(auth, toE164(phone));
     setOtpConfirmation(res);
     return res;
   };
@@ -167,6 +203,8 @@ export function AuthProvider({ children }) {
         signupWithOtp,
         resetOtp,
         otpReady: Boolean(otpConfirmation),
+        testPhones: TEST_PHONES,
+        isTestPhone,
       }}
     >
       {children}

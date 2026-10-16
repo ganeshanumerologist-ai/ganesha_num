@@ -12,6 +12,8 @@ const ERR_TX = {
     cred: "Wrong email or password. Sign up first.",
     used: "This email is already registered — please sign in.",
     net: "Check your internet connection.",
+    otpTestHead: "Test numbers (no SMS sent)",
+    otpTestNote: "Test number — OTP was NOT sent by SMS. Use the code shown in the Firebase console.",
     otpTab: "Login with OTP",
     otpSend: "Send OTP",
     otpEnter: "Enter OTP",
@@ -30,6 +32,8 @@ const ERR_TX = {
     cred: "ईमेल या पासवर्ड गलत है। पहले साइन अप करें।",
     used: "यह ईमेल पहले से रजिस्टर्ड है — साइन इन करें।",
     net: "इंटरनेट कनेक्शन जाँचें।",
+    otpTestHead: "टेस्ट नंबर (SMS नहीं जाएगा)",
+    otpTestNote: "टेस्ट नंबर — SMS नहीं गया। Firebase console में दिखाया गया कोड डालें।",
     otpTab: "OTP से लॉगिन",
     otpSend: "OTP भेजें",
     otpEnter: "OTP डालें",
@@ -48,6 +52,8 @@ const ERR_TX = {
     cred: "ईमेल किंवा पासवर्ड चूक आहे. आधी साइन अप करा.",
     used: "हा ईमेल आधीच नोंदणीकृत आहे — साइन इन करा.",
     net: "इंटरनेट कनेक्शन तपासा.",
+    otpTestHead: "चाचणी क्रमांक (SMS जाणार नाही)",
+    otpTestNote: "चाचणी क्रमांक — SMS गेला नाही. Firebase console मध्ये दाखवलेला कोड टाका.",
     otpTab: "OTP ने लॉगिन",
     otpSend: "OTP पाठवा",
     otpEnter: "OTP टाका",
@@ -65,6 +71,8 @@ const ERR_TX = {
     cred: "ইমেইল বা পাসওয়ার্ড ভুল। আগে সাইন আপ করুন।",
     used: "এই ইমেইল আগেই নিবন্ধিত — সাইন ইন করুন।",
     net: "ইন্টারনেট সংযোগ পরীক্ষা করুন।",
+    otpTestHead: "টেস্ট নম্বর (SMS যাবে না)",
+    otpTestNote: "টেস্ট নম্বর — SMS যায়নি। Firebase console-এ দেখানো কোড দিন।",
     otpTab: "OTP দিয়ে লগইন",
     otpSend: "OTP পাঠান",
     otpEnter: "OTP দিন",
@@ -82,6 +90,8 @@ const ERR_TX = {
     cred: "ఇమెయిల్ లేదా పాస్‌వర్డ్ తప్పు. ముందుగా సైన్ అప్ చేయండి.",
     used: "ఈ ఇమెయిల్ ఇప్పటికే నమోదు చేసబడింది — సైన్ ఇన్ చేయండి.",
     net: "ఇంటర్‌నెట్ కనెక్షన్ పరిశీలించండి.",
+    otpTestHead: "పరీక్ష సంఖ్యలు (SMS రాదు)",
+    otpTestNote: "పరీక్ష సంఖ్య — SMS పోలదు. Firebase console లో కనిపించిన కోడ్ నమోదు చేయండి.",
     otpTab: "OTP తో లాగిన్",
     otpSend: "OTP పంపండి",
     otpEnter: "OTP నమోదు చేయండి",
@@ -99,6 +109,8 @@ const ERR_TX = {
     cred: "மின்னஞ்சல் அல்லது கடவுச்சொல் தவறு. முதலில் பதிவு செய்யுங்கள்.",
     used: "இந்த மின்னஞ்சல் ஏற்கனவே பதிவானது — உள்நுழையுங்கள்.",
     net: "இணைய இணைப்பை சரிபார்க்கவும்.",
+    otpTestHead: "சோதனை எண்கள் (SMS போகாது)",
+    otpTestNote: "சோதனை எண் — SMS போகவில்லை. Firebase console-ல் காட்டப்பட்ட குறியீட்டை உள்ளிடவும்.",
     otpTab: "OTP மூலம் உள்நுழை",
     otpSend: "OTP அனுப்பு",
     otpEnter: "OTP உள்ளிடவும்",
@@ -116,6 +128,8 @@ const ERR_TX = {
     cred: "ઈમેલ કે પાસવર્ડ ખોટો છે. પહેલા સાઇન અપ કરો.",
     used: "આ ઈમેલ પહેલેથી નોંધાયેલો છે — સાઇન ઇન કરો.",
     net: "ઇન્ટરનેટ કનેક્શન તપાસો.",
+    otpTestHead: "ટેસ્ટ નંબર (SMS જશે નહીં)",
+    otpTestNote: "ટેસ્ટ નંબર — SMS ગયો નથી. Firebase console માં બતાવેલો કોડ નાખો.",
     otpTab: "OTP થી લોગિન",
     otpSend: "OTP મોકલો",
     otpEnter: "OTP નાખો",
@@ -133,6 +147,8 @@ const ERR_TX = {
     cred: "ای میل یا پاس ورڈ غلط ہے۔ پہلے سائن اَپ کریں۔",
     used: "یہ ای میل پہلے سے رجسٹرڈ ہے — سائن اِن کریں۔",
     net: "انٹرنیٹ کنکشن چیک کریں۔",
+    otpTestHead: "ٹیسٹ نمبر (SMS نہیں جائے گا)",
+    otpTestNote: "ٹیسٹ نمبر — SMS نہیں گیا۔ Firebase console میں دکھایا گیا کوڈ درج کریں۔",
     otpTab: "OTP سے لاگ ان",
     otpSend: "OTP بھیجیں",
     otpEnter: "OTP درج کریں",
@@ -150,6 +166,8 @@ const ERR_TX = {
     cred: "ಇಮೇಲ್ ಅಥವಾ ಪಾಸ್‌ವರ್ಡ್ ತಪ್ಪಾಗಿದೆ. ಮೊದಲು ಸೈನ್ ಅಪ್ ಮಾಡಿ.",
     used: "ಈ ಇಮೇಲ್ ಈಗಾಗಲೇ ನೋಂದಾಯಿತು — ಸೈನ್ ಇನ್ ಮಾಡಿ.",
     net: "ಇಂಟರ್ನೆಟ್ ಕನೆಕ್ಷನ್ ಪರಿಶೀಲಿಸಿ.",
+    otpTestHead: "ಪರೀಕ್ಷಾ ಸಂಖ್ಯೆಗಳು (SMS ಹೋಗುವುದಿಲ್ಲ)",
+    otpTestNote: "ಪರೀಕ್ಷಾ ಸಂಖ್ಯೆ — SMS ಹೋಗಿಲ್ಲ. Firebase console ನಲ್ಲಿ ತೋರಿಸಿದ ಕೋಡ್ ನಮೂದಿಸಿ.",
     otpTab: "OTP ಮೂಲಕ ಲಾಗಿನ್",
     otpSend: "OTP ಕಳುಹಿಸಿ",
     otpEnter: "OTP ನಮೂದಿಸಿ",
@@ -167,6 +185,8 @@ const ERR_TX = {
     cred: "ഇമെയിൽ അല്ലെങ്കിൽ പാസ്‌വേഡ് തെറ്റാണ്. ആദ്യം സൈൻ അപ്പ് ചെയ്യുക.",
     used: "ഈ ഇമെയിൽ മുമ്പ് തന്നെ രജിസ്റ്റർ ചെയ്തിരിക്കുന്നു — ലോഗിൻ ചെയ്യുക.",
     net: "ഇന്റർനെറ്റ് കണക്ഷൻ പരിശോധിക്കുക.",
+    otpTestHead: "ടെസ്റ്റ് നമ്പർ (SMS അയയില്ല)",
+    otpTestNote: "ടെസ്റ്റ് നമ്പർ — SMS അയച്ചില്ല. Firebase console-ൽ കാണിച്ച കോഡ് നൽകുക.",
     otpTab: "OTP വഴി ലോഗിൻ",
     otpSend: "OTP അയയ്ക്കുക",
     otpEnter: "OTP നൽകുക",
@@ -184,6 +204,8 @@ const ERR_TX = {
     cred: "ਈਮੇਲ ਜਾਂ ਪਾਸਵਰਡ ਗਲਤ ਹੈ। ਪਹਿਲਾਂ ਸਾਈਨ ਅੱਪ ਕਰੋ।",
     used: "ਇਹ ਈਮੇਲ ਪਹਿਲਾਂ ਤੋਂ ਰਜਿਸਟਰਡ ਹੈ — ਸਾਈਨ ਇਨ ਕਰੋ।",
     net: "ਇੰਟਰਨੈੱਟ ਕਨੈਕਸ਼ਨ ਜਾਂਚੋ।",
+    otpTestHead: "ਟੈਸਟ ਨੰਬਰ (SMS ਨਹੀਂ ਜਾਵੇਗਾ)",
+    otpTestNote: "ਟੈਸਟ ਨੰਬਰ — SMS ਨਹੀਂ ਗਿਆ। Firebase console ਵਿੱਚ ਦਿਖਾਇਆ ਕੋਡ ਪਾਓ।",
     otpTab: "OTP ਰਾਹੀਂ ਲੌਗਿਨ",
     otpSend: "OTP ਭੇਜੋ",
     otpEnter: "OTP ਪਾਓ",
@@ -201,6 +223,8 @@ const ERR_TX = {
     cred: "ଇମେଲ କିମ୍ବା ପାସୱାର୍ଡ ଭୁଲ। ପ୍ରଥମେ ସାଇନ ଅପ୍ କରନ୍ତୁ।",
     used: "ଏହି ଇମେଲ ପୂର୍ବରୁ ପଞ୍ଜୀକୃତ — ସାଇନ ଇନ୍ କରନ୍ତୁ।",
     net: "ଇଣ୍ଟରନେଟ୍ ସଂଯୋଗ ଯାଞ୍ଚ କରନ୍ତୁ।",
+    otpTestHead: "ପରୀକ୍ଷା ସଂଖ୍ୟା (SMS ଯିବ ନାହିଁ)",
+    otpTestNote: "ପରୀକ୍ଷା ସଂଖ୍ୟା — SMS ଗଲା ନାହିଁ। Firebase consoleରେ ଦେଖାଯାଇଥିବା କୋଡ ଦିଅନ୍ତୁ।",
     otpTab: "OTP ଦ୍ୱାରା ଲଗଇନ",
     otpSend: "OTP ପଠାନ୍ତୁ",
     otpEnter: "OTP ଦିଅନ୍ତୁ",
@@ -218,6 +242,8 @@ const ERR_TX = {
     cred: "ইমেইল বা পাছৱৰ্ড ভুল। প্ৰথমে ছাইন আপ কৰক।",
     used: "এই ইমেইল আগৰে পঞ্জীয়ন কৰা আছে — ছাইন ইন কৰক।",
     net: "ইণ্টাৰনেট সংযোগ পৰীক্ষা কৰক।",
+    otpTestHead: "টেষ্ট নম্বৰ (SMS যাব নাই)",
+    otpTestNote: "টেষ্ট নম্বৰ — SMS যায়নাই। Firebase consoleত দেখুওৱা কোড দিয়ক।",
     otpTab: "OTPৰে লগইন",
     otpSend: "OTP পঠিয়াওক",
     otpEnter: "OTP দিয়ক",
@@ -239,16 +265,24 @@ function friendlyError(err, lang) {
   if (code.includes("invalid-credential") || code.includes("user-not-found") || code.includes("wrong-password")) return d.cred;
   if (code.includes("email-already-in-use")) return d.idUsed || d.used;
   if (code.includes("network")) return d.net;
-  // OTP-specific
+
+  // ---- OTP-specific ----
   if (code.includes("invalid-verification-code") || code.includes("invalid-verification-id")
     || code.includes("session-expired") || code.includes("code-expired")) return d.otpBad;
-  if (code.includes("phone-number-already") || code.includes("browse")) return d.otpNeedsPhone;
-  if (code.includes("too-many-requests")) return d.otpBad;
+  if (code.includes("too-many-requests") || code.includes("quota")) return d.otpBad;
+  if (code.includes("operation-not-allowed")) return d.otpNeedsPhone;
+  if (code.includes("billing") || code.includes("payment-required")) return d.otpNeedsPhone;
+  // Phone Auth me "auth/argument-error" aata hai jab Phone provider band ho
+  // ya verifier container ready na ho. Asli wajah dikha do.
+  if (code.includes("argument-error") || code.includes("captcha") || code.includes("browse")
+    || code.includes("phone-number")) {
+    return `${d.otpNeedsPhone}  (${code || err?.message || "error"})`;
+  }
   return err?.message;
 }
 
 export default function Login() {
-  const { user, loading, login, signup, googleLogin, sendOtp, verifyOtp, signupWithOtp, resetOtp, otpReady } = useAuth();
+  const { user, loading, login, signup, googleLogin, sendOtp, verifyOtp, signupWithOtp, resetOtp, otpReady, testPhones, isTestPhone } = useAuth();
   const { t, lang } = useLanguage();
   const nav = useNavigate();
 
@@ -280,7 +314,7 @@ export default function Login() {
     try {
       await sendOtp(id, CAPTCHA_ID);
       setOtpSent(true);
-      setNote(d.otpSent);
+      setNote(isTestPhone(id) ? d.otpTestNote : d.otpSent);
     } catch (err) {
       setError(friendlyError(err, lang) || d.otpNeedsPhone);
     } finally {
@@ -480,8 +514,24 @@ export default function Login() {
         </form>
 
         {/* ---- Firebase OTP ke liye ye div chahiye (reCAPTCHA yahan aata hai) ---- */}
-        {how === "otp" && !otpSent && (
+        {how === "otp" && !otpSent && (testPhones.length > 0 ? null : (
           <div id={CAPTCHA_ID} style={{ marginTop: 14 }} />
+        ))}
+
+        {/* ---- Test numbers ka panel (sirf development me dikhta hai) ---- */}
+        {how === "otp" && testPhones.length > 0 && (
+          <div
+            style={{
+              marginTop: 14, padding: "10px 12px", borderRadius: 10,
+              border: "1px dashed rgba(34,211,238,.45)", background: "rgba(34,211,238,.06)",
+              fontSize: ".8rem",
+            }}
+          >
+            <strong style={{ color: "var(--accent-2)" }}>{d.otpTestHead}</strong>
+            <div style={{ marginTop: 6, opacity: .85 }}>
+              {testPhones.join("  ·  ")}
+            </div>
+          </div>
         )}
         <div style={{ marginTop: 12 }}>
           <button className="btn secondary" style={{ width: "100%" }} onClick={google}>{t("google_signin")}</button>
