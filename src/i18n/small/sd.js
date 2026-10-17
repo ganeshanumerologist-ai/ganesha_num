@@ -1,8 +1,3 @@
-// Chhoti bhasha — sd
-// 326 keys · translations 94 / site 149 / kundli 27 / pg 56
-// Values us bhasha ke apne script me. Brand aur technical shabd
-// (GANESHA SUYOG ASTROLOGY, Lo Shu Grid, AI, React, Shodashvarga)
-// English me hi rehte hain.
 export default {
   "code": "sd",
   "translations": {
@@ -95,7 +90,7 @@ export default {
     "password": "پاس ورڊ",
     "sign_in": "لاگ ان ٿيو",
     "sign_up": "راجسٽر ٿيو",
-    "google_signin": "Continue with Google",
+    "google_signin": "گوگل کان جاري رکو",
     "save_reading": "پڙهائي محفوظ ڪريو",
     "saved_readings": "محفوظ پڙهائي",
     "book_session": "سيشن بَک ڪريو",

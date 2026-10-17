@@ -45,16 +45,25 @@ for (const lang of SMALL_LANGS) {
       : BN_FAMILY.includes(lang) ? "bn" : null;
 
   const rows = PROBES.map((p) => ({ p, mine: tt(lang, p), was: wasSameAs ? tt(wasSameAs, p) : null }));
-  const sameAsFamily = rows.filter((r) => r.was !== null && r.mine === r.was).length;
-  const latin = rows.filter((r) => /[A-Za-z]{3,}/.test(r.mine) && !/^(Phaladesh|Lo Shu|Kundli|AI )/.test(r.mine));
 
-  const status = sameAsFamily === 0 ? "BADAL GAYA ✅" : `${sameAsFamily}/${PROBES.length} par ${wasSameAs} jaisa hi ❌`;
+  // Asli galti: value ENGLISH me chala gaya.
+  const english = rows.filter((r) => r.mine === translations.en[r.p]);
+  // Info: parivaar ki bhasha se kitna alag. 100% hona zaroori NAHI —
+  // "पंचांग" Dogri aur Hindi dono me wahi hai (Sanskrit se aaya shabd),
+  // wahan alag hona galat hota.
+  const sameAsFamily = rows.filter((r) => r.was !== null && r.mine === r.was).length;
+
+  const status = english.length
+    ? `${english.length} probe ENGLISH par ❌`
+    : sameAsFamily === PROBES.length
+      ? "sab parivaar jaisa (galat?) ❌"
+      : `apni bhasha me ✅${sameAsFamily ? `  (${sameAsFamily}/${PROBES.length} par shabd shared)` : ""}`;
+
   console.log(`  ${lang.padEnd(4)} ${status}`);
   for (const r of rows.slice(0, 3)) {
     console.log(`        ${r.p.padEnd(15)} "${r.mine.slice(0, 34)}"`);
   }
-  if (sameAsFamily) bad(`${lang}: ${sameAsFamily} probe par ab bhi ${wasSameAs} ka text hai`);
-  if (latin.length) bad(`${lang}: Latin leak — "${latin[0].mine}"`);
+  if (english.length) bad(`${lang}: ${english.map((r) => r.p).join(", ")} ab bhi English hai`);
 }
 
 console.log("\n=== 2. chaaron module us bhasha ka apna dict de rahe hain? ===");
@@ -74,16 +83,31 @@ for (const lang of SMALL_LANGS) {
 }
 
 console.log("\n=== 3. koi bhasha English par gir to nahi gayi? ===");
+// Ye English me rehna SAHI hai — brand, technical ya proper noun
+const KEEP_EN = new Set([
+  "app_name", "footer_powered", "nav_chat", "chat_title",
+  "nav_grid", "nav_loshu", "pg_grid",
+  "pg_varga", "pg_lalkitab",
+  "calc_ex_name", "calc_ex_mob",
+  "admin_step1", "admin_step2", "admin_step3",
+  "share_sub", "share_note", "share_default_msg",
+]);
 for (const lang of LANGUAGES.map((l) => l.code)) {
   if (lang === "en") continue;
-  const enKeys = Object.keys(translations.en);
-  // english value match count
-  let enMatch = 0;
-  for (const k of enKeys) {
-    if (tt(lang, k) === translations.en[k] && /[A-Za-z]{3,}/.test(String(translations.en[k]))) enMatch++;
+  const leaks = [];
+  for (const k of Object.keys(translations.en)) {
+    if (KEEP_EN.has(k)) continue;
+    const en = translations.en[k];
+    if (!/[A-Za-z]{3,}/.test(String(en))) continue;
+    if (tt(lang, k) === en) leaks.push(k);
   }
   const isSmall = SMALL_LANGS.includes(lang);
-  if (isSmall && enMatch > 2) bad(`${lang}: ${enMatch} key ab bhi English value de rahi hai`);
+  if (leaks.length) {
+    console.log(`  ${lang.padEnd(4)} ${leaks.length} leak: ${leaks.slice(0, 6).join(", ")}`);
+    if (isSmall) bad(`${lang}: ${leaks.length} English value — ${leaks.slice(0, 5).join(", ")}`);
+  } else {
+    console.log(`  ${lang.padEnd(4)} 0 English leak ✅`);
+  }
 }
 
 console.log("\n=== 4. bhasha ke apne native name dikhna chahiye (UI hint) ===");

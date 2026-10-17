@@ -1,8 +1,3 @@
-// Chhoti bhasha — brx
-// 326 keys · translations 94 / site 149 / kundli 27 / pg 56
-// Values us bhasha ke apne script me. Brand aur technical shabd
-// (GANESHA SUYOG ASTROLOGY, Lo Shu Grid, AI, React, Shodashvarga)
-// English me hi rehte hain.
 export default {
   "code": "brx",
   "translations": {
@@ -95,7 +90,7 @@ export default {
     "password": "गुपैत बोल",
     "sign_in": "दुखाम जयरा",
     "sign_up": "नया खाताँ दिङो",
-    "google_signin": "Continue with Google",
+    "google_signin": "गुगल निङ लिरा जारी रखालम",
     "save_reading": "पढ़ाइ सँगवार दिङो",
     "saved_readings": "सँगवार गेलिबो पढ़ाइ",
     "book_session": "पालन बुक करो",

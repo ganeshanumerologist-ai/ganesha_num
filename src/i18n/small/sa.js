@@ -1,8 +1,3 @@
-// Chhoti bhasha — sa
-// 326 keys · translations 94 / site 149 / kundli 27 / pg 56
-// Values us bhasha ke apne script me. Brand aur technical shabd
-// (GANESHA SUYOG ASTROLOGY, Lo Shu Grid, AI, React, Shodashvarga)
-// English me hi rehte hain.
 export default {
   "code": "sa",
   "translations": {
@@ -11,7 +6,7 @@ export default {
     "language": "भाषा",
     "error_generic": "किमपि त्रुटिः अभवत्।",
     "city_search": "नगरं अन्वेष्टुं टङ्कयतु...",
-    "city_choose": "— Select —",
+    "city_choose": "— चिनोतु —",
     "footer_tagline": "सङ्ख्याशक्तिना निजं भाग्यं मोचयतु।",
     "footer_powered": "Powered by React + Firebase (Hosting & Storage)",
     "nav_home": "गृहम्",
@@ -95,7 +90,7 @@ export default {
     "password": "गोपसंकेतः",
     "sign_in": "प्रविश्यतु",
     "sign_up": "पञ्जीकुरुत",
-    "google_signin": "Continue with Google",
+    "google_signin": "गूगलद्वारा सततं कुरु",
     "save_reading": "फलपठनं सञ्चयतु",
     "saved_readings": "सञ्चितानि पठनानि",
     "book_session": "सञ्ज्ञासत्रं कारयतु",
@@ -225,7 +220,7 @@ export default {
     "bala_asta": "वक्री",
     "remedies_guide": "रुद्राक्ष · औषधि · यन्त्रसूची",
     "rashifal_date": "तिथिः",
-    "city_choose": "— Select —",
+    "city_choose": "— चिनोतु —",
     "city_search": "नगरं अन्वेष्टुं टङ्कयतु...",
     "rf_shubh": "शुभम्",
     "rf_ashubh": "अशुभम्",
