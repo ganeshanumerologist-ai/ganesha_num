@@ -11,6 +11,7 @@
 // user ne signup par diya tha.
 
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { setProfileOwner, clearAllProfiles } from "../profile/profile.js";
 import { auth, db } from "../firebase.js";
 import {
   onAuthStateChanged,
@@ -49,6 +50,11 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (u) => {
       setUser(u);
+      // ── Profile ka owner badlo ────────────────────────────────
+      // Pehle ek hi "nv-profile" key thi, to ek hi phone par dusre
+      // user ka naam/jant/path dikh jaata tha. Ab har user ka apna
+      // slot hota hai (nv-profile:<uid>), logout par anonymous.
+      setProfileOwner(u ? u.uid : null);
       if (u) {
         try {
           const ref = doc(db, "users", u.uid);
@@ -105,7 +111,14 @@ export function AuthProvider({ children }) {
     return cred;
   };
 
-  const logout = () => signOut(auth);
+  const logout = async () => {
+    // Profile ka data logout par bhi mitao — shared device par agla
+    // user use na dekh sake. (setProfileOwner Auth listener kar raha hai)
+    await signOut(auth);
+    try {
+      clearAllProfiles();
+    } catch { /* ignore */ }
+  };
 
   /* ---------------- SMS OTP ----------------
      1. sendOtp(phone, containerId) -> SMS chali jaati hai

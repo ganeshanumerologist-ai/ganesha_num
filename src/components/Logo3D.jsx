@@ -6,10 +6,13 @@
 // Ye pehle /logo.png try karega. Na mile to apne 3D diya hua mark
 // dikha dega (mandala + kalash + ॐ). Kuch code badalne ki zaroorat nahi.
 
-import React, { useState } from "react";
+import React, { useState, useId } from "react";
 
 export default function Logo3D({ size = 132, text = "GANESHA SUYOG ASTROLOGY" }) {
   const [customFailed, setCustomFailed] = useState(false);
+  // Har SVG instance ko alag gradient/filter id — warna navbar aur hero
+  // ke SVG aapas me id chur lete hain (detail dekho defs ke neeche).
+  const uid = useId().replace(/:/g, "");
 
   return (
     <div className="logo3d" style={{ width: size, height: size }}>
@@ -27,26 +30,35 @@ export default function Logo3D({ size = 132, text = "GANESHA SUYOG ASTROLOGY" })
       {customFailed && (
         <svg className="logo3d-mark" viewBox="-100 -100 200 200">
           <defs>
-            <radialGradient id="lgc" cx="35%" cy="28%">
+            {/* ── BAHUT ZAROORI ──────────────────────────────
+                Ye pehle lgc / lgr / lgshadow the — jo GLOBAL ids hain.
+                Logo navbar AUR hero dono me render hota hai, to do SVG
+                page par aa jate the aur dusre SVG ka url(#lgc)
+                reference pehle wale par chala jaata tha. Result: circle
+                ka gradient render hi nahi hota tha → ॐ (dark brown)
+                dark background par invisible ho jata tha — yahi mobile
+                par "text dikhai nahi de raha" wali problem thi.
+                Ab har instance ko apna unique id milta hai. */}
+            <radialGradient id={`${uid}-c`} cx="35%" cy="28%">
               <stop offset="0%" stopColor="#fff6d8" />
               <stop offset="35%" stopColor="#fbbf24" />
               <stop offset="100%" stopColor="#b45309" />
             </radialGradient>
-            <linearGradient id="lgr" x1="0" y1="0" x2="1" y2="1">
+            <linearGradient id={`${uid}-r`} x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stopColor="#fde68a" />
               <stop offset="55%" stopColor="#fbbf24" />
               <stop offset="100%" stopColor="#a78bfa" />
             </linearGradient>
-            <filter id="lgshadow" x="-40%" y="-40%" width="180%" height="180%">
+            <filter id={`${uid}-s`} x="-40%" y="-40%" width="180%" height="180%">
               <feDropShadow dx="0" dy="6" stdDeviation="7" floodColor="#000" floodOpacity="0.55" />
             </filter>
           </defs>
 
           {/* chaakra */}
-          <g filter="url(#lgshadow)">
-            <circle r="72" fill="none" stroke="url(#lgr)" strokeWidth="4" />
-            <circle r="58" fill="none" stroke="url(#lgr)" strokeWidth="1.6" opacity="0.7" />
-            <circle r="40" fill="url(#lgc)" opacity="0.92" />
+          <g filter={`url(#${uid}-s)`}>
+            <circle r="72" fill="none" stroke={`url(#${uid}-r)`} strokeWidth="4" />
+            <circle r="58" fill="none" stroke={`url(#${uid}-r)`} strokeWidth="1.6" opacity="0.7" />
+            <circle r="40" fill={`url(#${uid}-c)`} opacity="0.92" />
             <circle r="40" fill="none" stroke="#fff8e1" strokeWidth="1.2" opacity="0.55" />
           </g>
 

@@ -209,9 +209,17 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 .grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
 .grid-3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
 .text-gradient {
+  /* Pehle: color: transparent + background-clip:text. Kuch mobile
+     browsers par background-clip render nahi hota — phir text
+     TRANSPARENT reh jaata hai, yaani dikhta hi nahi.
+     Isliye pehle solid gold, gradient sirf tab jab support ho. */
+  color: var(--gold);
   background: linear-gradient(115deg, #fde68a 0%, #fbbf24 28%, #a78bfa 62%, #67e8f9 100%);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
+  -webkit-background-clip: text; background-clip: text;
   filter: drop-shadow(0 4px 22px rgba(251,191,36,.25));
+}
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .text-gradient { color: transparent; }
 }
 .badge {
   display: inline-block; padding: 5px 16px; border-radius: 999px; font-size: .75rem;
@@ -231,9 +239,13 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 }
 .num-chip b {
   font-size: 1.9rem; line-height: 1.05; font-weight: 800;
+  color: var(--gold);   /* fallback — gradient na chale to bhi dikhe */
   background: linear-gradient(115deg, #fde68a, #fbbf24 40%, #a78bfa);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
+  -webkit-background-clip: text; background-clip: text;
   filter: drop-shadow(0 2px 10px rgba(251,191,36,.30));
+}
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .num-chip b { color: transparent; }
 }
 .num-chip span { font-size: .68rem; line-height: 1.25; color: var(--muted); }
 .spinner { width: 36px; height: 36px; border: 4px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto; }
@@ -432,7 +444,10 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 
 .number-card { text-align: center; }
 .number-card .num { font-size: 4rem; font-weight: 800; line-height: 1; margin: 8px 0; }
-.number-card .num span { background: linear-gradient(135deg, var(--accent), var(--gold)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.number-card .num span { color: var(--gold); background: linear-gradient(135deg, var(--accent), var(--gold)); -webkit-background-clip: text; background-clip: text; }
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .number-card .num span { color: transparent; }
+}
 .kv { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); }
 .kv:last-child { border-bottom: none; }
 .kv .k { color: var(--muted); }
@@ -449,4 +464,38 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 @media (max-width: 640px) {
   .main { padding: 20px 14px; }
   .hero { padding: 30px 0 20px; }
+
+  /* ── Mobile par text dark background par dubara dabba hua tha ──
+     Chhote screen par backdrop zyada peeche se dikhta hai, isliye
+     cards thodi opaque aur text thoda bright karte hain. */
+  .card {
+    background: linear-gradient(160deg, rgba(10, 13, 30, .93), rgba(6, 8, 20, .88));
+    backdrop-filter: blur(12px) saturate(130%);
+  }
+  .num-chip {
+    background: rgba(8, 11, 24, .92);
+    border-color: rgba(251, 191, 36, .34);
+  }
+  .num-chip span { color: #d5d8f0; }
+  .kv .k, .label { color: #d5d8f0; }
+  p, li { text-shadow: 0 1px 3px rgba(0, 0, 0, .85); }
+  .badge { background: rgba(251, 191, 36, .16); }
+  /* Sirf extra shadow. -webkit-text-fill-color YAHAN nahi lagana —
+     wo "color" ko follow karta hai, aur @supports me color:transparent
+     hota hai, yaani text phir invisible ho jayega! */
+  .text-gradient, .num-chip b, .number-card .num span {
+    text-shadow: 0 2px 10px rgba(0, 0, 0, .7);
+  }
+}
+
+/* ── Sabse zaroori: gradient text ka fallback ─────────────────────
+   Kuch mobile browsers par background-clip:text render nahi hota.
+   Tab "color: transparent" text ko INVISIBLE bana deta hai — jo
+   dark background par "text gayab" dikhta hai. Isliye upar @supports
+   guard lagaya hai; ye sirf shadow extra karta hai. */
+@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+  .text-gradient, .num-chip b, .number-card .num span {
+    background: none;
+    color: var(--gold);
+  }
 }

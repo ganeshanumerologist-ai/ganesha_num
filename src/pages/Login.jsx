@@ -5,6 +5,7 @@ import { isValidId, looksLikePhone, isValidOtp, toPhone } from "../auth/identity
 import { useLanguage } from "../i18n/LanguageContext.jsx";
 import { pageTX } from "../i18n/pageTx.js";
 import { isFirebaseConfigured } from "../firebase.js";
+import { saveProfile } from "../profile/profile.js";
 
 const ERR_TX = {
   en: {
@@ -331,9 +332,9 @@ export default function Login() {
       if (mode === "signup") await signupWithOtp(id, name, otp);
       else await verifyOtp(otp);
       // number profile me bhi rakh do, forms me auto bhare
+      // (saveProfile har user ke apne slot me likhta hai — profile.js dekho)
       try {
-        const cur = JSON.parse(localStorage.getItem("nv-profile") || "{}");
-        localStorage.setItem("nv-profile", JSON.stringify({ ...cur, mobile: toPhone(id) }));
+        saveProfile({ mobile: toPhone(id) });
       } catch { /* ignore */ }
       nav("/dashboard");
     } catch (err) {
@@ -366,8 +367,7 @@ export default function Login() {
       else await signup(name, id, password);
       if (looksLikePhone(id)) {
         try {
-          const cur = JSON.parse(localStorage.getItem("nv-profile") || "{}");
-          localStorage.setItem("nv-profile", JSON.stringify({ ...cur, mobile: toPhone(id) }));
+          saveProfile({ mobile: toPhone(id) });
         } catch { /* ignore */ }
       }
       nav("/dashboard");
