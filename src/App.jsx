@@ -28,6 +28,8 @@ import Charts from "./pages/Charts.jsx";
 import Loshu from "./pages/Loshu.jsx";
 import Remedies from "./pages/Remedies.jsx";
 import WhatsAppButton from "./components/WhatsAppButton.jsx";
+import { OnlyLoggedIn } from "./components/RequireAuth.jsx";
+import { useLanguage } from "./i18n/LanguageContext.jsx";
 
 import Admin from "./pages/Admin.jsx";
 
@@ -51,6 +53,18 @@ function ScrollHash() {
   return null;
 }
 
+function NotFound() {
+  // React component hai, to hook seedha yahin call ho sakta hai
+  const { S } = useLanguage();
+  return (
+    <div className="card" style={{ padding: 40, textAlign: "center", marginTop: 20 }}>
+      <h1 style={{ fontSize: "3rem", margin: 0 }}>404</h1>
+      <p>{S.gate_notfound}</p>
+      <a className="btn" href="/">{S.gate_home}</a>
+    </div>
+  );
+}
+
 export default function App() {
   return (
     <div className="app">
@@ -58,32 +72,37 @@ export default function App() {
       <Navbar />
       <main className="main">
         <Routes>
+          {/* ── Bina login sirf ye teen: home, login, 404 ── */}
           <Route path="/" element={<Home />} />
-          <Route path="/calculator" element={<Calculator />} />
-          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/experts" element={<Experts />} />
-          <Route path="/chat" element={<AiChat />} />
-          <Route path="/forecast" element={<Forecast />} />
-          <Route path="/match" element={<Compatibility />} />
-          <Route path="/daily" element={<Daily />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<BlogPost />} />
-          <Route path="/calendar" element={<Calendar />} />
-          <Route path="/kundli" element={<Kundli />} />
-          <Route path="/panchang" element={<Panchang />} />
-          <Route path="/rashifal" element={<Rashifal />} />
-          <Route path="/gochar" element={<Gochar />} />
-          <Route path="/muhurat" element={<Muhurat />} />
-          <Route path="/reports" element={<Reports />} />
-          <Route path="/shani" element={<Shani />} />
-          <Route path="/charts" element={<Charts />} />
-          <Route path="/loshu" element={<Loshu />} />
-          <Route path="/remedies" element={<Remedies />} />
-          <Route path="/admin" element={<Admin />} />
+
+          {/* ── Login ke baad hi kholti hain ── */}
+          <Route path="/calculator" element={<OnlyLoggedIn><Calculator /></OnlyLoggedIn>} />
+          <Route path="/gallery" element={<OnlyLoggedIn><Gallery /></OnlyLoggedIn>} />
+          <Route path="/dashboard" element={<OnlyLoggedIn><Dashboard /></OnlyLoggedIn>} />
+          <Route path="/experts" element={<OnlyLoggedIn><Experts /></OnlyLoggedIn>} />
+          <Route path="/chat" element={<OnlyLoggedIn><AiChat /></OnlyLoggedIn>} />
+          <Route path="/forecast" element={<OnlyLoggedIn><Forecast /></OnlyLoggedIn>} />
+          <Route path="/match" element={<OnlyLoggedIn><Compatibility /></OnlyLoggedIn>} />
+          <Route path="/daily" element={<OnlyLoggedIn><Daily /></OnlyLoggedIn>} />
+          <Route path="/calendar" element={<OnlyLoggedIn><Calendar /></OnlyLoggedIn>} />
+          <Route path="/kundli" element={<OnlyLoggedIn><Kundli /></OnlyLoggedIn>} />
+          <Route path="/panchang" element={<OnlyLoggedIn><Panchang /></OnlyLoggedIn>} />
+          <Route path="/rashifal" element={<OnlyLoggedIn><Rashifal /></OnlyLoggedIn>} />
+          <Route path="/gochar" element={<OnlyLoggedIn><Gochar /></OnlyLoggedIn>} />
+          <Route path="/muhurat" element={<OnlyLoggedIn><Muhurat /></OnlyLoggedIn>} />
+          <Route path="/reports" element={<OnlyLoggedIn><Reports /></OnlyLoggedIn>} />
+          <Route path="/shani" element={<OnlyLoggedIn><Shani /></OnlyLoggedIn>} />
+          <Route path="/charts" element={<OnlyLoggedIn><Charts /></OnlyLoggedIn>} />
+          <Route path="/loshu" element={<OnlyLoggedIn><Loshu /></OnlyLoggedIn>} />
+          <Route path="/remedies" element={<OnlyLoggedIn><Remedies /></OnlyLoggedIn>} />
+          <Route path="/admin" element={<OnlyLoggedIn><Admin /></OnlyLoggedIn>} />
+
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Footer />

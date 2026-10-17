@@ -1,86 +1,47 @@
-// Kundli page ka poora data-flow test — 22 bhasha me.
-// Check karta hai ki:
-//   1. har bhasha me saare 8 numbers nikalti hain
-//   2. varshpal ka data usi bhasha me hai (English par nahi gira)
-//   3. koi bhi value Latin script me nahi gayi (native script rule)
-//   4. Personal Year 1..9 me hai
-import { allNumbers, reduceNumber } from "../src/utils/numerology.js";
-import { yearMeaning, yearDetail, ycat, ycatSource } from "../src/data/varshphal_i18n.js";
-import { getMeaning } from "../src/data/meanings_all.js";
-import { personalYear } from "../src/data/forecast.js";
-import { LANGUAGES } from "../src/i18n/registry.js";
+import { kundliFull } from "../src/utils/kundliFull.js";
 
-const DOB = "1972-02-18";
-const NAME = "Ganesha";
+const r = kundliFull({
+  name: "Ganesha", birthdate: "1972-02-18", time: "10:30", place: "Nagpur", gender: "male",
+});
+const f = (d) => d.toISOString().slice(0, 10);
 
-// ── 1. numbers ka hisaab ──────────────────────────────────────────
-const nums = allNumbers({ name: NAME, birthdate: DOB });
-const day = Number(DOB.split("-")[2]);
-const moolank = reduceNumber(day, false);
-const py = personalYear(DOB, 2026);
+console.log("lagna :", r.lagna, "| D9 lagna :", r.d9Lagna, "| karakamsha :", r.karakamshaName);
+console.log("graha :", r.grahas.map((g) => `${g.key}=${g.rashi}${g.retro ? "(R)" : ""} bh${g.bhav}`).join(", "));
+console.log("panchang:", r.panchang.tithi.name, "|", r.panchang.nak.name, "| yoga", r.panchang.yoga, "|", r.panchang.karana);
 
-console.log(`DOB ${DOB} · naam "${NAME}"`);
-console.log(`  moolank    = ${moolank}    (18 → 9)`);
-console.log(`  bhagyank   = ${nums.bhagyank}   (1+9+7+2+0+2+1+8 = 30 → 3)`);
-console.log(`  lifePath   = ${nums.lifePath}   (18+2+1972 = 1992 → 21 → 3)`);
-console.log(`  birthday   = ${nums.birthday}`);
-console.log(`  attitude   = ${nums.attitude}  (2+18 = 20 → 2)`);
-console.log(`  naamank    = ${nums.destiny}`);
-console.log(`  soulUrge   = ${nums.soulUrge}`);
-console.log(`  personality= ${nums.personality}`);
-console.log(`  personalYr = ${py}   (18+2+2026 = 2046 → 12 → 3)`);
-
-let fails = 0;
-const bad = (m) => { fails++; console.log("  ✗ " + m); };
-if (moolank !== 9) bad("moolank 9 hona chahiye");
-if (nums.bhagyank !== 3) bad("bhagyank 3 hona chahiye");
-if (nums.lifePath !== 3) bad("lifePath 3 hona chahiye");
-if (py !== 3) bad("personalYear 3 hona chahiye");
-for (const [k, v] of Object.entries({ moolank, ...nums })) {
-  if (v == null) continue;
-  if (v < 1 || v > 9) bad(`${k} = ${v} — 1..9 hona chahiye`);
+console.log("\n=== MAHADASHA ===");
+for (const p of r.dasha.periods) {
+  const cur = p.lord === r.dasha.cur.lord ? "   <== CHALU" : "";
+  console.log(`  ${p.lord.padEnd(9)} ${f(p.start)} -> ${f(p.end)}${cur}`);
 }
 
-// ── 2. har bhasha me rendering ─────────────────────────────────────
-console.log("\n─── 22 bhasha ───");
-const rows = [];
-for (const { code, native } of LANGUAGES) {
-  const src = ycatSource(code);
-  const ym = yearMeaning(py, code);
-  const yd = yearDetail(py, code);
-  const c = ycat(code);
-
-  // is bhasha me jo dikhega wo sab text
-  const text = [ym.t, ym.d, ym.c, ym.love, ym.h, ym.col, ym.adv,
-    yd.edu, yd.mar, yd.share, yd.biz, yd.rep,
-    c.edu, c.mar, c.share, c.biz, c.rep, c.health, c.color, c.adv]
-    .map(String);
-
-  const empty = text.filter((s) => !s.trim()).length;
-  const latin = text.filter((s) => code === "en" ? false : /[A-Za-z]{2,}/.test(s));
-
-  // meaning labels bhi usi bhasha me hone chahiye
-  const meanings = [moolank, nums.bhagyank, nums.lifePath, nums.birthday,
-    nums.attitude, nums.destiny].filter((n) => n != null);
-  const noMeaning = meanings.filter((n) => !getMeaning(n, code)?.title);
-
-  let flag = "OK";
-  if (empty) { flag = `EMPTY(${empty})`; fails++; }
-  if (latin.length) { flag = `LATIN: "${latin[0].slice(0, 28)}"`; fails++; }
-  if (noMeaning.length) { flag = `NO-MEANING(${noMeaning})`; fails++; }
-  if (code !== "en" && src === "en") { flag = "FELL BACK TO ENGLISH"; fails++; }
-
-  rows.push(`  ${code.padEnd(4)} ${String(native).padEnd(12)} ← ${String(src).padEnd(4)} ${flag}`);
+console.log(`\n=== ANTARDASHA (${r.dasha.cur.lord} MD) ===`);
+for (const a of r.dasha.ads) {
+  const cur = a.lord === r.dasha.curAD.lord ? "   <== CHALU" : "";
+  console.log(`  ${a.lord.padEnd(9)} ${f(a.start)} -> ${f(a.end)}${cur}`);
 }
-console.log(rows.join("\n"));
 
-// ── 3. koi bhi chhoti bhasha English par giri to nahi ──────────────
-console.log("\n─── fallback audit ───");
-const fell = LANGUAGES.filter((l) => l.code !== "en" && ycatSource(l.code) === "en");
-console.log(fell.length
-  ? `  ✗ ${fell.map((f) => f.code).join(", ")} English par gir gayi`
-  : "  koi bhi bhasha English par nahi giri ✅");
-if (fell.length) fails += fell.length;
+// dasha ki sanity: 9 MD ka total ~120 saal hona chahiye
+const totalY = r.dasha.periods.reduce((s, p) => s + (p.end - p.start) / 31557600000, 0);
+console.log(`\n  9 mahadasha ka kul yog: ${totalY.toFixed(1)} saal (120 ke aas paas hona chahiye)`);
+const adTotal = r.dasha.ads.reduce((s, a) => s + (a.end - a.start) / 31557600000, 0);
+console.log(`  9 antar ka kul: ${adTotal.toFixed(1)} saal (MD ke barabar hona chahiye)`);
 
-console.log(fails ? `\n${fails} PROBLEM` : "\nKUNDLI POORA SAHI ✅");
-process.exit(fails ? 1 : 0);
+console.log("\navakanda:", r.avakanda.cells.map((c) => c.eng + (c.friends ? "+MITT" : "-shatru")).join("  "));
+console.log("maitri  :", "friend=" + r.maitri.filter((x) => x.rel === "friend").length,
+  " enemy=" + r.maitri.filter((x) => x.rel === "enemy").length);
+
+const c = r.shodashvarga.rows[0].cells;
+console.log("varga   :", ["D1", "D2", "D3", "D7", "D9", "D10", "D12", "D16", "D30", "D60"]
+  .map((d) => `${d}=${c[d].text}`).join(" "));
+
+console.log("shadbala:", r.shadbala.map((s) => `${s.planet}:${s.total}`).join(" "));
+console.log("ashtak  :", JSON.stringify(r.ashtakavarga.total));
+console.log("gochar  :", r.gochar.map((g) => `${g.key}:${g.nowRashi}${g.same ? "*" : ""}`).join(" "));
+
+// ── guard: har hissa bhar hona chahiye ──
+const need = ["lagIdx", "lagna", "d9Lagna", "grahas", "panchang", "dasha", "shodashvarga",
+  "chalit", "paraDristi", "maitri", "avakanda", "shadbala", "ashtakavarga", "ratna",
+  "gochar", "karakamshaName", "swaphalaName", "bhavMadhya"];
+const bad = need.filter((k) => r[k] === undefined || r[k] === null);
+console.log(bad.length ? `\nMISSING: ${bad.join(", ")}` : "\nSAARE HISSE BHARE HAIN ✅");

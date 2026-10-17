@@ -42,16 +42,18 @@ body {
 
 .jy-layer { position: absolute; }
 
-/* celestial gradient — HARKA. Mobile par content dubba ja raha tha,
-   isliye sab layers ki opacity kam kar di, aur vignette hata diya. */
+/* celestial gradient — pehle #070b18 tak ka near-black tha, jisse mobile
+   par poora page andhera lagta tha aur 3D logo/text mushkil se dikhta.
+   Ab INDIGO-PLUM hai: gehra hai (stars/3D chamke) par kaala nahi. */
 .jy-sky {
   position: absolute;
   inset: -10%;
   background:
-    radial-gradient(1100px 760px at 78% -12%, rgba(139,92,246,.20), transparent 62%),
-    radial-gradient(900px 620px at 8% 8%, rgba(34,211,238,.12), transparent 60%),
-    radial-gradient(1000px 900px at 50% 118%, rgba(251,191,36,.10), transparent 62%),
-    linear-gradient(170deg, #0b1024 0%, #070b18 45%, #0d0a1a 100%);
+    radial-gradient(1100px 760px at 78% -12%, rgba(139,92,246,.30), transparent 62%),
+    radial-gradient(900px 620px at 8% 8%, rgba(34,211,238,.20), transparent 60%),
+    radial-gradient(1000px 900px at 50% 118%, rgba(251,191,36,.18), transparent 62%),
+    radial-gradient(900px 700px at 50% 34%, rgba(76,29,149,.28), transparent 70%),
+    linear-gradient(170deg, #161a3d 0%, #101438 45%, #1c1436 100%);
 }
 
 /* optional photos (public/photos/bg1.jpg …) */
@@ -59,7 +61,7 @@ body {
 .jy-photo img { display: block; }
 
 /* taare */
-.jy-stars { inset: 0; width: 100%; height: 100%; opacity: .5; }
+.jy-stars { inset: 0; width: 100%; height: 100%; opacity: .72; }
 
 /* bada mandala */
 .jy-mandala-wrap {
@@ -68,7 +70,7 @@ body {
   width: min(190vmin, 1750px);
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
-  opacity: .16;
+  opacity: .34;
 }
 .jy-mandala {
   width: 100%;
@@ -79,15 +81,15 @@ body {
 @keyframes jyspin { to { transform: rotate(360deg); } }
 
 /* Kundali chart — kone par */
-.jy-chart { width: min(52vw, 620px); height: auto; opacity: .28; }
+.jy-chart { width: min(52vw, 620px); height: auto; opacity: .44; }
 .jy-chart-l { bottom: -14%; left: -13%; }
-.jy-chart-r { top: -16%; right: -13%; transform: scaleX(-1); opacity: .18; }
+.jy-chart-r { top: -16%; right: -13%; transform: scaleX(-1); opacity: .30; }
 
 /* kalash */
 .jy-kalash {
   bottom: -6%; right: 6%;
   width: min(30vmin, 330px); height: auto;
-  opacity: .18;
+  opacity: .32;
   animation: jyfloat 16s ease-in-out infinite;
 }
 @keyframes jyfloat {
@@ -103,17 +105,19 @@ body {
 .jy-vignette {
   position: absolute; inset: 0;
   background:
-    radial-gradient(130% 90% at 50% 45%, transparent 58%, rgba(3,4,10,.34) 100%);
+    radial-gradient(130% 90% at 50% 45%, transparent 62%, rgba(10,8,26,.24) 100%);
 }
 
-/* ---------- PHONE par background aur halka, content aur saafdikar ---------- */
+/* ---------- PHONE par background DIKHNA chahiye (pehle .10/.07 se
+   almost gayab tha) — content ke cards opaque hain, isliye art ko
+   thoda upar la sakte hain bina padhe chalne ka risk liye. ---------- */
 @media (max-width: 860px) {
-  .jy-mandala-wrap { opacity: .10; width: min(210vmin, 1400px); }
-  .jy-chart { opacity: .12; width: min(78vw, 420px); }
-  .jy-chart-r { opacity: .07; }
-  .jy-kalash { opacity: .10; width: min(38vmin, 220px); }
-  .jy-stars { opacity: .38; }
-  .jy-vignette { background: radial-gradient(140% 100% at 50% 40%, transparent 68%, rgba(3,4,10,.26) 100%); }
+  .jy-mandala-wrap { opacity: .26; width: min(210vmin, 1400px); }
+  .jy-chart { opacity: .30; width: min(78vw, 420px); }
+  .jy-chart-r { opacity: .20; }
+  .jy-kalash { opacity: .24; width: min(38vmin, 220px); }
+  .jy-stars { opacity: .62; }
+  .jy-vignette { background: radial-gradient(140% 100% at 50% 40%, transparent 72%, rgba(10,8,26,.20) 100%); }
   /* jyotish background ke upar se text padhne layak */
   .card,
   .tile,
@@ -461,6 +465,56 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 .dropzone:hover { border-color: var(--accent); }
 .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
 .gallery-grid img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border); }
+/* ══════════════════════════════════════════════════════════════
+   पूरी कुंडली — navigator chips + tables
+   ══════════════════════════════════════════════════════════════ */
+.kf-nav {
+  display: flex; gap: 7px; flex-wrap: wrap; justify-content: center;
+  margin-top: 4px;
+}
+.kf-chip {
+  padding: 6px 12px; border-radius: 999px; cursor: pointer;
+  font-size: .74rem; font-weight: 600; line-height: 1.35;
+  color: var(--muted);
+  background: rgba(255, 255, 255, .04);
+  border: 1px solid rgba(251, 191, 36, .22);
+  transition: all .15s;
+}
+.kf-chip:hover { border-color: var(--gold); color: var(--text); }
+.kf-chip.on {
+  color: #1a1206;
+  background: linear-gradient(135deg, #fde68a, #fbbf24);
+  border-color: var(--gold);
+  box-shadow: 0 6px 20px -8px rgba(251, 191, 36, .7);
+}
+.kf-table {
+  width: 100%; border-collapse: collapse; font-size: .8rem;
+  min-width: 560px;
+}
+.kf-table th, .kf-table td {
+  padding: 7px 9px; text-align: left; white-space: nowrap;
+  border-bottom: 1px solid var(--border);
+}
+.kf-table th {
+  color: var(--gold); font-weight: 700; font-size: .7rem;
+  letter-spacing: .5px; text-transform: uppercase;
+}
+.kf-table td { color: var(--text); }
+.kf-table tr:last-child td { border-bottom: none; }
+.kf-table-sm { font-size: .72rem; min-width: 520px; }
+.kf-table-sm th, .kf-table-sm td { padding: 5px 6px; }
+.kf-wrap section[id] h3 {
+  color: var(--gold); letter-spacing: .4px;
+}
+
+/* ── Mobile par poora chart aasan rahe ── */
+@media (max-width: 640px) {
+  .kf-nav { justify-content: flex-start; }
+  .kf-chip { font-size: .68rem; padding: 5px 10px; }
+  .kf-table { font-size: .72rem; }
+  .kf-table th, .kf-table td { padding: 6px 7px; }
+}
+
 @media (max-width: 640px) {
   .main { padding: 20px 14px; }
   .hero { padding: 30px 0 20px; }

@@ -16,6 +16,31 @@ import { numSecTX } from "../i18n/numSecTx.js";
 // Landing par sankhya sirf background art me dikhti hain
 // (mandala chakra + kundali chart) — wahi halka hai.
 
+// Har wo page jo login ke baad khulta hai. Label PEHLE se translated hai
+// (nav_* / pg_* keys), isliye ye list 22 bhasha me sahi dikhegi bina
+// naya content banaye. [route, labelKey, glyph]
+const ALL_FEATURES = [
+  ["/kundli", "nav_kundli_page", "🕉️"],
+  ["/reports", "nav_reports", "📊"],
+  ["/loshu", "nav_loshu", "🔢"],
+  ["/calculator", "nav_calculator", "🧮"],
+  ["/panchang", "nav_panchang", "📅"],
+  ["/rashifal", "nav_rashifal", "✨"],
+  ["/charts", "nav_charts", "📈"],
+  ["/forecast", "nav_varshik", "🔮"],
+  ["/calendar", "nav_calendar", "🗓️"],
+  ["/muhurat", "nav_muhurat", "⏰"],
+  ["/remedies", "nav_remedies", "📿"],
+  ["/match", "nav_match", "💞"],
+  ["/daily", "nav_daily", "🌟"],
+  ["/shani", "nav_shani_title", "🪐"],
+  ["/gochar", "nav_gochar", "🛰️"],
+  ["/chat", "nav_chat", "💬"],
+  ["/experts", "nav_experts", "🧑‍🏫"],
+  ["/gallery", "nav_gallery", "🖼️"],
+  ["/dashboard", "nav_dashboard", "📋"],
+];
+
 const TILES = {
   hi: [
     ["🕉️", "कुंडली", "जन्म से पूरी कुंडली, दशा और भविष्यवाणी।", "/kundli"],
@@ -127,7 +152,7 @@ const TILES = {
 const TILE_GLYPH = ["ॐ", "श्री", "वेद", "ॐ", "सूर्य", "चंद्र"];
 
 export default function Home() {
-  const { t, lang } = useLanguage();
+  const { t, lang, S } = useLanguage();
   const { user } = useAuth();
   const tiles = TILES[lang] || TILES.en;
   const NS = numSecTX(lang);
@@ -195,6 +220,43 @@ export default function Home() {
             </Link>
           ))}
         </div>
+      </section>
+
+      {/* ============ SAARI SEVAYEIN (login se pehle dikhti hain) ============
+          User ne kaha: "is website me kya kya he o dikhna chahiye".
+          Labels PEhle se 22 bhasha me translated hain (nav_* keys) —
+          isliye naya content banane ki zarurat nahi, sab sahi bhasha me dikhega. */}
+      <section style={{ marginTop: 54 }}>
+        <div className="sec-head">
+          <div className="kicker">✦ ✦</div>
+          <h2 className="text-gradient">{S.gate_unlocks}</h2>
+          <div className="rule" />
+        </div>
+        <p style={{ textAlign: "center", maxWidth: 720, margin: "0 auto 18px" }}>
+          {user ? S.gate_sub_open : S.gate_sub}
+        </p>
+        <div className="tile-grid">
+          {ALL_FEATURES.map(([to, key, glyph]) => {
+            const locked = !user;
+            return locked ? (
+              <Link key={to} to="/login" className="tile" title={S.gate_cta}>
+                <div className="glyph">{glyph} 🔒</div>
+                <h3>{t(key)}</h3>
+                <p style={{ fontSize: ".74rem", color: "var(--gold)" }}>{S.gate_cta}</p>
+              </Link>
+            ) : (
+              <Link key={to} to={to} className="tile">
+                <div className="glyph">{glyph}</div>
+                <h3>{t(key)}</h3>
+              </Link>
+            );
+          })}
+        </div>
+        {!user && (
+          <div style={{ display: "flex", gap: 12, justifyContent: "center", marginTop: 22, flexWrap: "wrap" }}>
+            <Link to="/login" className="btn">{S.gate_cta}</Link>
+          </div>
+        )}
       </section>
 
       {/* ============ SHUBH VIBHAG ============ */}

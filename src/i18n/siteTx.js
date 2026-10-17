@@ -9,6 +9,8 @@ import { langChain } from "./registry.js";
 import { smallLang } from "./smallTX.js";
 
 const EN = {
+    gate_sub_open: "Everything is unlocked. Choose any service below.",
+    gate_title: "Everything unlocks after you log in", gate_sub: "Create a free account with your email or mobile number. Your birth details stay private to you.", gate_cta: "Login / Sign Up", gate_home: "Back to Home", gate_unlocks: "What you get after login", gate_notfound: "This page does not exist.",
   // ---- Navbar ----
   nav_grid: "Lo Shu Grid",
   nav_panchang: "Panchang",
@@ -807,6 +809,8 @@ const cache = new Map();
 // Alag rakhe hain taaki upar wale bade blocks padhne me aasan rahein.
 const EXTRA = {
   en: {
+    gate_sub_open: "Everything is unlocked. Choose any service below.",
+    gate_title: "Everything unlocks after you log in", gate_sub: "Create a free account with your email or mobile number. Your birth details stay private to you.", gate_cta: "Login / Sign Up", gate_home: "Back to Home", gate_unlocks: "What you get after login", gate_notfound: "This page does not exist.",
     // ---- Shubh tareekhein, lucky numbers aur yog tags ----
     rf_shubh: "Auspicious",
     rf_ashubh: "Inauspicious",
@@ -833,6 +837,8 @@ const EXTRA = {
     lo_repeat_note: "Numbers repeated in your grid",
   },
   hi: {
+    gate_sub_open: "सब कुछ खुल चुका है। नीचे से कोई भी सेवा चुनें।",
+    gate_title: "लॉगिन करने पर सब कुछ खुल जाता है", gate_sub: "अपने ईमेल या मोबाइल नंबर से मुफ़्त खाता बनाएँ। आपकी जन्मतिथि सिर्फ आपको दिखेगी।", gate_cta: "लॉगिन / साइन अप", gate_home: "होम पर लौटें", gate_unlocks: "लॉगिन के बाद आपको यह मिलेगा", gate_notfound: "यह पेज नहीं मिला।",
     adm_none_booking: "अभी कोई बुकिंग नहीं है।", adm_none_inquiry: "अभी कोई पूछताछ नहीं है।", adm_none_photo: "कोई लंबित फ़ोटो नहीं है।", adm_none_review: "कोई लंबित समीक्षा नहीं है।", adm_social_help: "अपने पेज/प्रोफ़ाइल का पूरा लिंक डालें। खाली छोड़ने पर आइकॉन छिप जाएगा।",
     share_title: "साझा करें", share_sub: "Facebook, X, LinkedIn, WhatsApp, Telegram पर एक टैप में साझा करें।", share_copy_link: "लिंक कॉपी करें", share_copy_caption: "कैप्शन कॉपी करें", share_copied: "कॉपी हो गया!", share_phone: "फ़ोन से साझा करें", share_note: "ध्यान दें: Instagram/TikTok/YouTube वेबसाइट से सीधे पोस्ट नहीं करने देते — कैप्शन कॉपी करके वहाँ पेस्ट करें, या नीचे Follow बटन से प्रोफ़ाइल जोड़ें।", share_copy_fail: "कॉपी नहीं हुआ", share_default_msg: "न्यूमेरोलॉजी वीआईपी देखिए!",
     bala_sama: "साम", bala_uchcha: "उच्च", bala_neecha: "नीच", bala_swa: "स्व", bala_asta: "अस्त", remedies_guide: "📿 रुद्राक्ष · 🌿 जड़ी · 🔯 यंत्र गाइड",
@@ -880,6 +886,8 @@ const EXTRA = {
     lo_repeat_note: "आपकी ग्रिड में दोहराए गए अंक",
   },
   mr: {
+    gate_sub_open: "सर्व काही उघडले गेले आहे. खालीलून कोणतीही सेवा निवडा.",
+    gate_title: "लॉगिन केल्यावर सर्व काही उघडते", gate_sub: "तुमच्या ईमेल किंवा मोबाइल क्रमांकाने मोफत खाते तयार करा. तुमची जन्मतारीख फक्त तुम्हाला दिसेल.", gate_cta: "लॉगिन / साइन अप", gate_home: "मुख्य पृष्ठावर परा", gate_unlocks: "लॉगिननंतर तुम्हाला हे मिळेल", gate_notfound: "हे पान उपलब्ध नाही.",
     adm_none_booking: "अद्यापर्यंत बुकिंग नाही.", adm_none_inquiry: "अद्यापर्यंत चौकशी नाही.", adm_none_photo: "प्रलंबित फोटो नाहीत.", adm_none_review: "प्रलंबित पुनरावलोकन नाही.", adm_social_help: "तुमच्या पान/प्रोफाइलचा संपूर्ण दुवा टाका. रिकामे ठेवल्यास आयकॉन दिसणार नाही.",
     share_title: "शेअर करा", share_sub: "Facebook, X, LinkedIn, WhatsApp, Telegram वर एका टॅपमध्ये शेअर करा.", share_copy_link: "लिंक कॉपी करा", share_copy_caption: "कॅप्शन कॉपी करा", share_copied: "कॉपी झाले!", share_phone: "फोनवरून शेअर", share_note: "लक्षात ठेवा: Instagram/TikTok/YouTube वेबसाइटवरून थेट पोस्ट करू देत नाहीत — कॅप्शन कॉपी करून तिथे पेस्ट करा, किंवा खालील Follow बटनंनून प्रोफाइल जोडा.", share_copy_fail: "कॉपी झालं नाही", share_default_msg: "न्युमेरॉलॉजी व्हीआयपी पहा!",
     bala_sama: "सम", bala_uchcha: "उच्च", bala_neecha: "नीच", bala_swa: "स्व", bala_asta: "अस्त", remedies_guide: "📿 रुद्राक्ष · 🌿 जडी · 🔯 यंत्र मार्गदर्शक",
@@ -927,6 +935,8 @@ const EXTRA = {
     lo_repeat_note: "तुमच्या ग्रीडमध्ये पुन्हा पुन्हा आलेली अंक",
   },
   bn: {
+    gate_sub_open: "সবকিছু খুলে গেছে। নিচ থেকে যেকোনো সেবা বেছে নিন।",
+    gate_title: "লগইন করলে সবকিছু খুলে যাবে", gate_sub: "আপনার ইমেল বা মোবাইল নম্বর দিয়ে বিনামূল্যে অ্যাকাউন্ট খুলুন। আপনার জন্মতারিখ শুধু আপনিই দেখবেন।", gate_cta: "লগইন / সাইন আপ", gate_home: "হোমে ফিরুন", gate_unlocks: "লগইনের পর আপনি যা পাবেন", gate_notfound: "এই পাতা পাওয়া যায়নি।",
     adm_none_booking: "এখনও কোনো বুকিং নেই।", adm_none_inquiry: "এখনও কোনো জিজ্ঞাসা নেই।", adm_none_photo: "কোনো অপেক্ষমাণ ছবি নেই।", adm_none_review: "কোনো অপেক্ষমাণ পর্যালোচনা নেই।", adm_social_help: "আপনার পেজ/প্রোফাইলের সম্পূর্ণ লিঙ্ক দিন। খালি রাখলে আইকন লুকিয়ে যাবে।",
     share_title: "শেয়ার করুন", share_sub: "Facebook, X, LinkedIn, WhatsApp, Telegram-এ এক ট্যাপেই শেয়ার করুন।", share_copy_link: "লিংক কপি করুন", share_copy_caption: "ক্যাপশন কপি করুন", share_copied: "কপি হয়েছে!", share_phone: "ফোনে শেয়ার", share_note: "লক্ষ্য করুন: Instagram/TikTok/YouTube ওয়েবসাইট থেকে সরাসরি পোস্ট করতে দেয় না — ক্যাপশন কপি করে সেখানে পেস্ট করুন, অথবা নিচের Follow বোতাম দিয়ে প্রোফাইল যুক্ত করুন।", share_copy_fail: "কপি হয়নি", share_default_msg: "নিউমেরোলজি ভিআইপি দেখুন!",
     bala_sama: "সম", bala_uchcha: "উচ্চ", bala_neecha: "নীচ", bala_swa: "স্ব", bala_asta: "অস্ত", remedies_guide: "📿 রুদ্রাক্ষ · 🌿 জড়ি · 🔯 যন্ত্র গাইড",
@@ -974,6 +984,8 @@ const EXTRA = {
     lo_repeat_note: "আপনার গ্রিডে বারবার আসা সংখ্যা",
   },
   te: {
+    gate_sub_open: "అంతా తెరుచుకుంది. కింది నుండి ఏ సేవనుైనా ఎంచుకోండి.",
+    gate_title: "లాగిన్ చేస్తే అంతా తెరుచుకుంటుంది", gate_sub: "మీ ఇమెయిల్ లేదా మొబైల్ సంఖ్యతో ఉచిత ఖాతా తెరవండి. మీ జన్మతేదీ మీకు మాత్రమే కనిపిస్తుంది.", gate_cta: "లాగిన్ / సైన్ అప్", gate_home: "హోమ్‌కు వెళ్లండి", gate_unlocks: "లాగిన్ తర్వాత మీకు ఇది లభిస్తుంది", gate_notfound: "ఈ పేజీ కనబడలేదు.",
     adm_none_booking: "ఇంకా బుకింగ్‌లు లేవు.", adm_none_inquiry: "ఇంకా ప్రశ్నలు లేవు.", adm_none_photo: "పెండింగ్ ఫోటోలు లేవు.", adm_none_review: "పెండింగ్ సమీక్షలు లేవు.", adm_social_help: "మీ పేజు/ప్రొఫైల్ పూర్తి లింక్ ఇవ్వండి. ఖాళీగా ఉంచితే ఐకన్ దాచవజూపుతుంది.",
     share_title: "షేర్ చేయండి", share_sub: "Facebook, X, LinkedIn, WhatsApp, Telegram వద్ద ఒకే ట్యాప్‌లో షేర్ చేయండి.", share_copy_link: "లింక్ కాపీ చేయండి", share_copy_caption: "క్యాప్షన్ కాపీ చేయండి", share_copied: "కాపీ అయ్యింది!", share_phone: "ఫోన్ ద్వారా షేర్", share_note: "గమనించండి: Instagram/TikTok/YouTube వెబ్‌సైట్ నుండి నేరుగా పోస్ట్ చేయనివ్వదు — క్యాప్షన్ కాపీ చేసి అక్కడ పేస్ట్ చేయండి, లేదా కింద ఉన్న Follow బటన్‌లతో ప్రొఫైల్ జోడించండి.", share_copy_fail: "కాపీ కాలేదు", share_default_msg: "న్యూమెరాలజీ వీఐపీ చూడండి!",
     bala_sama: "సమ", bala_uchcha: "ఉచ్చ", bala_neecha: "నీచ", bala_swa: "స్వ", bala_asta: "అస్త", remedies_guide: "📿 రుద్రాక్ష · 🌿 జడి · 🔯 యంత్ర మార్గదర్శకం",
@@ -1021,6 +1033,8 @@ const EXTRA = {
     lo_repeat_note: "మీ గ్రిడ్‌లో పునరావృతమయ్యే సంఖ్యలు",
   },
   ta: {
+    gate_sub_open: "அனைத்தும் திறக்கப்பட்டுள்ளது. கீழே இருந்து எந்த சேவையையும் தேர்வு செய்க.",
+    gate_title: "உள்நுழைந்தால் அனைத்தும் திறக்கும்", gate_sub: "உங்கள் மின்னஞ்சல் அல்லது மொபைல் எண்ணால் இலவசம் கணக்கு திறக்கவும். உங்கள் பிறந்த நாள் உங்களுக்கு மட்டுமே தெரியும்.", gate_cta: "உள்நுழை / பதிவு", gate_home: "முகப்பு", gate_unlocks: "உள்நுழைந்த பிறகு நீங்கள் பெறுவது", gate_notfound: "இந்தப் பக்கம் கிடைக்கவில்லை.",
     adm_none_booking: "இன்னும் பதிவுகள் இல்லை.", adm_none_inquiry: "இன்னும் கேள்விகள் இல்லை.", adm_none_photo: "நிலுவையில் உள்ள படங்கள் இல்லை.", adm_none_review: "நிலுவையில் உள்ள மதிப்பீடுகள் இல்லை.", adm_social_help: "உங்கள் பக்கம்/சுயவிவரத்தின் முழு இணைப்பை உள்ளிடவும். காலியாக விட்டால் சின்னம் மறைந்துவிடும்.",
     share_title: "பகிரவும்", share_sub: "Facebook, X, LinkedIn, WhatsApp, Telegram ஆகியவற்றில் ஒரே தட்டில் பகிரவும்.", share_copy_link: "இணைப்பை நகலெடு", share_copy_caption: "தலைப்புரியை நகலெடு", share_copied: "நகலெடுக்கப்பட்டது!", share_phone: "தொலைபேசி மூலம் பகிரவும்", share_note: "கவனிக்கவும்: Instagram/TikTok/YouTube வலைதளத்திலிருந்து நேரடியாக இடுகை செய்ய முடியாது — தலைப்புரியை நகலெடுத்து அங்கு ஒட்டவும், அல்லது கீழே உள்ள Follow பொத்தான்களால் சுயவிவரம் இணைக்கவும்.", share_copy_fail: "நகலெடுக்க முடியவில்லை", share_default_msg: "நியூமராலஜி வீஐபி பாருங்கள்!",
     bala_sama: "சம", bala_uchcha: "உச்ச", bala_neecha: "நீச்ச", bala_swa: "சுவ", bala_asta: "அஸ்த", remedies_guide: "📿 ருத்ராக்ஷம் · 🌿 மூலி · 🔯 யந்திர வழிகாட்டி",
@@ -1068,6 +1082,8 @@ const EXTRA = {
     lo_repeat_note: "உங்கள் கட்டில் மீண்டும் மீண்டும் வரும் எண்கள்",
   },
   gu: {
+    gate_sub_open: "બધું ખુલી ગયું છે. નીચેથી કોઈપણ સેવા પસંદ કરો.",
+    gate_title: "લોગિન કર્યા પછી બધું ખૂલી જશે", gate_sub: "તમારા ઈમેલ કે મોબાઇલ નંબરથી મફત ખાતું બનાવો. તમારી જન્મતારીખ ફક્ત તમને દેખાશે.", gate_cta: "લોગિન / સાઇન અપ", gate_home: "હોમ પર પાછા", gate_unlocks: "લોગિન के बाद आपको यह मिलेगा", gate_notfound: "આ પાનું મળ્યું નથી.",
     adm_none_booking: "હજી કોઈ બુકિંગ નથી.", adm_none_inquiry: "હજી કોઈ પૂછપરછ નથી.", adm_none_photo: "કોઈ બાકી ફોટા નથી.", adm_none_review: "કોઈ બાકી સમીક્ષા નથી.", adm_social_help: "તમારા પેજ/પ્રોફાઇલનું સંપૂર્ણ લિંક મૂકો. ખાલી રાખશો તો આઇકન છુપાઈ જશે.",
     share_title: "શેર કરો", share_sub: "Facebook, X, LinkedIn, WhatsApp, Telegram પર એક ટેપમાં શેર કરો.", share_copy_link: "લિંક કોપી કરો", share_copy_caption: "કેપ્શન કોપી કરો", share_copied: "કોપી થઈ ગયું!", share_phone: "ફોનથી શેર કરો", share_note: "નોંધો: Instagram/TikTok/YouTube વેબસાઇટથી સીધું પોસ્ટ કરવા દેતું નથી — કેપ્શન કોપી કરી ત્યાં પેસ્ટ કરો, અથવા નીચેના Follow બટનોથી પ્રોફાઇલ જોડો.", share_copy_fail: "કોપી થયું નહીં", share_default_msg: "ન્યુમેરોલોજી વીઆઈપી જુઓ!",
     bala_sama: "સમ", bala_uchcha: "ઉચ્ચ", bala_neecha: "નીચ", bala_swa: "સ્વ", bala_asta: "અસ્ત", remedies_guide: "📿 રુદ્રાક્ષ · 🌿 જડી · 🔯 યંત્ર માર્ગદર્શક",
@@ -1115,6 +1131,8 @@ const EXTRA = {
     lo_repeat_note: "તમારી ગ્રિડમાં વારંવાર આવતી સંખ્યાઓ",
   },
   ur: {
+    gate_sub_open: "سب کچھ کھل چکا ہے۔ نیچے سے کوئی بھی خدمت منتخب کریں۔",
+    gate_title: "لاگ اِن کے بعد سب کچھ کھل جائے گا", gate_sub: "اپنے ای میل یا موبائل نمبر سے مفت اکاؤنٹ بنائیں۔ آپ کی تاریخِ پیدائش صرف آپ کو دکھے گی۔", gate_cta: "لاگ اِن / سائن اپ", gate_home: "ہوم واپس", gate_unlocks: "لاگ اِن کے بعد آپ کو یہ ملے گا", gate_notfound: "یہ صفحہ نہیں ملا۔",
     adm_none_booking: "ابھی کوئی بکنگ نہیں۔", adm_none_inquiry: "ابھی کوئی استفسار نہیں۔", adm_none_photo: "کوئی زیرِ التوا تصویر نہیں۔", adm_none_review: "کوئی زیرِ التوا جائزہ نہیں۔", adm_social_help: "اپنے صفحے/پروفائل کا مکمل لنک درج کریں۔ خالی چھوڑیں تو آئیکن چھپ جائے گا۔",
     share_title: "شیئر کریں", share_sub: "Facebook، X، LinkedIn، WhatsApp، Telegram پر ایک ٹیپ میں شیئر کریں۔", share_copy_link: "لنک کاپی کریں", share_copy_caption: "کیپشن کاپی کریں", share_copied: "کاپی ہو گیا!", share_phone: "فون سے شیئر", share_note: "نوٹ: Instagram/TikTok/YouTube ویب سائٹ سے براہِ راست پوسٹ نہیں کرنے دیتے — کیپشن کاپی کر کے وہاں پیسٹ کریں، یا نیچے Follow بٹن سے پروفائل جوڑیں۔", share_copy_fail: "کاپی نہیں ہوا", share_default_msg: "نیومرولوجی وی آئی پی دیکھیں!",
     bala_sama: "سما", bala_uchcha: "عروج", bala_neecha: "زوال", bala_swa: "سو", bala_asta: "اَست", remedies_guide: "📿 رُद्रاکش · 🌿 جڑی · 🔯 یانترا رہنمائی",
@@ -1162,6 +1180,8 @@ const EXTRA = {
     lo_repeat_note: "آپ کے گرڈ میں دہرائے گئے اعداد",
   },
   kn: {
+    gate_sub_open: "ಎಲ್ಲವೂ ತೆರೆದಿದೆ. ಕೆಳಗಿನಿಂದ ಯಾವುದೇ ಸೇವೆ ಆಯ್ಕಿಸಿ.",
+    gate_title: "ಲಾಗಿನ್ ಮಾಡಿದ ಮೇಲೆ ಎಲ್ಲವೂ ತೆರೆಯುತ್ತದೆ", gate_sub: "ನಿಮ್ಮ ಇಮೇಲ್ ಅಥವಾ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯಿಂದ ಉಚಿತ ಖಾತೆ ತೆರೆಯಿರಿ. ನಿಮ್ಮ ಜನನ ದಿನಾಂಕ ನಿಮಗೆ ಮಾತ್ರ ಕಾಣುತ್ತದೆ.", gate_cta: "ಲಾಗಿನ್ / ಸೈನ್ ಅಪ್", gate_home: "ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ", gate_unlocks: "ಲಾಗಿನ್ ನಂತರ ನಿಮಗೆ ಸಿಗುತ್ತದೆ", gate_notfound: "ಈ ಪುಟ ಸಿಗಲಿಲ್ಲ.",
     adm_none_booking: "ಇನ್ನೂ ಯಾವುದೇ ಬುಕಿಂಗ್ ಇಲ್ಲ.", adm_none_inquiry: "ಇನ್ನೂ ಯಾವುದೇ ಪ್ರಶ್ನೆ ಇಲ್ಲ.", adm_none_photo: "ಬಾಕಿ ಇರುವ ಫೋಟೋಗಳಿಲ್ಲ.", adm_none_review: "ಬಾಕಿ ಇರುವ ವಿಮರ್ಶೆಗಳಿಲ್ಲ.", adm_social_help: "ನಿಮ್ಮ ಪುಟ/ಪ್ರೊಫೈಲ್‌ನ ಪೂರ್ಣ ಲಿಂಕ್ ಹಾಕಿ. ಖಾಲಿ ಬಿಟ್ಟರೆ ಚಿಹ್ನೆ ಮರೆಯುತ್ತದೆ.",
     share_title: "ಹಂಚಿಕೊಳ್ಳಿ", share_sub: "Facebook, X, LinkedIn, WhatsApp, Telegram ನಲ್ಲಿ ಒಂದೇ ಟ್ಯಾಪ್‌ನಲ್ಲಿ ಹಂಚಿಕೊಳ್ಳಿ.", share_copy_link: "ಲಿಂಕ್ ನಕಲಿಸಿ", share_copy_caption: "ಕ್ಯಾಪ್ಷನ್ ನಕಲಿಸಿ", share_copied: "ನಕಲಾಗಿದೆ!", share_phone: "ಫೋನ್‌ನಿಂದ ಹಂಚಿಕೊಳ್ಳಿ", share_note: "ಗಮನಿಸಿ: Instagram/TikTok/YouTube ವೆಬ್‌ಸೈಟ್‌ನಿಂದ ನೇರವಾಗಿ ಪೋಸ್ಟ್ ಮಾಡಲು ಅನುಮತಿ ಇಲ್ಲ — ಕ್ಯಾಪ್ಷನ್ ನಕಲಿಸಿ ಅಲ್ಲಿ ಅಂಟಿಸಿ, ಅಥವಾ ಕೆಳಗಿನ Follow ಬಟನ್‌ಗಳಿಂದ ಪ್ರೊಫೈಲ್ ಜೋಡಿಸಿ.", share_copy_fail: "ನಕಲಾಗಲಿಲ್ಲ", share_default_msg: "ನ್ಯೂಮರಾಲಜಿ ವಿಐಪಿ ನೋಡಿ!",
     bala_sama: "ಸಮ", bala_uchcha: "ಉಚ್ಚ", bala_neecha: "ನೀಚ", bala_swa: "ಸ್ವ", bala_asta: "ಅಸ್ತ", remedies_guide: "📿 ರುದ್ರಾಕ್ಷ · 🌿 ಜಾಡಿ · 🔯 ಯಂತ್ರ ಮಾರ್ಗದರ್ಶಿ",
@@ -1209,6 +1229,8 @@ const EXTRA = {
     lo_repeat_note: "ನಿಮ್ಮ ಗ್ರಿಡ್‌ನಲ್ಲಿ ಪುನರಾವರ್ತನೆಯಾಗಿರುವ ಸಂಖ್ಯೆಗಳು",
   },
   ml: {
+    gate_sub_open: "എല്ലാം തുറന്നിരിക്കുന്നു. താഴെ നിന്ന് ഏതെങ്കിലും സേവനം തിരഞ്ഞെടുക്കുക.",
+    gate_title: "ലോഗിൻ ചെയ്താൽ എല്ലാം തുറക്കും", gate_sub: "നിങ്ങളുടെ ഇമെയിൽ അല്ലെങ്കിൽ മൊബൈൽ നമ്പറിലാണ് സൗജന്യ അക്കൗണ്ട് തുറക്കൂ. നിങ്ങളുടെ ജനനത്തെയത്തീ കാണാവുന്നത് നിങ്ങൾക്ക് മാത്രമാണ്.", gate_cta: "ലോഗിൻ / സൈൻ അപ്പ്", gate_home: "ഹോമിലേക്ക്", gate_unlocks: "ലോഗിൻ ചെയ്ത ശേഷം നിങ്ങൾക്ക് ലഭിക്കുക", gate_notfound: "ഈ പേജ് കണ്ടെത്തിയില്ല.",
     adm_none_booking: "ഇതുവരെ ബുക്കിംഗുകളൊന്നില്ല.", adm_none_inquiry: "ഇതുവരെ ചോദ്യങ്ങളൊന്നില്ല.", adm_none_photo: "തീർമ്മാക്കുന്ന ചിത്രങ്ങളൊന്നില്ല.", adm_none_review: "തീർമ്മാക്കുന്ന അവലോകനങ്ങളൊന്നില്ല.", adm_social_help: "നിങ്ങളുടെ പേജ്/പ്രൊഫൈൽ പൂർണ്ണ ലിങ്ക് നൽകുക. ശൂന്യമായി വിട്ടാൽ ഐക്കൺ മറയും.",
     share_title: "പങ്കിടുക", share_sub: "Facebook, X, LinkedIn, WhatsApp, Telegram എന്നിവയിൽ ഒരു ടാപ്പിൽ പങ്കിടുക.", share_copy_link: "ലിങ്ക് പകർത്തുക", share_copy_caption: "ക്യാപ്ഷൻ പകർത്തുക", share_copied: "പകർത്തി!", share_phone: "ഫോണിലൂടെ പങ്കിടുക", share_note: "ശ്രദ്ധിക്കുക: Instagram/TikTok/YouTube വെബ്‌സൈറ്റിൽ നേരിട്ട് പോസ്റ്റ് ചെയ്യാൻ അനുവദില്ല — ക്യാപ്ഷൻ പകർത്തി അവിടെ ഒട്ടിക്കുക, അല്ലെങ്കിൽ താഴെയുള്ള Follow ബട്ടണുകൾ വഴി പ്രൊഫൈൽ ചേർക്കുക.", share_copy_fail: "പകർത്തായില്ല", share_default_msg: "ന്യൂമറോളജി വിഐപി കാണൂ!",
     bala_sama: "സമ", bala_uchcha: "ഉച്ച", bala_neecha: "താഴ്", bala_swa: "സ്വ", bala_asta: "അസ്ത", remedies_guide: "📿 രുദ്രാക്ഷം · 🌿 മൂലി · 🔯 യന്ത്ര വഴികാട്ടി",
@@ -1256,6 +1278,8 @@ const EXTRA = {
     lo_repeat_note: "നിങ്ങളുടെ ഗ്രിഡിൽ ആവർത്തിച്ചുള്ള സംഖ്യകൾ",
   },
   pa: {
+    gate_sub_open: "ਸਭ ਖੁੱਲ ਚੁੱਕਾ ਹੈ। ਹੇਠਾਂ ਤੋਂ ਕੋਈ ਵੀ ਸੇਵਾ ਚੁਣੋ।",
+    gate_title: "ਲੌਗਇਨ ਕਰਨ ਤੋਂ ਬਾਅਦ ਸਭ ਖੁੱਲ ਜਾਵੇਗਾ", gate_sub: "ਆਪਣੀ ਈਮੇਲ ਜਾਂ ਮੋਬਾਈਲ ਨੰਬਰ ਨਾਲ ਮੁਫ਼ਤ ਖਾਤਾ ਖੋਲ੍ਹੋ। ਤੁਹਾਡੀ ਜਨਮ ਤਾਰੀਖ ਸਿਰਫ਼ ਤੁਹਾਨੂੰ ਦਿਸੇਗੀ।", gate_cta: "ਲੌਗਇਨ / ਸਾਈਨ ਅਪ", gate_home: "ਹੋਮ 'ਤੇ ਵਾਪਸ", gate_unlocks: "ਲੌਗਇਨ ਤੋਂ ਬਾਅਦ ਤੁਹਾਨੂੰ ਇਹ ਮਿਲੇਗਾ", gate_notfound: "ਇਹ ਪੰਨਾ ਨਹੀਂ ਮਿਲਿਆ।",
     adm_none_booking: "ਹਾਲੇ ਕੋਈ ਬੁਕਿੰਗ ਨਹੀਂ।", adm_none_inquiry: "ਹਾਲੇ ਕੋਈ ਪੁੱਛਣ ਨਹੀਂ।", adm_none_photo: "ਕੋਈ ਬਾਕੀ ਤਸਵੀਰ ਨਹੀਂ।", adm_none_review: "ਕੋਈ ਬਾਕੀ ਸਮੀਖਿਆ ਨਹੀਂ।", adm_social_help: "ਆਪਣੀ ਪੇਜ/ਪ੍ਰੋਫਾਈਲ ਦਾ ਪੂਰਾ ਲਿੰਕ ਪਾਓ। ਖਾਲੀ ਛੱਡਿਆ ਤਾਂ ਆਈਕਨ ਲੁਕ ਜਾਵੇਗਾ।",
     share_title: "ਸਾਂਝਾ ਕਰੋ", share_sub: "Facebook, X, LinkedIn, WhatsApp, Telegram ਉੱਤੇ ਇੱਕ ਟੈਪ ਵਿੱਚ ਸਾਂਝਾ ਕਰੋ।", share_copy_link: "ਲਿੰਕ ਕਾਪੀ ਕਰੋ", share_copy_caption: "ਕੈਪਸ਼ਨ ਕਾਪੀ ਕਰੋ", share_copied: "ਕਾਪੀ ਹੋ ਗਿਆ!", share_phone: "ਫ਼ੋਨ ਨਾਲ ਸਾਂਝਾ ਕਰੋ", share_note: "ਧਿਆਨ ਦਿਓ: Instagram/TikTok/YouTube ਵੈੱਬਸਾਈਟ ਤੋਂ ਸਿੱਧਾ ਪੋਸਟ ਨਹੀਂ ਕਰਨੇ ਦਿੰਦੇ — ਕੈਪਸ਼ਨ ਕਾਪੀ ਕਰਕੇ ਉੱਥੇ ਪੇਸਟ ਕਰੋ, ਜਾਂ ਹੇਠਾਂ Follow ਬਟਨਾਂ ਨਾਲ ਪ੍ਰੋਫਾਈਲ ਜੋੜੋ।", share_copy_fail: "ਕਾਪੀ ਨਹੀਂ ਹੋਇਆ", share_default_msg: "ਨਿਊਮਰੋਲੋਜੀ ਵੀਆਈਪੀ ਵੇਖੋ!",
     bala_sama: "ਸਮ", bala_uchcha: "ਉੱਚਾ", bala_neecha: "ਨੀਚਾ", bala_swa: "ਸਵ", bala_asta: "ਅਸਤ", remedies_guide: "📿 ਰੁਦਰਾਖ਼ · 🌿 ਜੜੀ · 🔯 ਯੰਤਰ ਮਾਰਗਦਰਸ਼ਕ",
@@ -1303,6 +1327,8 @@ const EXTRA = {
     lo_repeat_note: "ਤੁਹਾਡੀ ਗ੍ਰਿਡ ਵਿੱਚ ਵਾਰ-ਵਾਰ ਆਉਣ ਵਾਲੇ ਅੰਕ",
   },
   or: {
+    gate_sub_open: "ସବୁ ଖୋଲିଗଲା। ତଳେ ଥରୁ ଯେକୌଣସି ସେବା ବାଛନ୍ତୁ।",
+    gate_title: "ଲଗଇନ କରିବା ପରେ ସବୁ ଖୋଲିଯିବ", gate_sub: "ଆପଣଙ୍କ ଇମେଲ କିମ୍ବା ମୋବାଇଲ ନମ୍ବରରେ ମଫ଼ତ ଖାତା ଖୋଲନ୍ତୁ। ଆପଣଙ୍କ ଜନ୍ମତାରିଖ କେବଳ ଆପଣଙ୍କୁ ଦେଖାଯିବ।", gate_cta: "ଲଗଇନ / ସାଇନ ଅପ", gate_home: "ହୋମକୁ ଫେରନ୍ତୁ", gate_unlocks: "ଲଗଇନ ପରେ ଆପଣ ଯାହା ପାଣିବ", gate_notfound: "ଏହି ପୃଷ୍ଠା ମିଳିଲା ନାହିଁ।",
     adm_none_booking: "ଏପର୍ଯ୍ୟ କୌଣସି ବୁକିଂ ନାହିଁ।", adm_none_inquiry: "ଏପର୍ଯ୍ୟ କୌଣସି ପଚାରା ନାହିଁ।", adm_none_photo: "ଅପେକ୍ଷିତ ଫଟୋ କୌଣସି ନାହିଁ।", adm_none_review: "ଅପେକ୍ଷିତ ସମୀକ୍ଷା କୌଣସି ନାହିଁ।", adm_social_help: "ଆପଣଙ୍କ ପୃଷ୍ଠା/ପ୍ରୋଫାଇଲର ସମ୍ପୂର୍ଣ୍ଣ ଲିଙ୍କ ଦିଅନ୍ତୁ। ଖାଲି ରଖିଲେ ଆଇକନ ଲୁକାଯିବ।",
     share_title: "ସାଂଝା କରନ୍ତୁ", share_sub: "Facebook, X, LinkedIn, WhatsApp, Telegram ରେ ଏକ ଟ୍ୟାପରେ ସାଂଝା କରନ୍ତୁ।", share_copy_link: "ଲିଙ୍କ କପି କରନ୍ତୁ", share_copy_caption: "କ୍ୟାପ୍ସନ କପି କରନ୍ତୁ", share_copied: "କପି ହେଇଛି!", share_phone: "ଫୋନରୁ ସାଂଝା", share_note: "ଧ୍ୟାନ ଦିଅନ୍ତୁ: Instagram/TikTok/YouTube ଓୱେବସାଇଟରୁ ସିଧାସିଧା ପୋଷ୍ଟ ହେବା ଦିଏନା — କ୍ୟାପ୍ସନ କପି କରି ସେଠାରେ ପେଷ୍ଟ କରନ୍ତୁ, କିମ୍ବା ତଳେ Follow ବଟନରୁ ପ୍ରୋଫାଇଲ ଯୋଡ଼ନ୍ତୁ।", share_copy_fail: "କପି ହେଇଲା ନାହିଁ", share_default_msg: "ନ୍ୟୁମେରୋଲୋଜି ଭିଆଇପି ଦେଖନ୍ତୁ!",
     bala_sama: "ସମ", bala_uchcha: "ଉଚ୍ଚ", bala_neecha: "ନୀଚ", bala_swa: "ସ୍ୱ", bala_asta: "ଅସ୍ତ", remedies_guide: "📿 ରୁଦ୍ରାକ୍ଷ · 🌿 ଜଡ଼ି · 🔯 ଯନ୍ତ୍ର ମାର୍ଗଦର୍ଶକ",
@@ -1350,6 +1376,8 @@ const EXTRA = {
     lo_repeat_note: "ଆପଣଙ୍କ ଗ୍ରିଡରେ ପୁନରାବୃତ୍ତି ହୋଇଥିବା ସଂଖ୍ୟା",
   },
   as: {
+    gate_sub_open: "সকলো খুলি গৈছে। তলৰ পৰা যিকোনো সেৱা বাছনি কৰক।",
+    gate_title: "লগইন কৰিলৈ সকলো খুলি যাব", gate_sub: "আপোনাৰ ইমেইল বা মোবাইল নম্বৰৰে বিনামূল্যে একাউণ্ট খুলক। আপোনাৰ জন্মতাৰিখ কেৱল আপোনাকেই দেখা যাব।", gate_cta: "লগইন / ছাইন আপ", gate_home: "ঘৰলৈ ঘূৰক", gate_unlocks: "লগইনৰ পিছত আপুনি যি পাব", gate_notfound: "এই পৃষ্ঠাটো পোৱা নগ'ল।",
     adm_none_booking: "এতিয়ালৈকে কোনো বুকিং নাই।", adm_none_inquiry: "এতিয়ালৈকে কোনো সুধিটো নাই।", adm_none_photo: "অৰ্ধালম্প বাৰ্তবী ছবি নাই।", adm_none_review: "অৰ্ধালম্প সমীক্ষা নাই।", adm_social_help: "আপোনাৰ পৃষ্ঠা/প্ৰ’ফাইলৰ সম্পূৰ্ণ লিংক দিয়ক। খালী ৰাখিলে আইকন লুকাই যাব।",
     share_title: "শেয়াৰ কৰক", share_sub: "Facebook, X, LinkedIn, WhatsApp, Telegramত এক টেপতেই শেয়াৰ কৰক।", share_copy_link: "লিংক কপি কৰক", share_copy_caption: "কেপশন কপি কৰক", share_copied: "কপি হ’ল!", share_phone: "ফ’নৰে শেয়াৰ কৰক", share_note: "লক্ষ্য ৰাখক: Instagram/TikTok/YouTubeৰ পৰা সধাৰে পোষ্ট কৰতে দিয়ে নাই — কেপশন কপি কৰি সেইখানত পেষ্ট কৰক, বা তলত Follow বোতামেৰে প্ৰ’ফাইল যুক্ত কৰক।", share_copy_fail: "কপি হ’ল নাই", share_default_msg: "নিউমেৰলজি ভিআইপি চাওক!",
     bala_sama: "সম", bala_uchcha: "উচ্চ", bala_neecha: "নীচ", bala_swa: "স্ব", bala_asta: "অস্ত", remedies_guide: "📿 ৰুদ্ৰাক্ষ · 🌿 জড়ি · 🔯 যন্ত্ৰ গাইড",
@@ -1405,18 +1433,44 @@ for (const code of MERGE_ORDER) {
 // Alag block taaki aage aur bhi keys isi tarah jode ja sakein.
 const EXTRA2 = {
   hi: { lo_py_head: "साल का अंक" },
+    gate_sub_open: "सब कुछ खुल चुका है। नीचे से कोई भी सेवा चुनें।",
+    gate_title: "लॉगिन करने पर सब कुछ खुल जाता है", gate_sub: "अपने ईमेल या मोबाइल नंबर से मुफ़्त खाता बनाएँ। आपकी जन्मतिथि सिर्फ आपको दिखेगी।", gate_cta: "लॉगिन / साइन अप", gate_home: "होम पर लौटें", gate_unlocks: "लॉगिन के बाद आपको यह मिलेगा", gate_notfound: "यह पेज नहीं मिला।",
   mr: { lo_py_head: "वर्षाचा अंक" },
+    gate_sub_open: "सर्व काही उघडले गेले आहे. खालीलून कोणतीही सेवा निवडा.",
+    gate_title: "लॉगिन केल्यावर सर्व काही उघडते", gate_sub: "तुमच्या ईमेल किंवा मोबाइल क्रमांकाने मोफत खाते तयार करा. तुमची जन्मतारीख फक्त तुम्हाला दिसेल.", gate_cta: "लॉगिन / साइन अप", gate_home: "मुख्य पृष्ठावर परा", gate_unlocks: "लॉगिननंतर तुम्हाला हे मिळेल", gate_notfound: "हे पान उपलब्ध नाही.",
   bn: { lo_py_head: "বছরের অঙ্গ" },
+    gate_sub_open: "সবকিছু খুলে গেছে। নিচ থেকে যেকোনো সেবা বেছে নিন।",
+    gate_title: "লগইন করলে সবকিছু খুলে যাবে", gate_sub: "আপনার ইমেল বা মোবাইল নম্বর দিয়ে বিনামূল্যে অ্যাকাউন্ট খুলুন। আপনার জন্মতারিখ শুধু আপনিই দেখবেন।", gate_cta: "লগইন / সাইন আপ", gate_home: "হোমে ফিরুন", gate_unlocks: "লগইনের পর আপনি যা পাবেন", gate_notfound: "এই পাতা পাওয়া যায়নি।",
   te: { lo_py_head: "వ్యక్తిగత సంవత్సరం" },
+    gate_sub_open: "అంతా తెరుచుకుంది. కింది నుండి ఏ సేవనుైనా ఎంచుకోండి.",
+    gate_title: "లాగిన్ చేస్తే అంతా తెరుచుకుంటుంది", gate_sub: "మీ ఇమెయిల్ లేదా మొబైల్ సంఖ్యతో ఉచిత ఖాతా తెరవండి. మీ జన్మతేదీ మీకు మాత్రమే కనిపిస్తుంది.", gate_cta: "లాగిన్ / సైన్ అప్", gate_home: "హోమ్‌కు వెళ్లండి", gate_unlocks: "లాగిన్ తర్వాత మీకు ఇది లభిస్తుంది", gate_notfound: "ఈ పేజీ కనబడలేదు.",
   ta: { lo_py_head: "ஆண்டு எண்" },
+    gate_sub_open: "அனைத்தும் திறக்கப்பட்டுள்ளது. கீழே இருந்து எந்த சேவையையும் தேர்வு செய்க.",
+    gate_title: "உள்நுழைந்தால் அனைத்தும் திறக்கும்", gate_sub: "உங்கள் மின்னஞ்சல் அல்லது மொபைல் எண்ணால் இலவசம் கணக்கு திறக்கவும். உங்கள் பிறந்த நாள் உங்களுக்கு மட்டுமே தெரியும்.", gate_cta: "உள்நுழை / பதிவு", gate_home: "முகப்பு", gate_unlocks: "உள்நுழைந்த பிறகு நீங்கள் பெறுவது", gate_notfound: "இந்தப் பக்கம் கிடைக்கவில்லை.",
   gu: { lo_py_head: "વ્યક્તિગત વર્ષ" },
+    gate_sub_open: "બધું ખુલી ગયું છે. નીચેથી કોઈપણ સેવા પસંદ કરો.",
+    gate_title: "લોગિન કર્યા પછી બધું ખૂલી જશે", gate_sub: "તમારા ઈમેલ કે મોબાઇલ નંબરથી મફત ખાતું બનાવો. તમારી જન્મતારીખ ફક્ત તમને દેખાશે.", gate_cta: "લોગિન / સાઇન અપ", gate_home: "હોમ પર પાછા", gate_unlocks: "લોગિન के बाद आपको यह मिलेगा", gate_notfound: "આ પાનું મળ્યું નથી.",
   ur: { lo_py_head: "ذاتی سال کا عدد" },
+    gate_sub_open: "سب کچھ کھل چکا ہے۔ نیچے سے کوئی بھی خدمت منتخب کریں۔",
+    gate_title: "لاگ اِن کے بعد سب کچھ کھل جائے گا", gate_sub: "اپنے ای میل یا موبائل نمبر سے مفت اکاؤنٹ بنائیں۔ آپ کی تاریخِ پیدائش صرف آپ کو دکھے گی۔", gate_cta: "لاگ اِن / سائن اپ", gate_home: "ہوم واپس", gate_unlocks: "لاگ اِن کے بعد آپ کو یہ ملے گا", gate_notfound: "یہ صفحہ نہیں ملا۔",
   kn: { lo_py_head: "ವೈಯಕ್ತಿಕ ವರ್ಷ" },
+    gate_sub_open: "ಎಲ್ಲವೂ ತೆರೆದಿದೆ. ಕೆಳಗಿನಿಂದ ಯಾವುದೇ ಸೇವೆ ಆಯ್ಕಿಸಿ.",
+    gate_title: "ಲಾಗಿನ್ ಮಾಡಿದ ಮೇಲೆ ಎಲ್ಲವೂ ತೆರೆಯುತ್ತದೆ", gate_sub: "ನಿಮ್ಮ ಇಮೇಲ್ ಅಥವಾ ಮೊಬೈಲ್ ಸಂಖ್ಯೆಯಿಂದ ಉಚಿತ ಖಾತೆ ತೆರೆಯಿರಿ. ನಿಮ್ಮ ಜನನ ದಿನಾಂಕ ನಿಮಗೆ ಮಾತ್ರ ಕಾಣುತ್ತದೆ.", gate_cta: "ಲಾಗಿನ್ / ಸೈನ್ ಅಪ್", gate_home: "ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ", gate_unlocks: "ಲಾಗಿನ್ ನಂತರ ನಿಮಗೆ ಸಿಗುತ್ತದೆ", gate_notfound: "ಈ ಪುಟ ಸಿಗಲಿಲ್ಲ.",
   ml: { lo_py_head: "വ്യക്തിഗത വർഷം" },
+    gate_sub_open: "എല്ലാം തുറന്നിരിക്കുന്നു. താഴെ നിന്ന് ഏതെങ്കിലും സേവനം തിരഞ്ഞെടുക്കുക.",
+    gate_title: "ലോഗിൻ ചെയ്താൽ എല്ലാം തുറക്കും", gate_sub: "നിങ്ങളുടെ ഇമെയിൽ അല്ലെങ്കിൽ മൊബൈൽ നമ്പറിലാണ് സൗജന്യ അക്കൗണ്ട് തുറക്കൂ. നിങ്ങളുടെ ജനനത്തെയത്തീ കാണാവുന്നത് നിങ്ങൾക്ക് മാത്രമാണ്.", gate_cta: "ലോഗിൻ / സൈൻ അപ്പ്", gate_home: "ഹോമിലേക്ക്", gate_unlocks: "ലോഗിൻ ചെയ്ത ശേഷം നിങ്ങൾക്ക് ലഭിക്കുക", gate_notfound: "ഈ പേജ് കണ്ടെത്തിയില്ല.",
   pa: { lo_py_head: "ਨਿੱਜੀ ਸਾਲ" },
+    gate_sub_open: "ਸਭ ਖੁੱਲ ਚੁੱਕਾ ਹੈ। ਹੇਠਾਂ ਤੋਂ ਕੋਈ ਵੀ ਸੇਵਾ ਚੁਣੋ।",
+    gate_title: "ਲੌਗਇਨ ਕਰਨ ਤੋਂ ਬਾਅਦ ਸਭ ਖੁੱਲ ਜਾਵੇਗਾ", gate_sub: "ਆਪਣੀ ਈਮੇਲ ਜਾਂ ਮੋਬਾਈਲ ਨੰਬਰ ਨਾਲ ਮੁਫ਼ਤ ਖਾਤਾ ਖੋਲ੍ਹੋ। ਤੁਹਾਡੀ ਜਨਮ ਤਾਰੀਖ ਸਿਰਫ਼ ਤੁਹਾਨੂੰ ਦਿਸੇਗੀ।", gate_cta: "ਲੌਗਇਨ / ਸਾਈਨ ਅਪ", gate_home: "ਹੋਮ 'ਤੇ ਵਾਪਸ", gate_unlocks: "ਲੌਗਇਨ ਤੋਂ ਬਾਅਦ ਤੁਹਾਨੂੰ ਇਹ ਮਿਲੇਗਾ", gate_notfound: "ਇਹ ਪੰਨਾ ਨਹੀਂ ਮਿਲਿਆ।",
   or: { lo_py_head: "ବ୍ୟକ୍ତିଗତ ବର୍ଷ" },
+    gate_sub_open: "ସବୁ ଖୋଲିଗଲା। ତଳେ ଥରୁ ଯେକୌଣସି ସେବା ବାଛନ୍ତୁ।",
+    gate_title: "ଲଗଇନ କରିବା ପରେ ସବୁ ଖୋଲିଯିବ", gate_sub: "ଆପଣଙ୍କ ଇମେଲ କିମ୍ବା ମୋବାଇଲ ନମ୍ବରରେ ମଫ଼ତ ଖାତା ଖୋଲନ୍ତୁ। ଆପଣଙ୍କ ଜନ୍ମତାରିଖ କେବଳ ଆପଣଙ୍କୁ ଦେଖାଯିବ।", gate_cta: "ଲଗଇନ / ସାଇନ ଅପ", gate_home: "ହୋମକୁ ଫେରନ୍ତୁ", gate_unlocks: "ଲଗଇନ ପରେ ଆପଣ ଯାହା ପାଣିବ", gate_notfound: "ଏହି ପୃଷ୍ଠା ମିଳିଲା ନାହିଁ।",
   as: { lo_py_head: "ব্যক্তিগত বছৰ" },
+    gate_sub_open: "সকলো খুলি গৈছে। তলৰ পৰা যিকোনো সেৱা বাছনি কৰক।",
+    gate_title: "লগইন কৰিলৈ সকলো খুলি যাব", gate_sub: "আপোনাৰ ইমেইল বা মোবাইল নম্বৰৰে বিনামূল্যে একাউণ্ট খুলক। আপোনাৰ জন্মতাৰিখ কেৱল আপোনাকেই দেখা যাব।", gate_cta: "লগইন / ছাইন আপ", gate_home: "ঘৰলৈ ঘূৰক", gate_unlocks: "লগইনৰ পিছত আপুনি যি পাব", gate_notfound: "এই পৃষ্ঠাটো পোৱা নগ'ল।",
   en: { lo_py_head: "Personal year" },
+    gate_sub_open: "Everything is unlocked. Choose any service below.",
+    gate_title: "Everything unlocks after you log in", gate_sub: "Create a free account with your email or mobile number. Your birth details stay private to you.", gate_cta: "Login / Sign Up", gate_home: "Back to Home", gate_unlocks: "What you get after login", gate_notfound: "This page does not exist.",
 };
 for (const code of MERGE_ORDER) {
   if (EXTRA2[code]) DICT[code] = { ...DICT[code], ...EXTRA2[code] };

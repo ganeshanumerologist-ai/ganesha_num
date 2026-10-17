@@ -11,6 +11,7 @@ import { personalYear } from "../data/forecast.js";
 import { db } from "../firebase.js";
 import { collection, addDoc, serverTimestamp, query, where, getDocs } from "firebase/firestore";
 import ShareButtons from "../components/ShareButtons.jsx";
+import KundliChart from "../components/KundliChart.jsx";
 import CitySelect from "../components/CitySelect.jsx";
 import { loadProfile, saveProfile } from "../profile/profile.js";
 
@@ -282,6 +283,9 @@ export default function Kundli() {
           </div>
 
           <ShareButtons title={L.k_title} text={`${result.name} — ${L.k_moolank} ${result.moolank}, ${L.k_bhagyank} ${result.nums.bhagyank}, ${P.pg_lifepath} ${result.nums.lifePath}`} />
+
+          {/* ══════ पूरी कुंडली — एक ही heading के नीचे सारे हिस्से ══════ */}
+          <KundliChart form={result} />
         </>
       )}
     </div>

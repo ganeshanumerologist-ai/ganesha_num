@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext.jsx";
 import { isValidId, looksLikePhone, isValidOtp, toPhone } from "../auth/identity.js";
 import { useLanguage } from "../i18n/LanguageContext.jsx";
@@ -286,10 +286,17 @@ export default function Login() {
   const { user, loading, login, signup, googleLogin, sendOtp, verifyOtp, signupWithOtp, resetOtp, otpReady, testPhones, isTestPhone } = useAuth();
   const { t, lang } = useLanguage();
   const nav = useNavigate();
+  const loc = useLocation();
+  // Gate bhejta hai state: { from: "/kundli" }. Login ke baad wapas
+  // wahin jana chahiye, warna user ko dashboard par gira deta hai aur
+  // usse lagta hai "maine kundli khola tha".
+  const dest = loc.state?.from && String(loc.state.from).startsWith("/") && !String(loc.state.from).startsWith("//")
+    ? loc.state.from
+    : "/dashboard";
 
   // Login ke baad /login khole to dashboard bhejo
   useEffect(() => {
-    if (!loading && user) nav("/dashboard");
+    if (!loading && user) nav(dest, { replace: true });
   }, [user, loading, nav]);
   const [mode, setMode] = useState("login");   // login | signup
   const [how, setHow] = useState("pass");     // pass | otp
@@ -336,7 +343,7 @@ export default function Login() {
       try {
         saveProfile({ mobile: toPhone(id) });
       } catch { /* ignore */ }
-      nav("/dashboard");
+      nav(dest, { replace: true });
     } catch (err) {
       setError(friendlyError(err, lang));
     } finally {
@@ -370,7 +377,7 @@ export default function Login() {
           saveProfile({ mobile: toPhone(id) });
         } catch { /* ignore */ }
       }
-      nav("/dashboard");
+      nav(dest, { replace: true });
     } catch (err) {
       setError(friendlyError(err, lang));
     } finally {
@@ -382,7 +389,7 @@ export default function Login() {
     setError("");
     try {
       await googleLogin();
-      nav("/dashboard");
+      nav(dest, { replace: true });
     } catch (err) {
       setError(friendlyError(err, lang));
     }
