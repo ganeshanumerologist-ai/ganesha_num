@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../i18n/LanguageContext.jsx";
 import { useAuth } from "../auth/AuthContext.jsx";
@@ -11,6 +11,10 @@ import { personalYear } from "../data/forecast.js";
 import { db } from "../firebase.js";
 import { collection, addDoc, serverTimestamp, query, where, getDocs } from "firebase/firestore";
 import ShareButtons from "../components/ShareButtons.jsx";
+import { kundliFull } from "../utils/kundliFull.js";
+import { RASHIS } from "../utils/astro.js";
+import { siteTX } from "../i18n/siteTx.js";
+import { grahaName, rashiName, nakName, vaarName, tithiName, pakshaName, yogaName, karanaName } from "../i18n/names.js";
 import KundliChart from "../components/KundliChart.jsx";
 import CitySelect from "../components/CitySelect.jsx";
 import { loadProfile, saveProfile } from "../profile/profile.js";
@@ -251,6 +255,13 @@ export default function Kundli() {
               {` · ${genderLabel}`}
             </p>
 
+            {/* ══════════════════════════════════════════════════
+                JANM KI JHALAK — rashi, nakshatra, gana, vara, tithi.
+                User ne kaha ye "abhibhi nahi dikh rahi". Pehle ye sab
+                sirf neeche scroll karne par milte the, isliye page khaali
+                lagta tha. Ab seedha naam ke niche. */}
+            <BirthEyes form={result} />
+
             {glance.length > 0 && (
               <div className="num-strip">
                 {glance.map(([label, n]) => (
@@ -291,3 +302,72 @@ export default function Kundli() {
     </div>
   );
 }
+
+
+/** Rashi naam → index. RASHIS array astro.js se. */
+const RASHI_IDX = (name) => RASHIS.indexOf(name);
+
+/**
+ * Janm ki jhalak — ek nazar me poora birth chart.
+ * Lagna, sun/moon rashi, nakshatra (pada + gana + nadi), vara (svami),
+ * tithi, paksha, yoga, karana.
+ */
+function BirthEyes({ form }) {
+  const { lang } = useLanguage();
+  const S = siteTX(lang);
+  const r = useMemo(() => {
+    try { return kundliFull(form); } catch { return null; }
+  }, [form.birthdate, form.time, form.place]);
+
+  const g = r?.glance;
+  if (!g) return null;
+
+  const NAK = { Ashwini: 0, Bharani: 1, Krittika: 2, Rohini: 3, Mrigashira: 4, "Mrigashira": 4,
+    Ardra: 5, Punarvasu: 6, Pushya: 7, Ashlesha: 8, Magha: 9, "Purva Phalguni": 10,
+    "Uttara Phalguni": 11, Hasta: 12, Chitra: 13, Swati: 14, Vishakha: 15,
+    Anuradha: 16, Jyeshtha: 17, Mula: 18, "Purva Ashadha": 19, "Uttara Ashadha": 20,
+    Shravana: 21, Dhanishta: 22, Shatabhisha: 23, "Purva Bhadrapada": 24,
+    "Uttara Bhadrapada": 25, Revati: 26 };
+  void NAK;
+
+  const GANA_HI = { Deva: "देव", Manushya: "मानव", Rakshasa: "राक्षस" };
+  const GANA_MR = { Deva: "देव", Manushya: "माणूस", Rakshasa: "राक्षस" };
+  const NADI_HI = { Adya: "आद्य", Madhya: "मध्य", Antya: "अंत्य" };
+
+  const isMr = lang === "mr";
+  const ganaTxt = isMr ? (GANA_MR[g.gana] || g.gana) : (GANA_HI[g.gana] || g.gana);
+  const nadiTxt = isMr
+    ? { Adya: "आद्य", Madhya: "मध्य", Antya: "अंत्य" }[g.nadi] || g.nadi
+    : NADI_HI[g.nadi] || g.nadi;
+
+  const cells = [
+    { k: S.pg_lagna_full || "लग्न", v: g.lagna
+        ? `${rashiName(RASHI_IDX(g.lagna), lang)} · ${grahaName(g.lagnaLord, lang)}`
+        : S.pg_no_time || "समय नहीं" },
+    { k: "सूर्य राशि", v: rashiName(RASHI_IDX(g.sunRashi), lang) },
+    { k: "चंद्र राशि", v: `${rashiName(RASHI_IDX(g.moonRashi), lang)} ${g.moonDegree}` },
+    { k: "नक्षत्र", v: `${nakName(g.nakshatraIndex, lang)} · पाद ${g.nakPada}` },
+    { k: "गण", v: ganaTxt },
+    { k: "नाडी", v: nadiTxt },
+    { k: "राशि स्वामी", v: grahaName(g.rashiLord, lang) },
+    { k: "वार", v: `${vaarName(g.vara === "Ravivaar" ? 0 : g.vara === "Somvaar" ? 1 : g.vara === "Mangalvaar" ? 2 : g.vara === "Budhvaar" ? 3 : g.vara === "Guruvaar" ? 4 : g.vara === "Shukravaar" ? 5 : 6, lang)}` },
+    { k: "तिथि", v: `${tithiName(g.tithiNum - 1, lang)} · ${pakshaName(g.paksha, lang)}` },
+    { k: "योग", v: yogaName(g.yoga, lang) },
+    { k: "करण", v: karanaName(g.karana, lang) },
+  ];
+
+  return (
+    <div className="bg-eyes">
+      <div className="bg-eyes-h">{S.pg_janm || "जन्म की झलक"}</div>
+      <div className="bg-eyes-grid">
+        {cells.map((c) => (
+          <div className="bg-eye" key={c.k}>
+            <span className="bg-eye-k">{c.k}</span>
+            <span className="bg-eye-v">{c.v}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+

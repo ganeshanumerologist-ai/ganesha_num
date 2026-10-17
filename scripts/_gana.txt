@@ -1,0 +1,36 @@
+Nakshatra index → Gana
+
+  #   nakshatra (hi)          gana
+  ----------------------------------------------
+   0   अश्विनी                Deva
+   1   भरणी                   Manushya
+   2   कृत्तिका               Rakshasa
+   3   रोहिणी                 Manushya
+   4   मृगशिरा                Deva
+   5   आर्द्रा                Manushya
+   6   पुनर्वसु               Deva
+   7   पुष्य                  Deva
+   8   आश्लेषा                Rakshasa
+   9   मघा                    Rakshasa
+  10   पूर्वा फाल्गुनी        Manushya
+  11   उत्तरा फाल्गुनी        Deva
+  12   हस्त                   Deva
+  13   चित्रा                 Rakshasa
+  14   स्वाती                 Deva
+  15   विशाखा                 Rakshasa
+  16   अनुराधा                Deva
+  17   ज्येष्ठा               Rakshasa
+  18   मूल                    Rakshasa
+  19   पूर्वाषाढ़ा            Manushya
+  20   उत्तराषाढ़ा            Deva
+  21   श्रवण                  Deva
+  22   धनिष्ठा                Rakshasa
+  23   शतभिषा                 Rakshasa
+  24   पूर्वा भाद्रपद         Manushya
+  25   उत्तरा भाद्रपद         Deva
+  26   रेवती                  Deva
+
+  Deva 12 · Manushya 6 · Rakshasa 9 = 27
+  ✅ count sahi
+
+  nakshatraOf(280.5°) = Shravana (index 21) → Deva

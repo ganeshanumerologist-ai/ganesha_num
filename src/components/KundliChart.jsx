@@ -621,6 +621,7 @@ export default function KundliChart({ form }) {
 // varshphal alag module se aata hai
 import { yearMeaning, yearDetail, ycat } from "../data/varshphal_i18n.js";
 import { RASHIS } from "../utils/astro.js";
+import { rIdx } from "../utils/rashiHelper.js";
 const RASHI_LORD_EN = { Mesha: "Mangal", Vrishabha: "Venus", Mithuna: "Mercury", Karka: "Moon", Simha: "Sun", Kanya: "Mercury", Tula: "Venus", Vrishchika: "Mars", Dhanu: "Jupiter", Makara: "Saturn", Kumbha: "Saturn", Meena: "Jupiter" };
 
 /**

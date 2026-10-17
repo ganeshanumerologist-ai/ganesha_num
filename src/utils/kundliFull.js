@@ -77,6 +77,66 @@ export function bhav(lagnaIdx, planetIdx) {
   return ((planetIdx - lagnaIdx + 12) % 12) + 1;
 }
 
+
+// ════════════════════════════════════════════════════════════════════
+//  GANA — Dev / Manushya / Rakshas
+//  Nakshatra ke hisaab se. Ye astro engine me nahi tha, isliye yahan
+//  add kiya. Standard table: Deva 12, Manushya 6, Rakshasa 9 = 27.
+// ════════════════════════════════════════════════════════════════════
+const GANA_BY_NAK = [
+  "Deva", "Manushya", "Rakshasa", "Manushya", "Deva", "Manushya", "Deva", "Deva",
+  "Rakshasa", "Rakshasa", "Manushya", "Deva", "Deva", "Rakshasa", "Deva", "Rakshasa",
+  "Deva", "Rakshasa", "Rakshasa", "Manushya", "Deva", "Deva", "Rakshasa", "Rakshasa",
+  "Manushya", "Deva", "Deva",
+];
+
+/** Nakshatra index (0=Ashwini) se gana. */
+export function ganaOf(nakIndex) {
+  return GANA_BY_NAK[nakIndex] ?? "—";
+}
+
+/**
+ * Janm ki jhalak — jo upar, seedha result ke niche dikhti hai.
+ * values raw (English/Sanskrit) hain; rendering bhasha karegi.
+ */
+export function birthGlance(lagnaIdx, lons, nak, tithi, yoga, karana, wd, lagKnown) {
+  const moonIdx = rashiIndex(lons.Moon);
+  const sunIdx = rashiIndex(lons.Sun);
+  return {
+    lagna: lagKnown ? RASHIS[lagnaIdx] : null,
+    lagnaLord: lagKnown ? RASHI_LORD[RASHIS[lagnaIdx]] : null,
+    lagnaKnown: lagKnown,
+
+    sunRashi: RASHIS[sunIdx],
+    moonRashi: RASHIS[moonIdx],
+
+    nakshatra: nak.name,
+    nakshatraIndex: nak.index,
+    nakPada: nak.pada,
+    gana: ganaOf(nak.index),
+    nadi: NADI_BY_NAK[nak.index],
+    rashiLord: RASHI_LORD[RASHIS[moonIdx]],
+    moonDegree: Math.floor(rev(lons.Moon) % 30) + "°" + String(Math.floor((rev(lons.Moon) % 1) * 60)).padStart(2, "0") + "′",
+
+    vara: VAAR_NAMES[wd],
+    varaLord: VAAR_LORD[wd],
+
+    tithi: tithi.name,
+    tithiNum: tithi.n,
+    paksha: tithi.paksha,
+    yoga,
+    karana,
+  };
+}
+
+const VAAR_NAMES = ["Ravivaar", "Somvaar", "Mangalvaar", "Budhvaar", "Guruvaar", "Shukravaar", "Shanivaar"];
+// Nadi: Adya (A), Madhya (M), Antya (T) — 3-cycle, har nakshatra par
+const NADI_BY_NAK = [
+  "Adya", "Madhya", "Antya", "Adya", "Madhya", "Antya", "Adya", "Madhya", "Antya",
+  "Adya", "Madhya", "Antya", "Adya", "Madhya", "Antya", "Adya", "Madhya", "Antya",
+  "Adya", "Madhya", "Antya", "Adya", "Madhya", "Antya", "Adya", "Madhya", "Antya",
+];
+
 // ════════════════════════════════════════════════════════════════════
 // 1. VIMSHOTTARI DASHA — mahadasha / antardasha
 // ════════════════════════════════════════════════════════════════════
@@ -481,6 +541,11 @@ export function kundliFull({ name, birthdate, time, place, gender }) {
 
     // ── Naye hisse (user ki 4 shikayaton ka hal) ──
     // 1. varshphal: kaun sa saal — ab saaf
+    // 0. JANM KI JHALAK - rashi, nakshatra, gana, vara. Ye upar
+    //    result ke niche dikhti hai; pehle sirf neeche scroll karne
+    //    par milti thi, isliye user ko laga chart hi nahi hai.
+    glance: birthGlance(lagIdx, lons, nak, tithi, yoga, karana, wd, lagLon !== null),
+
     varshphal: varshphalScope(birthdate),
 
     // 2. lal kitab: puri upay-list, ghar ke hisaab se

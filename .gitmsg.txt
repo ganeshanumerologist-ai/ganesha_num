@@ -1,26 +1,24 @@
-Cleaner background, fluid 4K type, and city-aware Rahu Kaal
+Show the birth chart where the result is, and a guard for missing imports
 
-Two things. First, a design pass: I had been lightening the background
-blind and it was still wrong, because the problem was never darkness. A
-screenshot showed five competing layers at once, with the mandala rings
-running straight through the headline and a clipped kalash in the corner.
-Lighter is not the same as clean.
+The user said the chart still was not showing. It was, but only after a
+long scroll: the result area showed the name, the birth line and the eight
+numerology numbers, and nothing else. Rashi, nakshatra, gana and vara sat
+further down inside the full chart, so the page read as empty.
 
-The two kundali chart layers are now removed from the background
-entirely, which is where most of the line-art clutter was. The mandala
-stays but drops to .11 opacity behind a radial mask, so it fades out
-before it reaches the text instead of crossing it. The kalash no longer
-clips. The aurora is down to three soft colours from five.
+A birth summary now sits directly under the name: lagna with its lord, sun
+and moon sign with the moon's exact degree, nakshatra with pada, gana,
+nadi, rashi lord, weekday with its lord, tithi with paksha, yoga and
+karana. Eleven fields, one glance, before anything else.
 
-The headline gradient went from gold-pink-purple-cyan to three warm
-shades. Four hues read as a rainbow rather than a brand. Hero type is
-now fluid via clamp, growing from 34px on a phone to 104px at 4K; the
-old rule capped at 80px and had already stopped growing by 1280px, so
-on a 4K panel it looked undersized. All contrast sits at AAA.
+Gana was missing from the engine entirely. Added the standard
+nakshatra-to-gana table, twelve Deva, six Manushya and nine Rakshasa, plus
+nadi on its three-cycle.
 
-Second, Rahu Kaal. The user was right that it was Delhi's time for
-everyone. It was a fixed IST string table, so Nagpur and Chennai showed
-Delhi's window. The day is now split into eight segments from the
-selected city's own sunrise, giving ten different Rahu Kaal windows
-across ten cities. Delhi computes 16:38-18:04 against the published IST
-standard of 16:30-18:00, which is the expected agreement.
+Two crashes fixed on the way. KundliChart called rIdx() with no import,
+which blanked the whole page. And lagnaLord arrives already in Sanskrit,
+so wrapping it in a second Sanskrit-to-Sanskrit map returned undefined and
+two fields rendered empty.
+
+check-missing-imports.mjs is new and runs over every source file looking
+for a helper that is called but never imported. It ignores comments, which
+is what made the first run report sixteen false positives.
