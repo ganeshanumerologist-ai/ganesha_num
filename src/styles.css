@@ -6,7 +6,7 @@
      Har rang ka ratio card par (scripts/check-contrast2.mjs):
        --text  #ffffff  16.4:1  AAA
        --muted #c2c7ee   9.9:1  AAA   (pehle #9d9fc4 = 6.3:1 AA)
-       --gold  #f7c948  11.5:1  AAA   (pehle #fbbf24 = 9.8:1)
+       --gold  #f7c948  11.5:1  AAA   (pehle #f7c948 = 9.8:1)
      */
   /* ── MAROON / GOLD / ROSE THEME ──
      Purana palette INDIGO-BLUE tha (#141838 bg, cyan accent) jo
@@ -146,7 +146,7 @@ body {
 .jy-vignette {
   position: absolute; inset: 0;
   background:
-    radial-gradient(140% 100% at 50% 45%, transparent 74%, rgba(14,11,32,.22) 100%);
+    radial-gradient(140% 100% at 50% 45%, transparent 74%, rgba(12,6,9,.22) 100%);
 }
 
 /* ---------- PHONE par background DIKHNA chahiye (pehle .10/.07 se
@@ -157,7 +157,7 @@ body {
   .jy-mandala-wrap { opacity: .09; width: min(180vmin, 1300px); }
   .jy-kalash { opacity: .09; width: min(30vmin, 180px); }
   .jy-stars { opacity: .48; }
-  .jy-vignette { background: radial-gradient(140% 100% at 50% 40%, transparent 78%, rgba(20,16,48,.18) 100%); }
+  .jy-vignette { background: radial-gradient(140% 100% at 50% 40%, transparent 78%, rgba(14,7,11,.18) 100%); }
   /* jyotish background ke upar se text padhne layak.
      PEHLE rgba(10,14,32,.78) tha — ye phone par surface ko KAALA
      kar deta tha, yaani background halka karne ka kaam yahan
@@ -165,7 +165,7 @@ body {
   .card,
   .tile,
   .num-lock {
-    background: linear-gradient(160deg, rgba(42, 48, 100, .94), rgba(29, 34, 74, .92));
+    background: linear-gradient(160deg, rgba(32, 18, 25, .94), rgba(24, 13, 19, .92));
     backdrop-filter: blur(16px) saturate(130%);
     -webkit-backdrop-filter: blur(16px) saturate(130%);
   }
@@ -186,26 +186,26 @@ h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 8px; }
 p { color: var(--muted); text-shadow: 0 1px 2px rgba(0,0,0,.55); }
 .btn {
   display: inline-flex; align-items: center; gap: 8px;
-  padding: 13px 26px; border-radius: 999px; border: 1px solid rgba(251,191,36,.35); cursor: pointer;
+  padding: 13px 26px; border-radius: 999px; border: 1px solid rgba(247,201,72,.35); cursor: pointer;
   font-weight: 600; font-size: 0.95rem; letter-spacing: .2px;
   transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-  background: linear-gradient(135deg, rgba(139,92,246,.95), rgba(34,211,238,.85));
+  background: linear-gradient(135deg, rgba(242,160,184,.95), rgba(247,201,72,.85));
   color: #fff;
 }
 .btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 16px 42px -12px rgba(139,92,246,.75);
+  box-shadow: 0 16px 42px -12px rgba(242,160,184,.75);
 }
 .btn.secondary {
   background: rgba(255,255,255,.03);
-  border: 1px solid rgba(251,191,36,.28);
+  border: 1px solid rgba(247,201,72,.28);
   color: var(--text);
   backdrop-filter: blur(6px);
 }
 .btn.secondary:hover {
   border-color: var(--gold);
-  box-shadow: 0 14px 38px -14px rgba(251,191,36,.5);
-  background: rgba(251,191,36,.07);
+  box-shadow: 0 14px 38px -14px rgba(247,201,72,.5);
+  background: rgba(247,201,72,.07);
 }
 .btn.danger { background: linear-gradient(135deg,#ef4444,#f97316); }
 .card {
@@ -225,7 +225,7 @@ p { color: var(--muted); text-shadow: 0 1px 2px rgba(0,0,0,.55); }
   transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
 }
 .card:hover {
-  border-color: rgba(251,191,36,.34);
+  border-color: rgba(247,201,72,.34);
   transform: translateY(-2px);
   box-shadow: var(--glow-violet);
 }
@@ -254,7 +254,7 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   display: block; width: 100%; text-align: left; background: none; border: none;
   color: var(--text); padding: 10px 14px; cursor: pointer; font-size: .9rem; font-family: inherit;
 }
-.city-list button:hover { background: rgba(139,92,246,.25); }
+.city-list button:hover { background: rgba(242,160,184,.25); }
 .city-list .st { color: var(--muted); font-size: .75rem; margin-left: 6px; }
 .label { display: block; margin-bottom: 6px; font-size: .9rem; color: var(--muted); }
 .grid { display: grid; gap: 20px; }
@@ -300,7 +300,7 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   margin: 18px auto 0;
   max-width: 16ch;
   /* gradient ke neeche halka shadow — art ke upar bhi text khada rahe */
-  text-shadow: 0 4px 30px rgba(12, 10, 34, .55);
+  text-shadow: 0 4px 30px rgba(11, 6, 9, .55);
 }
 .hero p {
   font-size: clamp(.98rem, 1.55vw, 1.16rem);
@@ -308,7 +308,7 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   max-width: 62ch;
   margin: 18px auto 0;
   color: var(--muted);
-  text-shadow: 0 2px 12px rgba(12, 10, 34, .6);
+  text-shadow: 0 2px 12px rgba(11, 6, 9, .6);
 }
 
 /* Kundli: saare numbers ek saath, upar ki strip me */
@@ -349,10 +349,10 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 .navbar .inner { max-width: 1200px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; }
 .nav-links { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 .nav-links a { padding: 8px 14px; border-radius: 999px; font-size: .9rem; color: var(--muted); transition: all .15s; }
-.nav-links a:hover, .nav-links a.active { background: rgba(139,92,246,.15); color: var(--text); }
+.nav-links a:hover, .nav-links a.active { background: rgba(242,160,184,.15); color: var(--text); }
 .nav-item { position: relative; }
 .nav-label { padding: 8px 14px; border-radius: 999px; font-size: .9rem; color: var(--muted); cursor: pointer; display: inline-block; }
-.nav-item:hover .nav-label, .nav-item.active .nav-label { background: rgba(139,92,246,.15); color: var(--text); }
+.nav-item:hover .nav-label, .nav-item.active .nav-label { background: rgba(242,160,184,.15); color: var(--text); }
 .dropdown {
   display: none; position: absolute; top: 100%; left: 0; min-width: 200px;
   background: #2a1622; border: 1px solid var(--border); border-radius: 12px;
@@ -373,7 +373,7 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 .lang-wrap {
   display: inline-flex; align-items: center; gap: 6px;
   border: 2px solid var(--gold); border-radius: 999px; padding: 4px 6px 4px 12px;
-  background: rgba(251,191,36,.12); font-size: .9rem; font-weight: 700; color: var(--gold);
+  background: rgba(247,201,72,.12); font-size: .9rem; font-weight: 700; color: var(--gold);
 }
 .lang-wrap .lang-select { border: none; background: transparent; margin-left: 0; font-weight: 700; color: var(--text); cursor: pointer; }
 .lang-wrap .lang-select option { color: #000; }
@@ -448,7 +448,7 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   position: absolute; left: 50%; bottom: 0;
   width: min(520px, 80%); height: 1px;
   transform: translateX(-50%);
-  background: linear-gradient(90deg, transparent, rgba(251,191,36,.55), transparent);
+  background: linear-gradient(90deg, transparent, rgba(247,201,72,.55), transparent);
 }
 .hero h1 {
   font-size: clamp(2.4rem, 7.2vw, 5.2rem);
@@ -469,10 +469,10 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   display: grid; place-items: center;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 50% 50%, rgba(251,191,36,.16), transparent 62%),
-    conic-gradient(from 0deg, rgba(251,191,36,.65), rgba(34,211,238,.35), rgba(139,92,246,.55), rgba(251,191,36,.65));
+    radial-gradient(circle at 50% 50%, rgba(247,201,72,.16), transparent 62%),
+    conic-gradient(from 0deg, rgba(247,201,72,.65), rgba(247,201,72,.35), rgba(242,160,184,.55), rgba(247,201,72,.65));
   animation: jyspin 26s linear infinite;
-  box-shadow: 0 0 70px -12px rgba(251,191,36,.45);
+  box-shadow: 0 0 70px -12px rgba(247,201,72,.45);
 }
 .hero .logo-ring::before {
   content: "";
@@ -503,16 +503,16 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 }
 .tile:hover {
   transform: translateY(-4px);
-  border-color: rgba(251,191,36,.45);
-  box-shadow: 0 26px 60px -28px rgba(251,191,36,.5);
+  border-color: rgba(247,201,72,.45);
+  box-shadow: 0 26px 60px -28px rgba(247,201,72,.5);
 }
 .tile .glyph {
   width: 46px; height: 46px;
   display: grid; place-items: center;
   border-radius: 12px;
   font-size: 1.4rem;
-  background: linear-gradient(135deg, rgba(251,191,36,.20), rgba(139,92,246,.22));
-  border: 1px solid rgba(251,191,36,.28);
+  background: linear-gradient(135deg, rgba(247,201,72,.20), rgba(242,160,184,.22));
+  border: 1px solid rgba(247,201,72,.28);
 }
 .tile h3 { margin: 6px 0 0; font-size: 1.05rem; color: var(--text); }
 .tile p { font-size: .84rem; margin: 0; }
@@ -537,7 +537,7 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 .num-lock-mark {
   font-size: 2.6rem; line-height: 1; margin-bottom: 10px;
   color: var(--gold);
-  text-shadow: 0 0 34px rgba(251,191,36,.55);
+  text-shadow: 0 0 34px rgba(247,201,72,.55);
 }
 .num-lock h3 { font-size: 1.25rem; margin-bottom: 8px; }
 .num-lock p { max-width: 520px; margin: 0 auto; }
@@ -584,15 +584,15 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   font-size: .74rem; font-weight: 600; line-height: 1.35;
   color: var(--muted);
   background: rgba(255, 255, 255, .04);
-  border: 1px solid rgba(251, 191, 36, .22);
+  border: 1px solid rgba(247, 201, 72, .22);
   transition: all .15s;
 }
 .kf-chip:hover { border-color: var(--gold); color: var(--text); }
 .kf-chip.on {
   color: #1a1206;
-  background: linear-gradient(135deg, #fde68a, #fbbf24);
+  background: linear-gradient(135deg, #fde68a, #f7c948);
   border-color: var(--gold);
-  box-shadow: 0 6px 20px -8px rgba(251, 191, 36, .7);
+  box-shadow: 0 6px 20px -8px rgba(247, 201, 72, .7);
 }
 .kf-table {
   width: 100%; border-collapse: collapse; font-size: .8rem;
@@ -770,7 +770,7 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 .gem-rec-num {
   flex: 0 0 30px; height: 30px; border-radius: 50%;
   display: grid; place-items: center; font-weight: 800; font-size: .9rem;
-  background: linear-gradient(135deg, #f7c948, #fbbf24); color: #1a1206;
+  background: linear-gradient(135deg, #f7c948, #f7c948); color: #1a1206;
 }
 .gem-rec-item b { display: block; font-size: 1.06rem; color: var(--gold); }
 .gem-rec-gr { display: block; font-size: .8rem; color: var(--muted); }
