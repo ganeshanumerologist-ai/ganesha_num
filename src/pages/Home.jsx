@@ -267,7 +267,7 @@ export default function Home() {
           <div className="rule" />
         </div>
         <div className="card" style={{ textAlign: "center", padding: "34px 26px" }}>
-          <p style={{ fontSize: "1rem", maxWidth: 720, margin: "0 auto", color: "#c3c6e6" }}>
+          <p style={{ fontSize: "1rem", maxWidth: 720, margin: "0 auto", color: "#e6d4da" }}>
             {t("footer_tagline")}
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginTop: 24 }}>

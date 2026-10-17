@@ -152,13 +152,13 @@ export default function JyotishBackdrop() {
         <svg className="jy-mandala" viewBox="-200 -200 400 400">
           <defs>
             <linearGradient id="jyg" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#fbbf24" stopOpacity="0.55" />
-              <stop offset="50%" stopColor="#8b5cf6" stopOpacity="0.40" />
-              <stop offset="100%" stopColor="#22d3ee" stopOpacity="0.55" />
+              <stop offset="0%" stopColor="#f7c948" stopOpacity="0.55" />
+              <stop offset="50%" stopColor="#f2a0b8" stopOpacity="0.40" />
+              <stop offset="100%" stopColor="#f7c948" stopOpacity="0.55" />
             </linearGradient>
             <radialGradient id="jyglow">
-              <stop offset="0%" stopColor="#fbbf24" stopOpacity="0.22" />
-              <stop offset="100%" stopColor="#fbbf24" stopOpacity="0" />
+              <stop offset="0%" stopColor="#f7c948" stopOpacity="0.22" />
+              <stop offset="100%" stopColor="#f7c948" stopOpacity="0" />
             </radialGradient>
           </defs>
 
@@ -180,7 +180,7 @@ export default function JyotishBackdrop() {
                 y1={Math.sin(a) * inner}
                 x2={Math.cos(a) * 178}
                 y2={Math.sin(a) * 178}
-                stroke="#fbbf24"
+                stroke="#f7c948"
                 strokeWidth="0.6"
                 opacity="0.4"
               />
@@ -201,7 +201,7 @@ export default function JyotishBackdrop() {
                 cy={Math.sin(a) * 150}
                 r="17"
                 fill="none"
-                stroke="#fbbf24"
+                stroke="#f7c948"
                 strokeWidth="0.8"
                 opacity="0.42"
               />
@@ -209,23 +209,23 @@ export default function JyotishBackdrop() {
           })}
 
           {/* 12 rashi bhed */}
-          <circle r="112" fill="none" stroke="#22d3ee" strokeWidth="0.8" opacity="0.45" />
+          <circle r="112" fill="none" stroke="#f2a0b8" strokeWidth="0.8" opacity="0.45" />
           {RAASHI_TICKS.map(({ a, i }) => (
             <line key={i}
               x1={Math.cos(a) * 100} y1={Math.sin(a) * 100}
               x2={Math.cos(a) * 112} y2={Math.sin(a) * 112}
-              stroke="#22d3ee" strokeWidth="0.7" opacity="0.4" />
+              stroke="#f2a0b8" strokeWidth="0.7" opacity="0.4" />
           ))}
 
           {/* 24 ghadiya bhed */}
-          <circle r="100" fill="none" stroke="#8b5cf6" strokeWidth="0.6" opacity="0.4" />
+          <circle r="100" fill="none" stroke="#d16b8a" strokeWidth="0.6" opacity="0.4" />
           {Array.from({ length: 24 }, (_, i) => {
             const a = (i * Math.PI) / 12;
             return (
               <line key={i}
                 x1={Math.cos(a) * 86} y1={Math.sin(a) * 86}
                 x2={Math.cos(a) * 100} y2={Math.sin(a) * 100}
-                stroke="#8b5cf6" strokeWidth="0.5" opacity="0.35" />
+                stroke="#d16b8a" strokeWidth="0.5" opacity="0.35" />
             );
           })}
 
@@ -249,7 +249,7 @@ export default function JyotishBackdrop() {
 
           {/* gucchha (chakra) */}
           <circle r="58" fill="none" stroke="url(#jyg)" strokeWidth="1.4" opacity="0.6" />
-          <circle r="44" fill="none" stroke="#fbbf24" strokeWidth="0.7" opacity="0.4" />
+          <circle r="44" fill="none" stroke="#f7c948" strokeWidth="0.7" opacity="0.4" />
 
           {/* 8 padma patti */}
           {Array.from({ length: 8 }, (_, i) => {
@@ -259,22 +259,22 @@ export default function JyotishBackdrop() {
                 cx={Math.cos(a) * 32} cy={Math.sin(a) * 32}
                 rx="13" ry="6.5"
                 transform={`rotate(${(i * Math.PI) / 4} ${Math.cos(a) * 32} ${Math.sin(a) * 32})`}
-                fill="none" stroke="#22d3ee" strokeWidth="0.7" opacity="0.38" />
+                fill="none" stroke="#f2a0b8" strokeWidth="0.7" opacity="0.38" />
             );
           })}
-          <circle r="14" fill="#fbbf24" opacity="0.10" />
+          <circle r="14" fill="#f7c948" opacity="0.10" />
         </svg>
       </div>
 
       {/* ---------- 4. kundali chart — dono taraf ---------- */}
       <svg className="jy-layer jy-chart jy-chart-l" viewBox={`-10 -10 220 220`}>
-        <g fill="rgba(139,92,246,.07)" stroke="#fbbf24" strokeWidth="0.9" opacity="0.55">
+        <g fill="rgba(242,160,184,.07)" stroke="#f7c948" strokeWidth="0.9" opacity="0.55">
           {HOUSES.map((p, i) => (
             <polygon key={i} points={p} />
           ))}
         </g>
         {/* bhed lines */}
-        <g stroke="#22d3ee" strokeWidth="0.7" opacity="0.4" fill="none">
+        <g stroke="#f2a0b8" strokeWidth="0.7" opacity="0.4" fill="none">
           <line x1="0" y1="0" x2="200" y2="200" />
           <line x1="200" y1="0" x2="0" y2="200" />
           <polygon points={pts([MT, MR, MB, ML])} />
@@ -292,7 +292,7 @@ export default function JyotishBackdrop() {
               cy={(Math.min(...ys) + Math.max(...ys)) / 2}
               r="4.5"
               fill="none"
-              stroke="#fbbf24"
+              stroke="#f7c948"
               strokeWidth="0.8"
               opacity="0.32"
             />
@@ -301,12 +301,12 @@ export default function JyotishBackdrop() {
       </svg>
 
       <svg className="jy-layer jy-chart jy-chart-r" viewBox={`-10 -10 220 220`}>
-        <g fill="rgba(34,211,238,.05)" stroke="#8b5cf6" strokeWidth="0.9" opacity="0.5">
+        <g fill="rgba(247,201,72,.05)" stroke="#d16b8a" strokeWidth="0.9" opacity="0.5">
           {HOUSES.map((p, i) => (
             <polygon key={i} points={p} />
           ))}
         </g>
-        <g stroke="#22d3ee" strokeWidth="0.7" opacity="0.3" fill="none">
+        <g stroke="#f2a0b8" strokeWidth="0.7" opacity="0.3" fill="none">
           <line x1="0" y1="0" x2="200" y2="200" />
           <line x1="200" y1="0" x2="0" y2="200" />
           <polygon points={pts([MT, MR, MB, ML])} />
@@ -318,26 +318,26 @@ export default function JyotishBackdrop() {
         <defs>
           <linearGradient id="jkp" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0%" stopColor="#f97316" stopOpacity="0.55" />
-            <stop offset="45%" stopColor="#fbbf24" stopOpacity="0.75" />
+            <stop offset="45%" stopColor="#f7c948" stopOpacity="0.75" />
             <stop offset="100%" stopColor="#b45309" stopOpacity="0.50" />
           </linearGradient>
         </defs>
         {/* matka */}
         <path d="M38 96 q-22 8 -22 28 q0 26 22 26 q22 0 22 -26 q0 -20 -22 -28 z"
-          fill="url(#jkp)" stroke="#fbbf24" strokeWidth="1.2" />
+          fill="url(#jkp)" stroke="#f7c948" strokeWidth="1.2" />
         {/* mukh */}
-        <ellipse cx="60" cy="96" rx="22" ry="6" fill="#fbbf24" opacity="0.35" stroke="#fbbf24" strokeWidth="1" />
+        <ellipse cx="60" cy="96" rx="22" ry="6" fill="#f7c948" opacity="0.35" stroke="#f7c948" strokeWidth="1" />
         {/* taal */}
-        <ellipse cx="60" cy="150" rx="26" ry="5" fill="#22d3ee" opacity="0.22" stroke="#22d3ee" strokeWidth="0.9" />
+        <ellipse cx="60" cy="150" rx="26" ry="5" fill="#f7c948" opacity="0.22" stroke="#f2a0b8" strokeWidth="0.9" />
         {/* matki / chaabi */}
-        <path d="M34 54 h52 q6 0 6 6 v6 h-64 v-6 q0 -6 6 -6 z" fill="url(#jkp)" stroke="#fbbf24" strokeWidth="1" />
-        <rect x="42" y="66" width="36" height="12" rx="2" fill="#fbbf24" opacity="0.30" stroke="#fbbf24" strokeWidth="0.8" />
+        <path d="M34 54 h52 q6 0 6 6 v6 h-64 v-6 q0 -6 6 -6 z" fill="url(#jkp)" stroke="#f7c948" strokeWidth="1" />
+        <rect x="42" y="66" width="36" height="12" rx="2" fill="#f7c948" opacity="0.30" stroke="#f7c948" strokeWidth="0.8" />
         {/* nari */}
-        <path d="M56 54 q-10 -18 0 -28 q6 -6 4 -16" fill="none" stroke="#22d3ee" strokeWidth="2" opacity="0.6" />
+        <path d="M56 54 q-10 -18 0 -28 q6 -6 4 -16" fill="none" stroke="#f2a0b8" strokeWidth="2" opacity="0.6" />
         {/* kamal */}
-        <path d="M44 40 q16 -16 32 0 q-16 -6 -32 0 z" fill="#fbbf24" opacity="0.45" />
-        <circle cx="44" cy="41" r="4" fill="#fbbf24" opacity="0.55" />
-        <circle cx="76" cy="41" r="4" fill="#fbbf24" opacity="0.55" />
+        <path d="M44 40 q16 -16 32 0 q-16 -6 -32 0 z" fill="#f7c948" opacity="0.45" />
+        <circle cx="44" cy="41" r="4" fill="#f7c948" opacity="0.55" />
+        <circle cx="76" cy="41" r="4" fill="#f7c948" opacity="0.55" />
       </svg>
 
       {/* ---------- 7. vignette ---------- */}

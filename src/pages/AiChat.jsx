@@ -556,7 +556,7 @@ export default function AiChat() {
         {msgs.map((m, i) => (
           <div key={i} style={{
             alignSelf: m.from === "user" ? "flex-end" : "flex-start",
-            background: m.from === "user" ? "linear-gradient(135deg,#8b5cf6,#22d3ee)" : "rgba(255,255,255,.07)",
+            background: m.from === "user" ? "linear-gradient(135deg,#f2a0b8,#f7c948)" : "rgba(255,255,255,.07)",
             padding: "10px 14px", borderRadius: 14, maxWidth: "85%", whiteSpace: "pre-wrap",
           }}>
             {m.text}

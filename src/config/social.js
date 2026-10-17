@@ -1,3 +1,10 @@
+// ─────────────────────────────────────────────────────────────
+// BRAND COLOURS — inhe JAAN-BOOJH kar mat badalna.
+// Facebook #1877F2, LinkedIn #0A66C2, WhatsApp #25D366.
+// Ye blue/cyan HAIN aur hona bhi chahiye — inhe badalne se
+// unka pehchan hi khatam ho jayega. Baaki site puri tarah
+// gold + rose + maroon hai, ye sirf official brand colours hain.
+// ─────────────────────────────────────────────────────────────
 // Social profile links. Admin inhe Admin Panel > Social tab se bhi badal sakta hai
 // (Firestore: settings/social). Yahan ke values default hain.
 

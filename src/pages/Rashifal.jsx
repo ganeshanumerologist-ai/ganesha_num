@@ -175,7 +175,7 @@ export default function Rashifal() {
           ) : (
             <>
               {/* ---------- Aaj / saptahik / masik ka mukhya fal ---------- */}
-              <div style={{ marginTop: 16, padding: "12px 14px", borderRadius: 10, background: "rgba(139,92,246,.10)", border: "1px solid var(--border)" }}>
+              <div style={{ marginTop: 16, padding: "12px 14px", borderRadius: 10, background: "rgba(242,160,184,.10)", border: "1px solid var(--border)" }}>
                 <div style={{ fontSize: ".75rem", color: "var(--muted)" }}>{S.rashifal_date} {todayLabel()}</div>
                 <p style={{ marginTop: 6, fontSize: "1.05rem" }}>{plan.topics.shubh?.[0] || dailyLine}</p>
               </div>

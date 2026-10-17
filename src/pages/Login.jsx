@@ -530,7 +530,7 @@ export default function Login() {
           <div
             style={{
               marginTop: 14, padding: "10px 12px", borderRadius: 10,
-              border: "1px dashed rgba(34,211,238,.45)", background: "rgba(34,211,238,.06)",
+              border: "1px dashed rgba(247,201,72,.45)", background: "rgba(247,201,72,.06)",
               fontSize: ".8rem",
             }}
           >

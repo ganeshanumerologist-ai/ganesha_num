@@ -237,7 +237,7 @@ export default function Loshu() {
                 {GRID.flat().map((n) => (
                   <div key={n} style={{
                     width: 84, height: 84, borderRadius: 12, border: "1px solid var(--border)",
-                    background: r.grid[n] ? "linear-gradient(135deg, rgba(139,92,246,.35), rgba(34,211,238,.25))" : "rgba(255,255,255,.03)",
+                    background: r.grid[n] ? "linear-gradient(135deg, rgba(242,160,184,.35), rgba(247,201,72,.25))" : "rgba(255,255,255,.03)",
                     display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
                   }}>
                     <span style={{ fontSize: "1.7rem", fontWeight: 800, opacity: r.grid[n] ? 1 : 0.35 }}>{n}</span>
