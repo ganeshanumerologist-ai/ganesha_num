@@ -7,6 +7,11 @@
     ],
     "headers": [
       {
+        "comment": "Service worker kabhi cache na ho — warna browser naya sw.js kabhi fetch hi nahi karega",
+        "source": "/sw.js",
+        "headers": [{ "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }]
+      },
+      {
         "comment": "assets content-hashed hain, inpe long cache theek hai",
         "source": "/assets/**",
         "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
