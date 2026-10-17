@@ -75,14 +75,25 @@ export default function Logo3D({ size = 132, text = "GANESHA SUYOG ASTROLOGY" })
             );
           })}
 
-          {/* ॐ */}
+          {/* ── ॐ ───────────────────────────────────────────────
+              Pehle ॐ ka fill #4a1d05 (gehra brown) tha — wo background
+              par 1.25:1 contrast deta tha, yaani phone par bilkul
+              invisible. Ab:
+                1. uske peeche SOLID chamdi jaisi disc hai (gradient
+                   par depend nahi karta — gradient render na ho to bhi
+                   ॐ dikhega)
+                2. ॐ gehra usi disc par = 7:1 se zyada
+                3. disc ka rim chamka rakhta hai jo dark background se
+                   alag karta hai
+            */}
+          <circle r="34" fill="#fff6d8" />
+          <circle r="34" fill="none" stroke="#b45309" strokeWidth="1.6" opacity="0.55" />
           <text
             x="0" y="16"
             textAnchor="middle"
             fontSize="46"
             fontWeight="800"
-            fill="#4a1d05"
-            opacity="0.92"
+            fill="#3b1604"
           >
             ॐ
           </text>

@@ -1,0 +1,30 @@
+k_gem_Jupiter_stone      [MISSING          ] undefined
+k_gem_Jupiter_metal      [MISSING          ] undefined
+k_gem_Jupiter_day        [MISSING          ] undefined
+k_gem_Jupiter_finger     [MISSING          ] undefined
+k_gem_Moon_stone         [MISSING          ] undefined
+k_gem_Saturn_stone       [MISSING          ] undefined
+k_gem_Ketu_stone         [MISSING          ] undefined
+k_mu_abhijit             [ok               ] Abhijit Muhurat
+k_mu_brahma              [ok               ] Brahma Muhurt
+k_mu_vijay               [ok               ] Vijay Muhurt
+k_mu_godhuli             [ok               ] Godhuli (sundown)
+k_mu_amrit               [ok               ] Amrit Kaal
+k_mu_rahu                [ok               ] Rahu Kaal
+k_mu_yamaganda           [ok               ] Yamaganda
+k_mu_gulika              [ok               ] Gulika Kaal
+k_mu_bhadra              [ok               ] Bhadra (no marriage)
+k_mu_panchak             [ok               ] Panchak (five tithis)
+k_mu_noNote              [ok               ] fire dosha
+k_why_best               [ok               ] Best in-house strength ({p}/8) + house {h} â€” most benefit
+k_why_good               [ok               ] Fair strength ({p}/8) + house {h} â€” worth wearing
+k_why_weak               [ok               ] Low strength ({p}/8) â€” not needed, wear only if you wish
+k_why_node               [ok               ] shadow planet â€” the texts advise against wearing these
+k_why_akru               [ok               ] malefic + weak + difficult house â€” no gain, more harm
+k_why_debil              [ok               ] already debilitated â€” the stone would unsettle it further
+k_why_badHouse           [ok               ] in house {h} â€” the house of loss, disease or travel
+k_why_maxThree           [ok               ] (more than 3 at once is not advised)
+k_why_fallback           [ok               ] most suitable â€” 
+
+total en keys : 201
+hi missing    : NONE

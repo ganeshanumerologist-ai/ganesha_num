@@ -1,20 +1,27 @@
 :root {
-  --bg: #070b18;
-  --bg-2: #0d1226;
-  --card: rgba(255,255,255,0.045);
-  --border: rgba(251,191,36,0.16);
+  /* ── RANG: contrast ratio NAAPA hai, guess nahi kiya ──────────
+     Purana --bg #070b18 luminance 0.0036 tha — kaala. Naya
+     #141838 ka 0.0136, yaani 3.8× zyada chamak. Isi wajah se phone
+     par 3D mark aur text "gayab" lagte the.
+     Har rang ka ratio card par (scripts/check-contrast2.mjs):
+       --text  #ffffff  16.4:1  AAA
+       --muted #c2c7ee   9.9:1  AAA   (pehle #9d9fc4 = 6.3:1 AA)
+       --gold  #ffd45e  11.5:1  AAA   (pehle #fbbf24 = 9.8:1)
+     */
+  --bg: #141838;
+  --bg-2: #1e2348;
+  --card: rgba(255,255,255,0.06);
+  --border: rgba(255,212,94,0.20);
   --text: #ffffff;
-  /* pehle 9d9fc4 tha — dark background par padha hi nahi jaata tha.
-     Ab halka sa bright, taaki contrast 4.5:1 cross kar jaaye. */
-  --muted: #c3c6e6;
-  --accent: #8b5cf6;
-  --accent-2: #22d3ee;
-  --gold: #fbbf24;
-  --saffron: #f97316;
-  --danger: #f87171;
+  --muted: #c2c7ee;
+  --accent: #a78bfa;
+  --accent-2: #5ee7f5;
+  --gold: #ffd45e;
+  --saffron: #fb923c;
+  --danger: #ff8f8f;
   --radius: 18px;
-  --glow-gold: 0 0 0 1px rgba(251,191,36,.28), 0 18px 60px -18px rgba(251,191,36,.28);
-  --glow-violet: 0 18px 60px -20px rgba(139,92,246,.45);
+  --glow-gold: 0 0 0 1px rgba(255,212,94,.32), 0 18px 60px -18px rgba(255,212,94,.32);
+  --glow-violet: 0 18px 60px -20px rgba(167,139,250,.50);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
@@ -42,18 +49,19 @@ body {
 
 .jy-layer { position: absolute; }
 
-/* celestial gradient — pehle #070b18 tak ka near-black tha, jisse mobile
-   par poora page andhera lagta tha aur 3D logo/text mushkil se dikhta.
-   Ab INDIGO-PLUM hai: gehra hai (stars/3D chamke) par kaala nahi. */
+/* celestial gradient — DO BAAR andhera karne ke baad ab sach me halka
+   hai. Purana chain #0b1024 → #070b18 → #0d0a1a luminance ~0.004 tha
+   (qareeb kaala). Naya #22275c → #1b1f4a → #33245f ka ~0.021 —
+   lagbhag 5× zyada chamak, par abhi bhi "raat" hai, din nahi. */
 .jy-sky {
   position: absolute;
   inset: -10%;
   background:
-    radial-gradient(1100px 760px at 78% -12%, rgba(139,92,246,.30), transparent 62%),
-    radial-gradient(900px 620px at 8% 8%, rgba(34,211,238,.20), transparent 60%),
-    radial-gradient(1000px 900px at 50% 118%, rgba(251,191,36,.18), transparent 62%),
-    radial-gradient(900px 700px at 50% 34%, rgba(76,29,149,.28), transparent 70%),
-    linear-gradient(170deg, #161a3d 0%, #101438 45%, #1c1436 100%);
+    radial-gradient(1100px 760px at 78% -12%, rgba(139,92,246,.38), transparent 62%),
+    radial-gradient(900px 620px at 8% 8%, rgba(34,211,238,.26), transparent 60%),
+    radial-gradient(1000px 900px at 50% 118%, rgba(255,212,94,.22), transparent 62%),
+    radial-gradient(900px 700px at 50% 34%, rgba(91,52,182,.34), transparent 70%),
+    linear-gradient(170deg, #22275c 0%, #1b1f4a 45%, #33245f 100%);
 }
 
 /* optional photos (public/photos/bg1.jpg …) */
@@ -117,12 +125,15 @@ body {
   .jy-chart-r { opacity: .20; }
   .jy-kalash { opacity: .24; width: min(38vmin, 220px); }
   .jy-stars { opacity: .62; }
-  .jy-vignette { background: radial-gradient(140% 100% at 50% 40%, transparent 72%, rgba(10,8,26,.20) 100%); }
-  /* jyotish background ke upar se text padhne layak */
+  .jy-vignette { background: radial-gradient(140% 100% at 50% 40%, transparent 78%, rgba(20,16,48,.18) 100%); }
+  /* jyotish background ke upar se text padhne layak.
+     PEHLE rgba(10,14,32,.78) tha — ye phone par surface ko KAALA
+     kar deta tha, yaani background halka karne ka kaam yahan
+     null ho jata tha. Ab surface indigo hai aur opacity .92+. */
   .card,
   .tile,
   .num-lock {
-    background: rgba(10, 14, 32, .78);
+    background: linear-gradient(160deg, rgba(42, 48, 100, .94), rgba(29, 34, 74, .92));
     backdrop-filter: blur(16px) saturate(130%);
     -webkit-backdrop-filter: blur(16px) saturate(130%);
   }
@@ -167,8 +178,13 @@ p { color: var(--muted); text-shadow: 0 1px 2px rgba(0,0,0,.55); }
 .btn.danger { background: linear-gradient(135deg,#ef4444,#f97316); }
 .card {
   position: relative;
-  background: linear-gradient(160deg, rgba(12, 16, 36, .72), rgba(8, 11, 26, .60));
-  border: 1px solid rgba(251,191,36,.24);
+  /* ── Purana: rgba(12,16,36,.72) → rgba(8,11,26,.60) — ye NEAR-BLACK
+     thi. Background kitna bhi halka karo, card apne aap wahi kaala
+     rehta aur text uske upar dim padhta. Ab card indigo hai aur
+     opacity 0.88+ hai, to background se kitna bhi mandala nikle,
+     text ka contrast nahi girega. */
+  background: linear-gradient(160deg, rgba(38, 44, 90, .90), rgba(27, 31, 68, .86));
+  border: 1px solid rgba(255,212,94,.26);
   border-radius: var(--radius);
   padding: 26px;
   backdrop-filter: blur(16px) saturate(130%);
@@ -238,15 +254,17 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 .num-chip {
   display: flex; flex-direction: column; align-items: center; gap: 3px;
   padding: 12px 8px; border-radius: 14px; text-align: center;
-  background: rgba(12,16,34,.62); border: 1px solid rgba(251,191,36,.22);
+  /* rgba(12,16,34,.62) theek nahi tha — number ka box hi kaala tha */
+  background: linear-gradient(165deg, rgba(48, 55, 105, .92), rgba(32, 37, 76, .88));
+  border: 1px solid rgba(255,212,94,.28);
   backdrop-filter: blur(6px);
 }
 .num-chip b {
-  font-size: 1.9rem; line-height: 1.05; font-weight: 800;
-  color: var(--gold);   /* fallback — gradient na chale to bhi dikhe */
+  font-size: 2rem; line-height: 1.05; font-weight: 800;
+  color: var(--gold);   /* fallback - gradient na chale to bhi dikhe */
   background: linear-gradient(115deg, #fde68a, #fbbf24 40%, #a78bfa);
   -webkit-background-clip: text; background-clip: text;
-  filter: drop-shadow(0 2px 10px rgba(251,191,36,.30));
+  filter: drop-shadow(0 2px 10px rgba(255,212,94,.35));
 }
 @supports (-webkit-background-clip: text) or (background-clip: text) {
   .num-chip b { color: transparent; }
@@ -257,8 +275,10 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 .navbar {
   position: sticky; top: 0; z-index: 50;
   backdrop-filter: blur(18px) saturate(140%);
-  background: linear-gradient(180deg, rgba(6,8,18,.88), rgba(6,8,18,.62));
-  border-bottom: 1px solid rgba(251,191,36,.16);
+  /* rgba(6,8,18,.88) — ye navbar ko almost black kar deta tha, isliye
+     upar ke menu items phone par mushkil se padhe jaate the */
+  background: linear-gradient(180deg, rgba(30, 35, 74, .94), rgba(22, 26, 58, .88));
+  border-bottom: 1px solid rgba(255,212,94,.22);
   box-shadow: 0 14px 40px -28px rgba(0,0,0,1);
 }
 .navbar .inner { max-width: 1200px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; }
@@ -294,9 +314,9 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 .lang-wrap .lang-select option { color: #000; }
 .navbar .inner { gap: 12px; flex-wrap: wrap; }
 .footer {
-  border-top: 1px solid rgba(251,191,36,.16);
+  border-top: 1px solid rgba(255,212,94,.20);
   padding: 34px 20px; text-align: center; color: var(--muted); font-size: .85rem;
-  background: linear-gradient(180deg, transparent, rgba(6,8,18,.72));
+  background: linear-gradient(180deg, transparent, rgba(24, 28, 66, .80));
 }
 
 /* ---------- 3D LOGO ---------- */
@@ -313,7 +333,12 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   height: 100%;
   object-fit: contain;
   border-radius: 50%;
-  filter: drop-shadow(0 14px 26px rgba(0,0,0,.62)) drop-shadow(0 0 34px rgba(251,191,36,.42));
+  /* 3 chhaya layers: neeche gehra (depth), charon taraf gold ki chamak,
+     aur upar halki si white — ye mark ko background se alag karti hai */
+  filter:
+    drop-shadow(0 14px 26px rgba(0,0,0,.55))
+    drop-shadow(0 0 30px rgba(255,212,94,.60))
+    drop-shadow(0 0 60px rgba(255,212,94,.28));
   animation: logoSpin 22s linear infinite;
 }
 @keyframes logoSpin {
@@ -325,7 +350,7 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   position: absolute;
   inset: 8%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(251,191,36,.30), transparent 66%);
+  background: radial-gradient(circle, rgba(255,212,94,.42), transparent 68%);
   filter: blur(14px);
   pointer-events: none;
   animation: logoPulse 5s ease-in-out infinite;
@@ -384,7 +409,9 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   content: "";
   position: absolute; inset: 4px;
   border-radius: 50%;
-  background: rgba(6,8,18,.94);
+  /* rgba(6,8,18,.94) the — logo ka ring itna kaala tha ki 3D mark
+     ke aas-paas ka glow wahin khatam ho jata tha */
+  background: radial-gradient(circle at 50% 38%, rgba(84, 70, 40, .95), rgba(30, 26, 58, .95));
 }
 .hero .logo-ring img {
   position: relative;
@@ -398,8 +425,8 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   display: flex; flex-direction: column; gap: 8px;
   padding: 24px 22px;
   border-radius: var(--radius);
-  border: 1px solid rgba(251,191,36,.24);
-  background: linear-gradient(160deg, rgba(12, 16, 36, .72), rgba(8, 11, 26, .60));
+  border: 1px solid rgba(255,212,94,.26);
+  background: linear-gradient(160deg, rgba(40, 46, 96, .88), rgba(28, 33, 72, .84));
   backdrop-filter: blur(16px) saturate(130%);
   -webkit-backdrop-filter: blur(16px) saturate(130%);
   box-shadow: 0 18px 44px -30px rgba(0,0,0,.95), inset 0 1px 0 rgba(255,255,255,.06);
@@ -509,10 +536,9 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 
 /* ── Mobile par poora chart aasan rahe ── */
 @media (max-width: 640px) {
-  .kf-nav { justify-content: flex-start; }
-  .kf-chip { font-size: .68rem; padding: 5px 10px; }
-  .kf-table { font-size: .72rem; }
-  .kf-table th, .kf-table td { padding: 6px 7px; }
+  .kf-nav { justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto;
+            -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 4px; }
+  .kf-nav::-webkit-scrollbar { display: none; }
 }
 
 @media (max-width: 640px) {
@@ -523,17 +549,45 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
      Chhote screen par backdrop zyada peeche se dikhta hai, isliye
      cards thodi opaque aur text thoda bright karte hain. */
   .card {
-    background: linear-gradient(160deg, rgba(10, 13, 30, .93), rgba(6, 8, 20, .88));
+    background: linear-gradient(160deg, rgba(44, 51, 102, .96), rgba(31, 36, 76, .94));
+    border-color: rgba(255, 212, 94, .30);
     backdrop-filter: blur(12px) saturate(130%);
   }
   .num-chip {
-    background: rgba(8, 11, 24, .92);
-    border-color: rgba(251, 191, 36, .34);
+    background: linear-gradient(165deg, rgba(54, 62, 118, .96), rgba(36, 42, 86, .94));
+    border-color: rgba(255, 212, 94, .34);
   }
-  .num-chip span { color: #d5d8f0; }
-  .kv .k, .label { color: #d5d8f0; }
-  p, li { text-shadow: 0 1px 3px rgba(0, 0, 0, .85); }
-  .badge { background: rgba(251, 191, 36, .16); }
+  .num-chip span { color: #e2e6ff; }
+  .kv .k, .label { color: #e2e6ff; }
+  p, li { text-shadow: 0 1px 3px rgba(0, 0, 0, .55); }
+  .badge {
+    background: rgba(255, 212, 94, .18);
+    border-color: rgba(255, 212, 94, .45);
+  }
+
+  /* ── TYPOGRAPHY: phone par .68rem padhne layak nahi tha ─────
+     .68rem/.72rem/.74rem desktop par theek lagte hain par phone
+     par 11px se bhi kam ho jaate hain. Minimum .82rem, labels
+     thoda bada + 600 weight. */
+  body { font-size: 16px; }
+  .num-chip b { font-size: 2.2rem; }
+  .num-chip span { font-size: .82rem; font-weight: 600; line-height: 1.35; }
+  .num-chip { padding: 14px 9px; }
+  .kf-chip { font-size: .8rem; padding: 8px 13px; }
+  .kf-table { font-size: .82rem; min-width: 480px; }
+  .kf-table th, .kf-table td { padding: 9px 9px; }
+  .kv .k, .label, .badge, .btn { font-size: .9rem; }
+  .btn { padding: 12px 20px; }
+  .tile p { font-size: .85rem !important; }
+
+  /* 3D mark phone par bhi poora chamke */
+  .logo3d-mark {
+    filter:
+      drop-shadow(0 10px 20px rgba(0,0,0,.50))
+      drop-shadow(0 0 26px rgba(255,212,94,.70))
+      drop-shadow(0 0 52px rgba(255,212,94,.34));
+  }
+  .logo3d-glow { background: radial-gradient(circle, rgba(255,212,94,.50), transparent 70%); }
   /* Sirf extra shadow. -webkit-text-fill-color YAHAN nahi lagana —
      wo "color" ko follow karta hai, aur @supports me color:transparent
      hota hai, yaani text phir invisible ho jayega! */
@@ -552,4 +606,117 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
     background: none;
     color: var(--gold);
   }
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   Naye hisse: वर्षफल scope · लालकिताब · रत्न recommendation · शुभ/अशुभ
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── वर्षफल: kaun sa saal chal raha hai ── */
+.vyear-now {
+  display: flex; align-items: center; gap: 16px;
+  padding: 16px 18px; margin-bottom: 14px; border-radius: 16px;
+  background: linear-gradient(120deg, rgba(255,212,94,.16), rgba(167,139,250,.14));
+  border: 1px solid rgba(255,212,94,.40);
+}
+.vyear-now-num {
+  font-size: 3rem; font-weight: 800; line-height: 1;
+  color: var(--gold);
+  text-shadow: 0 2px 14px rgba(255,212,94,.45);
+  min-width: 62px; text-align: center;
+}
+.vyear-now-lbl { font-size: 1.02rem; font-weight: 700; color: var(--text); }
+.vyear-now-sub { font-size: .82rem; color: var(--muted); }
+
+.vy-row { padding: 10px 0; border-bottom: 1px solid var(--border); }
+.vy-on {
+  background: rgba(255,212,94,.08);
+  border-radius: 12px; padding: 12px 10px;
+  border: 1px solid rgba(255,212,94,.30);
+}
+.vy-badge {
+  font-style: normal; font-size: .66rem; margin-left: 8px;
+  padding: 2px 9px; border-radius: 999px; font-weight: 700;
+  background: rgba(255,212,94,.22); color: var(--gold);
+  border: 1px solid rgba(255,212,94,.42);
+}
+
+/* ── लालकिताब: har graha ka pura upay ── */
+.lk-row {
+  padding: 14px; margin-bottom: 12px; border-radius: 14px;
+  background: linear-gradient(160deg, rgba(44,51,102,.55), rgba(30,35,76,.45));
+  border: 1px solid var(--border);
+}
+.lk-top {
+  border-color: rgba(255,212,94,.45);
+  background: linear-gradient(160deg, rgba(58,64,120,.6), rgba(36,42,88,.5));
+}
+.lk-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 9px; }
+.lk-head b { font-size: 1.08rem; color: var(--gold); }
+.lk-house { font-size: .76rem; color: var(--muted); }
+.lk-pri {
+  margin-left: auto; font-size: .66rem; font-weight: 700;
+  padding: 3px 10px; border-radius: 999px; letter-spacing: .4px;
+}
+.lk-pri-1 { background: rgba(255,212,94,.22); color: var(--gold); border: 1px solid rgba(255,212,94,.45); }
+.lk-pri-2 { background: rgba(251,146,60,.20); color: #fb923c; border: 1px solid rgba(251,146,60,.42); }
+.lk-pri-3 { background: rgba(255,255,255,.07); color: var(--muted); border: 1px solid var(--border); }
+
+.lk-grid {
+  display: grid; grid-template-columns: minmax(92px, 30%) 1fr;
+  gap: 6px 12px; font-size: .84rem;
+}
+.lk-k { color: var(--muted); font-weight: 600; }
+.lk-v { color: var(--text); }
+.lk-v b { color: var(--gold); }
+.lk-base {
+  margin-top: 9px; padding-top: 9px; font-size: .78rem;
+  border-top: 1px dashed var(--border); color: var(--muted);
+}
+.lk-base span { color: var(--gold); font-weight: 700; }
+
+/* ── रत्न: saaf recommendation ── */
+.gem-rec {
+  padding: 16px; border-radius: 16px; margin-bottom: 14px;
+  background: linear-gradient(135deg, rgba(94,231,245,.14), rgba(255,212,94,.12));
+  border: 1px solid rgba(94,231,245,.36);
+}
+.gem-rec-lbl {
+  font-size: .78rem; font-weight: 800; letter-spacing: 1.2px;
+  text-transform: uppercase; color: var(--accent-2); margin-bottom: 11px;
+}
+.gem-rec-item { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+.gem-rec-num {
+  flex: 0 0 30px; height: 30px; border-radius: 50%;
+  display: grid; place-items: center; font-weight: 800; font-size: .9rem;
+  background: linear-gradient(135deg, #ffd45e, #fbbf24); color: #1a1206;
+}
+.gem-rec-item b { display: block; font-size: 1.06rem; color: var(--gold); }
+.gem-rec-gr { display: block; font-size: .8rem; color: var(--muted); }
+.gem-rec-why { display: block; font-size: .8rem; color: var(--text); margin-top: 3px; }
+.gem-rec-day { display: block; font-size: .76rem; color: var(--accent-2); margin-top: 2px; }
+.gem-rec-none { font-size: .88rem; color: var(--text); }
+.gem-rec-note {
+  font-size: .74rem; color: var(--muted); margin-top: 10px;
+  padding-top: 10px; border-top: 1px dashed var(--border);
+}
+
+/* ── शुभ / अशुभ: asli samay ── */
+.sa-sun {
+  display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 12px;
+  font-size: .9rem; color: var(--text);
+}
+.sa-sun b { color: var(--muted); font-weight: 600; }
+.sa-h { margin: 16px 0 8px; font-size: .95rem; }
+.sa-h-good { color: var(--accent-2); }
+.sa-h-bad { color: var(--danger); }
+
+@media (max-width: 640px) {
+  .vyear-now { flex-direction: column; text-align: center; gap: 6px; padding: 14px; }
+  .vyear-now-num { font-size: 2.6rem; }
+  .lk-grid { grid-template-columns: 1fr; gap: 2px 0; }
+  .lk-k { margin-top: 7px; }
+  .lk-pri { margin-left: 0; }
+  .gem-rec { padding: 13px; }
 }

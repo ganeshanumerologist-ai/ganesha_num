@@ -56,6 +56,33 @@ export default function KundliChart({ form }) {
   const R = (i) => rashiName(i, lang);
   const N = (i) => nakName(i, lang);
 
+  // gem ka "kyun" — ab translation key se, English/Hinglish text nahi
+  const why = (g) => {
+    let t = X[`k_why_${g.whyCode}`] ?? X.k_why_weak;
+    for (const [k, v] of Object.entries(g.whyArgs || {})) t = t.replaceAll(`{${k}}`, v);
+    if (g.extraNote && X[`k_why_${g.extraNote}`]) t += ` ${X[`k_why_${g.extraNote}`]}`;
+    return t;
+  };
+
+  // muhurat ka naam — kundliFull.js ab slug deta hai, text nahi
+  const muLabel = (x, XX, bad) => {
+    const slug =
+      x.name.startsWith("Abhijit") ? "abhijit"
+      : x.name.startsWith("Brahma") ? "brahma"
+      : x.name.startsWith("Vijay") ? "vijay"
+      : x.name.startsWith("Godhuli") ? "godhuli"
+      : x.name.startsWith("Amrit") ? "amrit"
+      : x.name.startsWith("Rahu") ? "rahu"
+      : x.name.startsWith("Yama") ? "yamaganda"
+      : x.name.startsWith("Gulika") ? "gulika"
+      : x.name.startsWith("Bhadra") ? "bhadra"
+      : x.name.startsWith("Panchak") ? "panchak"
+      : null;
+    let label = slug ? (XX[`k_mu_${slug}`] ?? x.name) : x.name;
+    if (bad && x.note && XX.k_mu_noNote) label += ` · ${XX.k_mu_noNote}`;
+    return label;
+  };
+
   // suryodaya/suryast — bhav-kundali me bhi dikhate hain
   let sun = null;
   try {
@@ -411,7 +438,16 @@ export default function KundliChart({ form }) {
       {/* ══════════ 16. वर्षफल ══════════ */}
       {show("varshphal") && (
         <Sec id="varshphal" title={X.s_varshphal} icon="📆" note={X.note_varshphal}>
-          <YearRows />
+          {/* ── PEHLE pata hi nahi chalta tha kaun sa SAAL ──
+              Ab upar saaf: calendar year + niji saal (personal year). */}
+          <div className="vyear-now">
+            <div className="vyear-now-num">{r.varshphal?.personalYear ?? "—"}</div>
+            <div>
+              <div className="vyear-now-lbl">{X.k_niji_saal}</div>
+              <div className="vyear-now-sub">{X.k_calendar_year} {r.varshphal?.calendarYear}</div>
+            </div>
+          </div>
+          <YearRows running={r.varshphal?.personalYear} />
         </Sec>
       )}
 
@@ -425,32 +461,97 @@ export default function KundliChart({ form }) {
         </Sec>
       )}
 
-      {/* ══════════ 18. लालकिताब ══════════ */}
+      {/* ══════════ 18. लालकिताब — PURA upay ══════════ */}
       {show("lalkitab") && (
         <Sec id="lalkitab" title={X.s_lalkitab} icon="📕" note={X.note_lalkitab}>
-          {r.grahas.map((g) => {
-            const up = LALKITAB_UPAY[g.key] || LALKITAB_UPAY[g.key === "Sun" ? "Surya" : g.key];
-            return (
-              <Row
-                key={g.key}
-                k={`${G(g.key)} · ${X.k_bhav} ${g.bhav}`}
-                v={up ? `${up.upay || up.text || "-"}` : "-"}
-              />
-            );
-          })}
+          {/* Pehle sirf ek line ka upay tha. Ab har graha ke liye:
+              bhav + uska fal, rog-lakshan, daan, puja, mantra, samay. */}
+          {(r.lalKitab || []).map((l) => (
+            <div key={l.planet} className={`lk-row${l.priority === "sabse pehle" ? " lk-top" : ""}`}>
+              <div className="lk-head">
+                <b>{G(l.planet)}</b>
+                <span className="lk-house">{X.k_bhav} {l.house} · {rashiName(rIdx(l.rashi), lang)}</span>
+                <span className={`lk-pri lk-pri-${l.priority === "sabse pehle" ? "1" : l.priority === "zor se" ? "2" : "3"}`}>
+                  {l.priority === "sabse pehle" ? X.k_lk_first : l.priority === "zor se" ? X.k_lk_urgent : X.k_lk_normal}
+                </span>
+              </div>
+              <div className="lk-grid">
+                <div className="lk-k">{X.k_lk_bhavfal}</div><div className="lk-v">{l.bhavFal}</div>
+                <div className="lk-k">{X.k_lk_rogi}</div><div className="lk-v">{l.rogi}</div>
+                <div className="lk-k">{X.k_lk_daan}</div><div className="lk-v">{l.daan}</div>
+                <div className="lk-k">{X.k_lk_puja}</div><div className="lk-v">{l.puja}</div>
+                <div className="lk-k">{X.k_lk_mantra}</div>
+                <div className="lk-v">
+                  {l.mantra} <b>× {l.mantraCount}</b>
+                </div>
+                <div className="lk-k">{X.k_lk_time}</div><div className="lk-v">{l.time}</div>
+              </div>
+              {l.baseUpay && (
+                <div className="lk-base">
+                  <span>{X.k_lk_base}</span> {l.baseUpay}
+                </div>
+              )}
+            </div>
+          ))}
         </Sec>
       )}
 
-      {/* ══════════ 19. रत्न ══════════ */}
+      {/* ══════════ 19. रत्न — RECOMMENDATION ══════════ */}
       {show("ratna") && (
         <Sec id="ratna" title={X.s_ratna} icon="💎" note={X.note_ratna}>
-          {r.grahas.map((g) => (
-            <Row
-              key={g.key}
-              k={G(g.key)}
-              v={`${r.ratna[g.key]?.stone || "-"} · ${r.ratna[g.key]?.metal || "-"} · ${X.k_din} ${r.ratna[g.key]?.day || "-"}`}
-            />
-          ))}
+          {(() => {
+            const top = (r.gemAdvice || []).filter((g) => g.status === "pehli");
+            return (
+              <>
+                {/* ── SAHI JAWAAB upar ── */}
+                <div className="gem-rec">
+                  <div className="gem-rec-lbl">{X.k_gem_recommend}</div>
+                  {top.length === 0 ? (
+                    <div className="gem-rec-none">{X.k_gem_none}</div>
+                  ) : top.map((g) => (
+                    <div key={g.planet} className="gem-rec-item">
+                      <span className="gem-rec-num">{g.planet === "Jupiter" ? "1" : g.planet === "Venus" ? "2" : "3"}</span>
+                      <div>
+                        <b>{X[`k_gem_${g.planet}_stone`] ?? g.stone}</b>
+                        <span className="gem-rec-gr">{G(g.planet)} · {X[`k_gem_${g.planet}_metal`] ?? g.metal} · {X[`k_gem_${g.planet}_finger`] ?? g.finger}</span>
+                        <span className="gem-rec-why">{why(g)}</span>
+                        <span className="gem-rec-day">{X.k_din}: {X[`k_gem_${g.planet}_day`] ?? g.day}</span>
+                      </div>
+                    </div>
+                  ))}
+                  <p className="gem-rec-note">{X.k_gem_max3}</p>
+                </div>
+
+                {/* ── BAAKI SAB GRAHA ── */}
+                <div style={{ overflowX: "auto", marginTop: 14 }}>
+                  <table className="kf-table">
+                    <thead>
+                      <tr>
+                        <th>{X.k_graha}</th><th>{X.k_bhav}</th><th>{X.k_stone}</th>
+                        <th>{X.k_metal}</th><th>{X.k_din}</th><th>{X.k_k_status}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(r.gemAdvice || []).map((g) => (
+                        <tr key={g.planet}>
+                          <td><b>{G(g.planet)}</b></td>
+                          <td>{g.house}</td>
+                          <td>{X[`k_gem_${g.planet}_stone`] ?? g.stone}</td>
+                          <td>{X[`k_gem_${g.planet}_metal`] ?? g.metal}</td>
+                          <td>{X[`k_gem_${g.planet}_day`] ?? g.day}</td>
+                          <td style={{ color: g.status === "pehli" ? "var(--accent-2)" : g.status === "mat" ? "var(--danger)" : "var(--muted)" }}>
+                            {g.status === "pehli" ? X.k_gem_yes : g.status === "mat" ? X.k_gem_no : X.k_gem_maybe}
+                            <br />
+                            <small style={{ opacity: .8 }}>{why(g)}</small>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            );
+          })()}
         </Sec>
       )}
 
@@ -468,14 +569,37 @@ export default function KundliChart({ form }) {
         </Sec>
       )}
 
-      {/* ══════════ 21. अशुभ व शुभ ══════════ */}
+      {/* ══════════ 21. अशुभ व शुभ — ASLI TIME ══════════ */}
       {show("shubh") && (
         <Sec id="shubh" title={X.s_shubh} icon="✓" note={X.note_shubh}>
-          {sun && <Row k={X.k_sunrise} v={fmtMin(sun.sunrise)} color="var(--accent-2)" />}
-          {sun && <Row k={X.k_sunset} v={fmtMin(sun.sunset)} color="var(--danger)" />}
-          <Row k={X.k_shubhkala} v={X.time_shubh} />
-          <Row k={X.k_ashubhkala} v={X.time_ashubh} />
-          <Row k={X.k_rahukaal} v={X.note_rahu} />
+          {r.shubhAshubh ? (
+            <>
+              <div className="sa-sun">
+                <span><b>{X.k_sunrise}</b> {r.shubhAshubh.sunrise}</span>
+                <span><b>{X.k_sunset}</b> {r.shubhAshubh.sunset}</span>
+              </div>
+
+              <h4 className="sa-h sa-h-good">✓ {X.k_shubhkala}</h4>
+              {r.shubhAshubh.shubh.map((x) => (
+                <Row key={x.name} k={muLabel(x, X, false)} v={x.text} color="var(--accent-2)" />
+              ))}
+
+              <h4 className="sa-h sa-h-bad">✗ {X.k_ashubhkala}</h4>
+              {r.shubhAshubh.ashubh.map((x) => (
+                <Row key={x.name} k={muLabel(x, X, true)} v={x.text} color="var(--danger)" />
+              ))}
+
+              <p style={{ fontSize: ".74rem", color: "var(--muted)", marginTop: 10 }}>
+                {X.note_shubh_src}
+              </p>
+            </>
+          ) : (
+            <>
+              <p style={{ color: "var(--muted)" }}>{X.note_no_time}</p>
+              {sun && <Row k={X.k_sunrise} v={fmtMin(sun.sunrise)} color="var(--accent-2)" />}
+              {sun && <Row k={X.k_sunset} v={fmtMin(sun.sunset)} color="var(--danger)" />}
+            </>
+          )}
         </Sec>
       )}
 
@@ -499,24 +623,47 @@ import { yearMeaning, yearDetail, ycat } from "../data/varshphal_i18n.js";
 import { RASHIS } from "../utils/astro.js";
 const RASHI_LORD_EN = { Mesha: "Mangal", Vrishabha: "Venus", Mithuna: "Mercury", Karka: "Moon", Simha: "Sun", Kanya: "Mercury", Tula: "Venus", Vrishchika: "Mars", Dhanu: "Jupiter", Makara: "Saturn", Kumbha: "Saturn", Meena: "Jupiter" };
 
-function YearRows() {
+/**
+ * 9 niji saal — saare dikhate hain, par CHALU saal pehle aur
+ * saaf dikhta hai (pehle pata hi nahi chalta tha kaun sa chal raha hai).
+ */
+function YearRows({ running }) {
   const { lang } = useLanguage();
   const X = kfTX(lang);
   const ym = ycat(lang);
+
+  // Chalu saal sabse upar
+  const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const ordered = running
+    ? [running, ...nums.filter((n) => n !== running)]
+    : nums;
+
   return (
     <div>
-      {Array.from({ length: 9 }, (_, i) => i + 1).map((n) => {
+      {ordered.map((n) => {
         const m = yearMeaning(n, lang);
         const d = yearDetail(n, lang);
+        const on = n === running;
         return (
-          <div key={n} className="kv" style={{ alignItems: "flex-start" }}>
-            <span className="k"><b style={{ color: "var(--gold)", fontSize: "1.1rem" }}>{n}</b> {m.t}</span>
-            <span className="v" style={{ fontSize: ".82rem", textAlign: "right", maxWidth: "68%" }}>
-              {m.d}<br />
+          <div
+            key={n}
+            className={`kv vy-row${on ? " vy-on" : ""}`}
+            style={{ alignItems: "flex-start" }}
+          >
+            <span className="k">
+              <b style={{ color: "var(--gold)", fontSize: "1.15rem" }}>{n}</b> {m.t}
+              {on && <em className="vy-badge">{X.k_chalu_saal}</em>}
+            </span>
+            <span className="v" style={{ fontSize: ".84rem", textAlign: "right", maxWidth: "68%" }}>
+              {m.d}
+              <br />
               <span style={{ color: "var(--muted)" }}>
-                {ym.edu}: {d.edu}<br />
-                {ym.mar}: {d.mar}<br />
-                {ym.biz}: {d.biz}<br />
+                {ym.edu}: {d.edu}
+                <br />
+                {ym.mar}: {d.mar}
+                <br />
+                {ym.biz}: {d.biz}
+                <br />
                 {ym.rep}: {d.rep}
               </span>
             </span>

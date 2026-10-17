@@ -1,0 +1,13 @@
+source me total keys : 201
+nayi family (gem/mu/why): 56
+
+  as   201 keys   56/56 nayi   READY
+  bn   201 keys   56/56 nayi   READY
+  gu   201 keys   56/56 nayi   READY
+  kn   201 keys   56/56 nayi   READY
+  ml   201 keys   56/56 nayi   READY
+  or   201 keys   56/56 nayi   READY
+  pa   201 keys   56/56 nayi   READY
+  ta   201 keys   56/56 nayi   READY
+  te   201 keys   56/56 nayi   READY
+  ur   201 keys   56/56 nayi   READY

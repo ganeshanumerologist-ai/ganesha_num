@@ -1,0 +1,35 @@
+Recommendations instead of bare lists in the full Kundli chart
+
+The user pointed out four gaps in "Your complete Kundli": the varshphal
+did not say which year it belonged to, the Lal Kitab remedies were one
+line each, the gemstone section listed every stone without saying which
+one to wear, and the auspicious section named muhurtas but gave no times.
+
+Varshpal now states the calendar year and the running personal year up
+front and puts the running one first with a badge. Lal Kitab gives each
+planet seven fields: result in that house, likely troubles, donation,
+worship, mantra with count, best time, and the base remedy, each sorted
+by whether it runs in the current dasha or the planet is weak.
+
+Gemstones are now a decision. Ranking weighs ashtakavarga points,
+shadbala, benefic or malefic nature, and kendra-trikona placement.
+Shadow planets are marked do-not-wear, as are the loss and disease
+houses. A debilitated planet is only optional, since a stone unsettles
+it further. Cap is three, one at a time. If nothing qualifies the top
+candidate is promoted so there is always an answer.
+
+Auspicious and inauspicious times are computed, not listed. Abhijit,
+Brahma, Vijay, Godhuli, Amrit, Rahu Kaal, Yamaganda, Gulika, Bhadra and
+Panchak all derive from the birth city sunrise and sunset, so they move
+with the city.
+
+While checking the render I found three English leaks. grahaName keyed
+its table by Sanskrit names while the astro engine returns English, so
+no planet was ever translated on any page. RATNA data was English only.
+Muhurat names and the gem rationale were hardcoded. All three are now
+translation keys: 201 keys per language across ten languages, with the
+remaining twelve falling back to a same-script relative.
+
+check-kf-files.mjs exempts the {p} and {h} placeholders, which it was
+flagging as Latin, and still catches real script intrusions. It found two
+Devanagari characters that had crept into Tamil and Telugu values.

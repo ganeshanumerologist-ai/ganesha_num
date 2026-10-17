@@ -41,7 +41,14 @@ for (const f of files) {
   for (const [k, v] of Object.entries(d)) {
     const s = String(v ?? "");
     if (!s.trim()) { problems.push(`${k} khali`); continue; }
-    if (/[A-Za-z]/.test(s)) { problems.push(`${k} me Latin: "${s.slice(0, 34)}"`); continue; }
+    // {p} (points) aur {h} (house) jaan-boojh kar rakhe jaate hain —
+    // inhe rendering time par number se replace kiya jaata hai.
+    // Pehle ye Latin samajh aa rahe the aur 40 false FAIL de rahe the.
+    const withoutPh = s.replaceAll("{p}", "").replaceAll("{h}", "");
+    if (/[A-Za-z]/.test(withoutPh)) {
+      problems.push(`${k} me Latin: "${s.slice(0, 34)}"`);
+      continue;
+    }
     const range = SCRIPT[code];
     if (range) {
       for (const ch of s) {
