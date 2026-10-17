@@ -7,6 +7,7 @@ import {
 import {
   sunTimes, fmtMin, shakaSamvat, samvatsaraName, vikramSamvat,
   tithiAt, nakshatraAt, amritKaal, sthanikSamay, grihaPravishTime, vivahMuhur,
+  abhijitWindow, godhuliWindow, horaFromSunrise, choghadiyaFromSunrise,
 } from "../utils/panchang.js";
 import {
   RAHUKAAL, YAMAGANDA, GULIKA, ABHIJIT, HORA_ORDER, HORA_START, HORA_HI,
@@ -39,6 +40,8 @@ function isPanchak(nak) {
 }
 
 // Din me Bhadra (Vishti karana) kab-kab — 2-2 ghante sampling
+// (Bhadra raat me hoti hai — suryast ke baad — isliye yahan
+//  0-24 ghante ka poora din scan hota hai jisme dono ho jate hain)
 function bhadraWindows(dateStr) {
   const wins = [];
   let cur = null;
@@ -60,8 +63,21 @@ function fmtH(h) {
   return `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
 }
 
-// ABHIJIT constant me "(maanak samay)" Hinglish hai — bhasha se replace karo.
-const abhijitTime = (lang) => {
+// Shehar ka choice yaad rakhna hai — page reload par bhi wahi rahe.
+// Pehle har reload par Delhi (hardcoded default) ho jata tha.
+const CITY_KEY = "nv-panchang-city";
+const loadCity = () => {
+  try {
+    const saved = localStorage.getItem(CITY_KEY);
+    if (saved && CITIES_FLAT.some((c) => c[0] === saved)) return saved;
+  } catch { /* ignore */ }
+  return "Delhi";
+};
+const saveCity = (c) => { try { localStorage.setItem(CITY_KEY, c); } catch { /* ignore */ } };
+
+// ABHIJIT ab calculate hota hai (abhijitWindow) — isliye ye static helper
+// ab zarurat nahi. Rakh diya hai taaki koi purana import tode nahi.
+export const abhijitTime = (lang) => {
   const i = lang === "en" ? ABHIJIT : ABHIJIT.replace(/\s*\(.*\)\s*$/, "");
   return `${i} (${siteTX(lang).pan_approx_time})`;
 };
@@ -78,7 +94,10 @@ export default function Panchang() {
   const [date, setDate] = useState(todayISO());
   const [myear, setMyear] = useState(new Date().getFullYear());
   const [mmonth, setMmonth] = useState(new Date().getMonth() + 1);
-  const [city, setCity] = useState("Delhi");
+  const [city, setCity] = useState(loadCity);
+
+  // Shehar badlo to abhi turant hisaab dobara banao (delhi wala default hat jayega)
+  const pickCity = (name) => { setCity(name); saveCity(name); };
 
   // P alias: jyotish_b ke labels (pg_tithi, pg_naks …) + siteTx ke pan_* labels.
   const p = LP(panchang(date), lang);
@@ -93,6 +112,14 @@ export default function Panchang() {
   const cityData = CITIES_FLAT.find((x) => x[0] === city) || CITIES_FLAT[0];
   const sun = sunTimes(date, cityData[1], cityData[2]);
 
+  // ── Shehar-DEPENDENT times ──────────────────────────────────────
+  // Ye pehle Delhi ke hi values the (6:00 se, 11:48-12:36, 17:12-18:00).
+  // Ab suryodaya/suryast se nikalte hain, to Nagpur/Mumbai/Chennai/
+  // Guwahati — har jagah apna time.
+  // Naam alag rakha hai taaki upar import hua ABHIJIT constant se clash na ho
+  const ABHIJIT_WIN = abhijitWindow(sun.sunrise, sun.dayLength);
+  const GODHULI_WIN = godhuliWindow(sun.sunset);
+
   // Amrit Kaal — user ke janma-nakshatra se
   const prof = loadProfile();
   let janmaNakIdx = null;
@@ -105,17 +132,19 @@ export default function Panchang() {
   const amrit = amritKaal(date, janmaNakIdx, null);
   const sthanik = sthanikSamay(weekday);
 
-  // Hora: 6:00 se 1-1 ghante, vaar-swami se shuru
-  const horas = [];
-  for (let i = 0; i < 24; i++) {
-    horas.push({ time: `${fmtH(6 + i)}–${fmtH(7 + i)}`, lord: HORA_ORDER[(HORA_START[weekday] + i) % 7] });
-  }
-  // Choghadiya: 6:00–18:00, 1.5h each
-  const chogs = [];
-  for (let i = 0; i < 8; i++) {
-    const name = CHOG_CYCLE[(CHOG_START[weekday] + i) % 7];
-    chogs.push({ time: `${fmtH(6 + i * 1.5)}–${fmtH(7.5 + i * 1.5)}`, name, shubh: CHOG_SHUBH.includes(name) });
-  }
+  // Hora: SURYODAYA se 1-1 ghanta, vaar-swami se shuru.
+  // (pehle 6:00 se — jo sirf Delhi ka tha)
+  const horas = horaFromSunrise(sun.sunrise).map((h) => ({
+    from: h.from, to: h.to,
+    lord: HORA_ORDER[(HORA_START[weekday] + h.hour) % 7],
+  }));
+  // Choghadiya: SURYODAYA → SURYAST, 8 barabar hisse.
+  // (pehle 6:00-18:00 fixed tha)
+  const chogs = choghadiyaFromSunrise(sun.sunrise, sun.sunset).map((c) => ({
+    from: c.from, to: c.to,
+    name: CHOG_CYCLE[(CHOG_START[weekday] + c.index) % 7],
+    shubh: CHOG_SHUBH.includes(CHOG_CYCLE[(CHOG_START[weekday] + c.index) % 7]),
+  }));
 
   const bhadra = bhadraWindows(date);
   const c = CITIES_FLAT.find((x) => x[0] === city) || CITIES_FLAT[0];
@@ -153,7 +182,6 @@ export default function Panchang() {
   }
 
   const WD = vaarName(weekday, lang);
-  const ABHIJIT_T = abhijitTime(lang);
 
   return (
     <div>
@@ -164,6 +192,27 @@ export default function Panchang() {
         {TABS.map((tb) => (
           <button key={tb} className={tab === tb ? "btn" : "btn secondary"} onClick={() => setTab(tb)}>{TABL[tb]}</button>
         ))}
+      </div>
+
+      {/* ── Shehar chunne ka bar ──────────────────────────────────
+          Pehle ye sirf "Lagna" tab par tha, isliye Dainik aur Muhurat
+          par hamesha Delhi ka time dikhta raha. Ab har tab par hai. */}
+      <div className="card" style={{ marginTop: 14, padding: 14 }}>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "flex-end" }}>
+          <div>
+            <label className="label">{S.pan_city}</label>
+            <select className="input" style={{ maxWidth: 260 }} value={city} onChange={(e) => pickCity(e.target.value)}>
+              {STATES.map((g) => (
+                <optgroup key={g.state} label={g.state}>
+                  {g.cities.map((c) => <option key={g.state + c[0]} value={c[0]}>{c[0]}</option>)}
+                </optgroup>
+              ))}
+            </select>
+          </div>
+          <div style={{ fontSize: ".82rem", color: "var(--muted)", paddingBottom: 10 }}>
+            {S.pan_sunrise} {fmtMin(sun.sunrise)} · {S.pan_sunset} {fmtMin(sun.sunset)}
+          </div>
+        </div>
       </div>
 
       {tab === "Dainik" && (
@@ -192,12 +241,12 @@ export default function Panchang() {
                 <div className="card"><h3>{P.pg_chandra}</h3><p style={{ marginTop: 8 }}>{p.chandraRashi}</p></div>
                 <div className="card"><h3>{P.pg_surya}</h3><p style={{ marginTop: 8 }}>{p.suryaRashi}</p></div>
                 <div className="card"><h3>{P.pg_rahu}</h3><p style={{ marginTop: 8 }}>{S.pan_rahu_kaal}: {RAHUKAAL[weekday]}</p></div>
-                <div className="card"><h3>{P.pg_abhijit}</h3><p style={{ marginTop: 8 }}>{ABHIJIT_T}</p></div>
-                <div className="card"><h3>{S.pan_godhuli} ({P.pg_shubh})</h3><p style={{ marginTop: 8 }}>{S.pan_godhuli_time}</p></div>
+                <div className="card"><h3>{P.pg_abhijit}</h3><p style={{ marginTop: 8 }}>{fmtMin(ABHIJIT_WIN.from)} – {fmtMin(ABHIJIT_WIN.to)}</p><p style={{ fontSize: ".78rem", color: "var(--muted)", marginTop: 4 }}>{S.pan_approx_time}</p></div>
+                <div className="card"><h3>{S.pan_godhuli} ({P.pg_shubh})</h3><p style={{ marginTop: 8 }}>{fmtMin(GODHULI_WIN.from)} – {fmtMin(GODHULI_WIN.to)}</p><p style={{ fontSize: ".78rem", color: "var(--muted)", marginTop: 4 }}>{S.pan_godhuli_time}</p></div>
                 <div className="card"><h3>{S.pan_yamaganda}</h3><p style={{ marginTop: 8 }}>{YAMAGANDA[weekday]}</p></div>
                 <div className="card"><h3>{S.pan_gulika}</h3><p style={{ marginTop: 8 }}>{GULIKA[weekday]}</p></div>
                 <div className="card"><h3>{S.pan_sunrise} — {city}</h3><p style={{ marginTop: 8 }}>{fmtMin(sun.sunrise)}</p></div>
-                <div className="card"><h3>{S.pan_sunset}</h3><p style={{ marginTop: 8 }}>{fmtMin(sun.sunset)}</p></div>
+                <div className="card"><h3>{S.pan_sunset} — {city}</h3><p style={{ marginTop: 8 }}>{fmtMin(sun.sunset)}</p></div>
                 <div className="card"><h3>{S.pan_day_length}</h3><p style={{ marginTop: 8 }}>{Math.floor(sun.dayLength / 60)} {S.pan_hours} {Math.round(sun.dayLength % 60)} {S.pan_minutes}</p></div>
                 <div className="card"><h3>{S.pan_amrit}</h3><p style={{ marginTop: 8 }}>
                     {janmaNakIdx == null
@@ -249,17 +298,17 @@ export default function Panchang() {
           <div className="card">
             <h3>{S.pan_tab_hora} ({WD}) — {S.pan_hora_note}</h3>
             <div style={{ marginTop: 10 }}>
-              {horas.map((h) => (
-                <div key={h.time} className="kv"><span className="k">{h.time}</span><span className="v">{grahaName(h.lord, lang)} {S.pan_hora}</span></div>
+              {horas.map((h, i) => (
+                <div key={i} className="kv"><span className="k">{fmtMin(h.from)} – {fmtMin(h.to)}</span><span className="v">{grahaName(h.lord, lang)} {S.pan_hora}</span></div>
               ))}
             </div>
           </div>
           <div className="card" style={{ marginTop: 16 }}>
-            <h3>{S.pan_choghadiya} ({WD}) — 6:00–18:00</h3>
+            <h3>{S.pan_choghadiya} ({WD}) — {fmtMin(sun.sunrise)} – {fmtMin(sun.sunset)}</h3>
             <div style={{ marginTop: 10 }}>
-              {chogs.map((c) => (
-                <div key={c.time} className="kv">
-                  <span className="k">{c.time} — {chogName(c.name, lang)}</span>
+              {chogs.map((c, i) => (
+                <div key={i} className="kv">
+                  <span className="k">{fmtMin(c.from)} – {fmtMin(c.to)} — {chogName(c.name, lang)}</span>
                   <span className="v" style={{ color: c.shubh ? "var(--accent-2)" : "var(--danger)" }}>{c.shubh ? S.pan_shubh_hai : S.pan_nahi}</span>
                 </div>
               ))}
@@ -302,15 +351,8 @@ export default function Panchang() {
 
       {tab === "Lagna" && (
         <div style={{ marginTop: 16 }}>
-          <div className="card" style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          <div className="card">
             <input className="input" style={{ maxWidth: 260 }} type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-            <select className="input" style={{ maxWidth: 260 }} value={city} onChange={(e) => setCity(e.target.value)}>
-              {STATES.map((g) => (
-                <optgroup key={g.state} label={g.state}>
-                  {g.cities.map((c) => <option key={g.state + c[0]} value={c[0]}>{c[0]}</option>)}
-                </optgroup>
-              ))}
-            </select>
           </div>
           <div className="card" style={{ marginTop: 16 }}>
             <h3>{S.pan_lagna_talika} — {city} ({date})</h3>
@@ -376,6 +418,8 @@ export default function Panchang() {
                     <h3>{S.pan_sunrise} / {S.pan_sunset} — {city}</h3>
                     <div className="kv"><span className="k">{S.pan_sunrise}</span><span className="v">{fmtMin(sun.sunrise)}</span></div>
                     <div className="kv"><span className="k">{S.pan_sunset}</span><span className="v">{fmtMin(sun.sunset)}</span></div>
+                    <div className="kv"><span className="k">{P.pg_abhijit}</span><span className="v">{fmtMin(ABHIJIT_WIN.from)} – {fmtMin(ABHIJIT_WIN.to)}</span></div>
+                    <div className="kv"><span className="k">{S.pan_godhuli}</span><span className="v">{fmtMin(GODHULI_WIN.from)} – {fmtMin(GODHULI_WIN.to)}</span></div>
                     <div className="kv"><span className="k">{S.pan_sthanik_short}</span><span className="v" style={{ fontSize: ".8rem" }}>{sthanikL(sthanik, lang).join(" · ")}</span></div>
                   </div>
                   <div className="card">

@@ -207,8 +207,96 @@ export function vivahMuhur(tithi, weekday, nakIdx, panchak, bhadra) {
   };
 }
 
+// ============================================================
+//  SHEHAR-DEPENDENT (CITY-AWARE) TIMES
+//
+//  Ye pehle Delhi ke hisaab se static likhe gaye the. Ab inka hisaab
+//  suryodaya/suryast se aata hai, isliye Nagpur, Mumbai, Chennai,
+//  Guwahati — har jagah apna time dikhega.
+//
+//  IST poore desh me ek hi hai, isliye Amrit Kaal / Sthanik / Rahu Kaal
+//  jaise tithi-based times me shehar ka koi farq nahi — wahi sahi hain.
+// ============================================================
+
+/**
+ * Ek muhurta = din ka 1/15 hissa.
+ * @param {number} sunrise  suryodaya (minutes, midnight se)
+ * @param {number} dayLength din ki lambai (minutes)
+ * @returns {{muhurta:number, from:number, to:number}}
+ */
+export function muhurtaParts(sunrise, dayLength) {
+  const m = dayLength / 15;
+  return { muhurta: m, from: sunrise, to: sunrise + dayLength };
+}
+
+/**
+ * Abhijit Muhurat — din ke 15 muhurton me se 8va.
+ * Shehar badalne par ye badal bhi hai (Delhi ~15:24, Mumbai ~15:46).
+ */
+export function abhijitWindow(sunrise, dayLength) {
+  const m = dayLength / 15;
+  // 15 muhurton ki list ka 8va (index 7) — beech se 3.5 muhurta
+  const from = sunrise + m * 7.5;
+  const to = from + m;
+  return { from, to, muhurta: m };
+}
+
+/**
+ * Godhuli Kaal — suryast se 1 ghanta 28 minute PEHLE se suryast tak.
+ * (Bhadra kaal ka ek hissa; shehar ke saath badalta hai.)
+ */
+export function godhuliWindow(sunset) {
+  const span = 60 + 28;              // 1:28
+  return { from: Math.max(0, sunset - span), to: sunset };
+}
+
+/**
+ * Bhadra Kaal — suryast ke baad se aadhi raat tak.
+ * Din me Bhadra nahi hota, isliye raat ka hissa hi.
+ */
+export function bhadraWindow(sunset) {
+  return { from: sunset, to: 1440 };
+}
+
+/**
+ * 24 Hora — suryodaya se shuru, har ek 1 ghanta.
+ * @param {number} sunrise suryodaya (minutes)
+ * @returns {Array<{from:number,to:number,hour:number}>} hour = 0..23 (pratham hora)
+ */
+export function horaFromSunrise(sunrise) {
+  return Array.from({ length: 24 }, (_, i) => ({
+    from: sunrise + i * 60,
+    to: sunrise + (i + 1) * 60,
+    hour: i,
+  }));
+}
+
+/**
+ * Choghadiya — suryodaya se suryast tak, 8 barabar hisse.
+ * (Pehle 6:00–18:00 fixed tha — jo Delhi jaisa hi tha.)
+ * @returns {Array<{from:number,to:number,index:number}>} index = 0..7 (pratham choghadiya)
+ */
+export function choghadiyaFromSunrise(sunrise, sunset) {
+  const step = (sunset - sunrise) / 8;
+  return Array.from({ length: 8 }, (_, i) => ({
+    from: sunrise + step * i,
+    to: sunrise + step * (i + 1),
+    index: i,
+  }));
+}
+
+/**
+ * Raat ki hora — suryast ke baad. Choghadiya/Bhadra yahin se hataate hain.
+ */
+export function nightHoursFromSunset(sunset) {
+  const left = 1440 - sunset;
+  return Math.max(0, Math.floor(left / 60));
+}
+
 export default {
   sunTimes, fmtMin, shakaSamvat, samvatsaraName, vikramSamvat,
   tithiAt, nakshatraAt, amritKaal, sthanikSamay, grihaPravishTime, vivahMuhur,
+  muhurtaParts, abhijitWindow, godhuliWindow, bhadraWindow,
+  horaFromSunrise, choghadiyaFromSunrise, nightHoursFromSunset,
   SAMVATSARA, GRIHA_RULES,
 };

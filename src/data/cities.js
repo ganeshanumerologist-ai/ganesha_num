@@ -98,7 +98,7 @@ export const STATES = [
     ["Nashik", 19.99, 73.78], ["Aurangabad (MH)", 19.87, 75.34], ["Nagpur", 21.14, 79.08],
     ["Solapur", 17.65, 75.9], ["Kolhapur", 16.7, 74.23], ["Amravati", 20.93, 77.75],
     ["Nanded", 19.15, 77.31], ["Latur", 18.4, 76.56], ["Dhule", 20.9, 74.77],
-    ["Jalgaon", 21.01, 75.56], ["Ahilyanagar", 19.09, 74.73], ["Akola", 20.7, 77.0],
+    ["Jalgaon", 21.01, 75.56], ["Jalna", 19.84, 75.88], ["Ahilyanagar", 19.09, 74.73], ["Akola", 20.7, 77.0],
     ["Beed", 18.99, 75.75], ["Chandrapur", 19.95, 79.3], ["Parbhani", 19.26, 76.77],
     ["Sangli", 16.85, 74.57], ["Satara", 17.68, 73.98], ["Yavatmal", 20.38, 78.13],
     ["Wardha", 20.74, 78.6], ["Osmanabad", 18.18, 76.03], ["Ratnagiri", 16.99, 73.3],
