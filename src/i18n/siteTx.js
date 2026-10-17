@@ -6,6 +6,7 @@
 // ki bhasha se text leti hai, English se nahi.
 
 import { langChain } from "./registry.js";
+import { smallLang } from "./smallTX.js";
 
 const EN = {
   // ---- Navbar ----
@@ -1429,6 +1430,14 @@ export function siteTX(lang) {
   for (let i = chain.length - 1; i >= 0; i--) {
     const d = DICT[chain[i]];
     if (d) out = { ...out, ...d };
+  }
+  // ── Chhoti bhasha ka apna content sabse upar ──────────────────
+  // (ne, mai, doi, brx, sa, ks, sd, sat, mni — pehle inme se ye
+  //  file nahi thi, isliye nav/pan/rashifal ka text bhi parivaar
+  //  ki bhasha (hi/ur/bn) me hi rehta tha)
+  const mine = smallLang(lang);
+  if (mine && mine.site && Object.keys(mine.site).length) {
+    out = { ...out, ...mine.site };
   }
   cache.set(lang, out);
   return out;

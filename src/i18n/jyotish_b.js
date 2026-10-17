@@ -1,5 +1,6 @@
 // Jyotish pages UI labels — part 2 (ur, kn, or, ml, pa, as) + helper
 import { EN, HI, MR, BN, TE, TA, GU } from "./jyotish_a.js";
+import { smallLang } from "./smallTX.js";
 
 const mk = (o) => ({ ...EN, ...o });
 
@@ -129,6 +130,9 @@ const FALLBACK = {
 };
 
 export function pgT(lang) {
+  // ── Chhoti bhasha ka apna content sabse pehle ────────────────
+  const mine = smallLang(lang);
+  if (mine && mine.pg && Object.keys(mine.pg).length) return mine.pg;
   if (ALL[lang]) return ALL[lang];
   if (FALLBACK[lang]) return ALL[FALLBACK[lang]];
   return ALL.en;

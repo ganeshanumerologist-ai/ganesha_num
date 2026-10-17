@@ -4,6 +4,8 @@
 // doosri bhasha dekhi jati hai (see registry.js langChain). Isliye yahan
 // har bhasha ke liye key poori tarah likhi jaati hai.
 
+import { smallLang, SMALL_LANGS } from "./smallTX.js";
+
 const EN = {
   app_name: "GANESHA SUYOG ASTROLOGY",
   loading: "Loading...",
@@ -98,7 +100,7 @@ const D = {
   en: EN,
   hi: mk({
     nav_kundli_page: "कुंडली", nav_charts: "कुंडली चार्ट", nav_loshu: "लो शु ग्रिड", nav_match: "मिलान", nav_varshphal: "वर्षफल", nav_rashifal: "राशिफल", nav_gochar: "गोचर", nav_shani: "शनि", nav_muhurat: "मुहूर्त", nav_reports: "रिपोर्ट", nav_remedies: "रुद्राक्ष-यंत्र", nav_daily: "दैनिक शुभ", nav_calendar: "कैलेंडर", nav_blog: "ब्लॉग", nav_admin: "एडमिन", nav_shani_title: "शनि सदे साती",
-    nav_kundli: "कुंडली", nav_phaladesh: "फलदेश", nav_jyotish: "ज्योतिष",
+    nav_kundli: "कुंडली", nav_phaladesh: "फलादेश", nav_jyotish: "ज्योतिष",
     app_name: "GANESHA SUYOG ASTROLOGY",
     loading: "लोड हो रहा है...", language: "भाषा", error_generic: "कुछ गड़बड़ हो गई।",
       city_search: "शहर खोजने के लिए लिखें...", city_choose: "— चुनें —",
@@ -141,7 +143,7 @@ const D = {
 
   mr: mk({
     nav_kundli_page: "कुंडली", nav_charts: "कुंडली चार्ट", nav_loshu: "लो शू ग्रिड", nav_match: "जुळणी", nav_varshphal: "वर्षफळ", nav_rashifal: "राशिफल", nav_gochar: "गोचर", nav_shani: "शनी", nav_muhurat: "मुहूर्त", nav_reports: "अहवाल", nav_remedies: "रुद्राक्ष-यंत्र", nav_daily: "दैनिक शुभ", nav_calendar: "दैनिकी", nav_blog: "ब्लॉग", nav_admin: "प्रशासक", nav_shani_title: "शनी साडेसाती",
-    nav_kundli: "कुंडली", nav_phaladesh: "फळदेश", nav_jyotish: "ज्योतिष",
+    nav_kundli: "कुंडली", nav_phaladesh: "फलादेश", nav_jyotish: "ज्योतिष",
     app_name: "GANESHA SUYOG ASTROLOGY",
     loading: "लोड होत आहे...", language: "भाषा", error_generic: "काहीतरी चूक झाली.",
       city_search: "शहर शोधण्यासाठी लिहा...", city_choose: "— निवडा —",
@@ -485,7 +487,7 @@ const D = {
 
   pa: mk({
     nav_kundli_page: "ਕੁੰਡਲੀ", nav_charts: "ਕੁੰਡਲੀ ਚਾਰਟ", nav_loshu: "ਲੋ ਸ਼ੂ ਗ੍ਰਿਡ", nav_match: "ਮਿਲਾਪ", nav_varshphal: "ਵਰਸ਼ਫਲ", nav_rashifal: "ਰਾਸ਼ੀਫਲ", nav_gochar: "ਗੋਚਰ", nav_shani: "ਸ਼ਨਿ", nav_muhurat: "ਮਹੂਰਤ", nav_reports: "ਰਿਪੋਰਟ", nav_remedies: "ਰੁਦਰਾਖ਼-ਯੰਤਰ", nav_daily: "ਰੋਜ਼ਾਨਾ ਸ਼ੁਭ", nav_calendar: "ਕੈਲੰਡਰ", nav_blog: "ਬਲਾਗ", nav_admin: "ਐਡਮਿਨ", nav_shani_title: "ਸ਼ਨਿ ਸਾਢੇਸਾਤੀ",
-    nav_kundli: "ਕੁੰਡਲੀ", nav_phaladesh: "ਫਲਦੇਸ਼", nav_jyotish: "ਜ੍ਯੋਤਿਸ਼",
+    nav_kundli: "ਕੁੰਡਲੀ", nav_phaladesh: "ਫਲਾਦੇਸ਼", nav_jyotish: "ਜ੍ਯੋਤਿਸ਼",
     app_name: "GANESHA SUYOG ASTROLOGY",
     loading: "ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ...", language: "ਭਾਸ਼ਾ", error_generic: "ਕੁਝ ਗਲਤ ਹੋ ਗਿਆ।",
       city_search: "ਸ਼ਹਿਰ ਲੱਭਣ ਲਈ ਲਿਖੋ...", city_choose: "— ਚੁਣੋ —",
@@ -626,6 +628,18 @@ const D = {
   sat: {},
   mni: {},
 };
+
+// ── Chhoti bhashaon ka apna content daalo ──────────────────────────
+// Pehle ye 9 bhashayein (nepali, maithili, dogri, bodo, sanskrit,
+// kashmiri, sindhi, santali, manipuri) khaali thin — isliye user
+// नेपाली chunne par हिन्दी dikhti thi, yaani "bhasha badli hi nahi".
+// Ab inka apna file hai (src/i18n/small/<lang>.js), yahan bharta hain.
+for (const code of SMALL_LANGS) {
+  const s = smallLang(code);
+  if (s && s.translations && Object.keys(s.translations).length) {
+    D[code] = { ...D[code], ...s.translations };
+  }
+}
 
 export const translations = D;
 export default D;

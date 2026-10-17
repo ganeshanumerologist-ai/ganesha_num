@@ -1,4 +1,5 @@
 // Kundli page labels — har bhasha me. Missing key English me dikhegi.
+import { smallLang } from "./smallTX.js";
 const EN = {
   k_title: "Open Your Kundli", k_sub: "Name, birth date, time, place and gender — full kundli in your language.",
   k_name: "Full Name", k_dob: "Date of Birth", k_time: "Birth Time", k_place: "Birth Place", k_gender: "Gender",
@@ -108,6 +109,9 @@ const FALLBACK_UI = {
 };
 
 export function kundliT(lang) {
+  // ── Chhoti bhasha ka apna content sabse pehle ────────────────
+  const mine = smallLang(lang);
+  if (mine && mine.kundli && Object.keys(mine.kundli).length) return mine.kundli;
   if (KUNDLI[lang]) return KUNDLI[lang];
   if (FALLBACK_UI[lang]) return KUNDLI[FALLBACK_UI[lang]];
   return KUNDLI.en;
