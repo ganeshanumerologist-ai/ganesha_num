@@ -43,6 +43,9 @@ const parts = (birthdate) => {
   if (p.length < 3) return null;
   const d = Number(p[2]), m = Number(p[1]), y = Number(p[0]);
   if (!d || !m || !y) return null;
+  // mahina 1..12 aur din 1..31 hone chahiye
+  if (m < 1 || m > 12 || d < 1 || d > 31) return null;
+  if (y < 1800 || y > 2200) return null;
   return { d, m, y };
 };
 
@@ -55,10 +58,13 @@ export function lifePathNumber(birthdate) {
 
 /** Bhagyank / Destiny Number — poori janm-tithi ke har digit ka jod. Hamesha 1..9. */
 export function bhagyankNumber(birthdate) {
-  const digits = String(birthdate || "").replace(/\D/g, "");
-  if (!digits) return null;
+  // Date valid nahi hai (khaali / 0000-00-00 / sirf text) to null.
+  // Warna 0 return ho jata tha jo ek "number" nahi hai.
+  const p = parts(birthdate);
+  if (!p) return null;
+  const digits = String(birthdate).replace(/\D/g, "");
   const sum = digits.split("").reduce((a, b) => a + Number(b), 0);
-  return reduceNumber(sum, false);
+  return reduceNumber(sum, false) || null;
 }
 
 export function birthdayNumber(birthdate) {

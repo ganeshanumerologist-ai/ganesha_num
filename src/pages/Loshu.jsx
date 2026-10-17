@@ -4,7 +4,7 @@ import { pageTX } from "../i18n/pageTx.js";
 import { pgT } from "../i18n/jyotish_b.js";
 import { pgX } from "../i18n/jyotish_c.js";
 import kundliT from "../i18n/kundli.js";
-import { destinyNumber, luckyNumber, reduceNumber } from "../utils/numerology.js";
+import { destinyNumber, luckyNumber, reduceNumber, bhagyankNumber } from "../utils/numerology.js";
 import { detectYogs, groupYogs, bazaarProfile, gridProfile, yearOutlook } from "../utils/loshuYog.js";
 import { loshuTX, loshuYog, loshuUpay } from "../data/loshuTX.js";
 import { loshuXTX } from "../data/loshuXTX.js";
@@ -153,14 +153,17 @@ export default function Loshu() {
     e.preventDefault();
     if (!dob) return;
     saveProfile({ name: name.trim(), birthdate: dob, gender, mobile: mobile.trim() });
-    const digits = dob.replace(/\D/g, "").split("").map(Number).filter((d) => d !== 0);
+    const digits = dob.replace(/\D/g, "").split("").map(Number);
     const digitSum = digits.reduce((a, b) => a + b, 0);
     const counts = {};
-    digits.forEach((d) => { counts[d] = (counts[d] || 0) + 1; });
+    // grid me sirf 1-9 count hote hain, 0 grid number nahi hai
+    digits.forEach((d) => { if (d !== 0) counts[d] = (counts[d] || 0) + 1; });
     const day = Number(dob.split("-")[2]);
     const year = Number(dob.split("-")[0]);
     const moolank = reduceNumber(day, false);
-    const bhagyank = reduceNumber(digitSum, false);
+    // Bhagyank shared helper se — taaki har page par ek hi hisaab ho.
+    // (pehle yahan zero filter karke khud jod rahe the)
+    const bhagyank = bhagyankNumber(dob);
     const grid = { ...counts };
     grid[moolank] = (grid[moolank] || 0) + 1;
     grid[bhagyank] = (grid[bhagyank] || 0) + 1;

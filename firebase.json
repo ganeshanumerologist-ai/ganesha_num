@@ -7,11 +7,13 @@
     ],
     "headers": [
       {
-        "source": "/index.html",
-        "headers": [{ "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }]
+        "comment": "assets content-hashed hain, inpe long cache theek hai",
+        "source": "/assets/**",
+        "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
       },
       {
-        "source": "/manifest.json",
+        "comment": "baaki sab (index.html, manifest) kabhi cache na ho — naye bundle turant mile",
+        "source": "!/assets/**",
         "headers": [{ "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }]
       },
       {

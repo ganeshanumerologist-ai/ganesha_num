@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useLanguage } from "../i18n/LanguageContext.jsx";
 import { useAuth } from "../auth/AuthContext.jsx";
 import kundliT from "../i18n/kundli.js";
+import pgT from "../i18n/jyotish_b.js";
 import { getMeaning } from "../data/meanings_all.js";
 import { yearMeaning, yearDetail, ycat } from "../data/varshphal_i18n.js";
 import { allNumbers, reduceNumber } from "../utils/numerology.js";
@@ -11,6 +13,12 @@ import { collection, addDoc, serverTimestamp, query, where, getDocs } from "fire
 import ShareButtons from "../components/ShareButtons.jsx";
 import CitySelect from "../components/CitySelect.jsx";
 import { loadProfile, saveProfile } from "../profile/profile.js";
+
+// 1972-02-18 → "18 / 02 / 1972"  (har bhasha me samajh aane wala format)
+const fmtDob = (d) => {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(d || ""));
+  return m ? `${m[3]} / ${m[2]} / ${m[1]}` : String(d || "");
+};
 
 function YearSection({ py, year, lang, L }) {
   if (!py) return null;
@@ -70,9 +78,10 @@ function Section({ num, label, meaning, L }) {
 }
 
 export default function Kundli() {
-  const { lang, S } = useLanguage();
+  const { lang, t, S } = useLanguage();
   const { user } = useAuth();
   const L = kundliT(lang);
+  const P = pgT(lang);
   const [form, setForm] = useState(() => ({
     name: "", birthdate: "", time: "", place: "", gender: "male", ...loadProfile(),
   }));
@@ -164,6 +173,19 @@ export default function Kundli() {
     ? result.gender === "female" ? L.k_female : result.gender === "other" ? L.k_other : L.k_male
     : "";
 
+  // Saare ek saath dikhane wale numbers — user ko saaf dikhe ki kya kya nikaala.
+  // (pehle sirf 5 dikhte the, Life Path / Janmank / MannoVritti chhoot jaati thi)
+  const glance = result ? [
+    [L.k_moolank, result.moolank],
+    [L.k_bhagyank, result.nums.bhagyank],
+    [P.pg_lifepath, result.nums.lifePath],
+    [t("lb_birthday"), result.nums.birthday],
+    [t("lb_attitude"), result.nums.attitude],
+    [L.k_naamank, result.nums.destiny],
+    [L.k_soul, result.nums.soulUrge],
+    [L.k_persona, result.nums.personality],
+  ].filter(([, n]) => n != null) : [];
+
   return (
     <div>
       {!result ? (
@@ -176,7 +198,7 @@ export default function Kundli() {
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                 {saved.map((s) => (
                   <button key={s.id} className="btn secondary" style={{ padding: "8px 14px" }} onClick={() => openSaved(s)}>
-                    {s.name} · {s.birthdate}
+                    {s.name} · {fmtDob(s.birthdate)}
                   </button>
                 ))}
               </div>
@@ -198,7 +220,7 @@ export default function Kundli() {
               </div>
               <div>
                 <label className="label">{L.k_place}</label>
-                <CitySelect value={form.place} onChange={(v) => set("place", v)} placeholder="Type karke sheher chunein..." />
+                <CitySelect value={form.place} onChange={(v) => set("place", v)} placeholder={S.city_search} />
               </div>
               <div>
                 <label className="label">{L.k_gender}</label>
@@ -222,12 +244,25 @@ export default function Kundli() {
             <span className="badge">{L.k_title}</span>
             <h1 style={{ marginTop: 10 }}>{result.name}</h1>
             <p style={{ marginTop: 6 }}>
-              {result.birthdate}
+              {fmtDob(result.birthdate)}
               {result.time ? ` · ${result.time}` : ""}
               {result.place ? ` · ${result.place}` : ""}
               {` · ${genderLabel}`}
             </p>
+
+            {glance.length > 0 && (
+              <div className="num-strip">
+                {glance.map(([label, n]) => (
+                  <div className="num-chip" key={label}>
+                    <b>{n}</b>
+                    <span>{label}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
             <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 14, flexWrap: "wrap" }}>
+              <Link className="btn secondary" to="/reports">{t("nav_reports")}</Link>
               <button className="btn secondary" onClick={reset}>{L.k_new}</button>
               <button className="btn secondary" onClick={save}>{L.k_save}</button>
             </div>
@@ -237,13 +272,16 @@ export default function Kundli() {
           <div className="grid grid-2" style={{ marginTop: 20 }}>
             <Section num={result.moolank} label={L.k_moolank} meaning={getMeaning(result.moolank, lang)} L={L} />
             <Section num={result.nums.bhagyank} label={L.k_bhagyank} meaning={getMeaning(result.nums.bhagyank, lang)} L={L} />
+            <Section num={result.nums.lifePath} label={P.pg_lifepath} meaning={getMeaning(result.nums.lifePath, lang)} L={L} />
+            <Section num={result.nums.birthday} label={t("lb_birthday")} meaning={getMeaning(result.nums.birthday, lang)} L={L} />
+            <Section num={result.nums.attitude} label={t("lb_attitude")} meaning={getMeaning(result.nums.attitude, lang)} L={L} />
             <Section num={result.nums.destiny} label={L.k_naamank} meaning={getMeaning(result.nums.destiny, lang)} L={L} />
             <Section num={result.nums.soulUrge} label={L.k_soul} meaning={getMeaning(result.nums.soulUrge, lang)} L={L} />
             <Section num={result.nums.personality} label={L.k_persona} meaning={getMeaning(result.nums.personality, lang)} L={L} />
             <YearSection py={result.py} year={new Date().getFullYear()} lang={lang} L={L} />
           </div>
 
-          <ShareButtons title={L.k_title} text={`${result.name} — ${L.k_moolank} ${result.moolank}, ${L.k_bhagyank} ${result.nums.bhagyank}`} />
+          <ShareButtons title={L.k_title} text={`${result.name} — ${L.k_moolank} ${result.moolank}, ${L.k_bhagyank} ${result.nums.bhagyank}, ${P.pg_lifepath} ${result.nums.lifePath}`} />
         </>
       )}
     </div>
