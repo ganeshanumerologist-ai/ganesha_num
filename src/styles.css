@@ -53,15 +53,17 @@ body {
    hai. Purana chain #0b1024 → #070b18 → #0d0a1a luminance ~0.004 tha
    (qareeb kaala). Naya #22275c → #1b1f4a → #33245f ka ~0.021 —
    lagbhag 5× zyada chamak, par abhi bhi "raat" hai, din nahi. */
+/* ── ULTRA CLEAN AURORA ──
+   Sirf 3 rang, teeno aage-peechhe blend karte hue — rainbow nahi.
+   Pehle 5 gradients the jo ek dusre ko kaat rahe the. */
 .jy-sky {
   position: absolute;
   inset: -10%;
   background:
-    radial-gradient(1100px 760px at 78% -12%, rgba(139,92,246,.38), transparent 62%),
-    radial-gradient(900px 620px at 8% 8%, rgba(34,211,238,.26), transparent 60%),
-    radial-gradient(1000px 900px at 50% 118%, rgba(255,212,94,.22), transparent 62%),
-    radial-gradient(900px 700px at 50% 34%, rgba(91,52,182,.34), transparent 70%),
-    linear-gradient(170deg, #22275c 0%, #1b1f4a 45%, #33245f 100%);
+    radial-gradient(1200px 820px at 72% -14%, rgba(124,92,220,.34), transparent 64%),
+    radial-gradient(1000px 700px at 16% 6%, rgba(48,132,196,.22), transparent 62%),
+    radial-gradient(1100px 900px at 50% 116%, rgba(96,72,168,.26), transparent 66%),
+    linear-gradient(168deg, #21264f 0%, #191d44 48%, #241c48 100%);
 }
 
 /* optional photos (public/photos/bg1.jpg …) */
@@ -69,36 +71,52 @@ body {
 .jy-photo img { display: block; }
 
 /* taare */
-.jy-stars { inset: 0; width: 100%; height: 100%; opacity: .72; }
+.jy-stars { inset: 0; width: 100%; height: 100%; opacity: .55; }
 
 /* bada mandala */
+/* ── MANDALA: ab sirf ek halki si ring ──
+   Pehle poori kaali drawing thi aur uski lines text ke upar aa jaati
+   thi. Ab: opacity .10, aur radial mask jo beech me 42% tak rakhta hai
+   aur 72% pe poori tarah gaayab kar deta hai — yaani ring text tak
+   pahunchti hi nahi. */
 .jy-mandala-wrap {
-  top: 46%;
+  top: 42%;
   left: 50%;
-  width: min(190vmin, 1750px);
+  width: min(150vmin, 1500px);
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
-  opacity: .34;
+  opacity: .11;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%,
+      #000 0%, #000 42%, transparent 74%);
+  mask-image: radial-gradient(circle at 50% 50%,
+      #000 0%, #000 42%, transparent 74%);
 }
 .jy-mandala {
   width: 100%;
   height: 100%;
-  animation: jyspin 320s linear infinite;
-  filter: drop-shadow(0 0 40px rgba(251,191,36,.12));
+  animation: jyspin 480s linear infinite;
+  filter: none;
 }
 @keyframes jyspin { to { transform: rotate(360deg); } }
 
 /* Kundali chart — kone par */
-.jy-chart { width: min(52vw, 620px); height: auto; opacity: .44; }
-.jy-chart-l { bottom: -14%; left: -13%; }
-.jy-chart-r { top: -16%; right: -13%; transform: scaleX(-1); opacity: .30; }
+/* ── KUNDALI CHART BACKGROUND SE HATA DIYE ──
+   Ye dono sabse zyada line-art the aur text ke peeche grid banakar
+   dikh rahe the. Design me "clean" ka matlab hai: jo cheez padhne me
+   takleef de, use hatao. Art Gallery page par maujood hai, wahan
+   sahi jagah hai. */
+.jy-chart { display: none; }
+.jy-chart-l, .jy-chart-r { display: none; }
 
 /* kalash */
+/* Pehle bottom -6% right 6% tha, jisse kalash ka aadha hissa screen
+   se bahar chala jaata tha aur wo galti lagti thi. Ab poora dikhta hai
+   aur halka hai. */
 .jy-kalash {
-  bottom: -6%; right: 6%;
-  width: min(30vmin, 330px); height: auto;
-  opacity: .32;
-  animation: jyfloat 16s ease-in-out infinite;
+  bottom: 2%; right: 3%;
+  width: min(22vmin, 250px); height: auto;
+  opacity: .14;
+  animation: jyfloat 22s ease-in-out infinite;
 }
 @keyframes jyfloat {
   0%, 100% { transform: translateY(0); }
@@ -113,18 +131,17 @@ body {
 .jy-vignette {
   position: absolute; inset: 0;
   background:
-    radial-gradient(130% 90% at 50% 45%, transparent 62%, rgba(10,8,26,.24) 100%);
+    radial-gradient(140% 100% at 50% 45%, transparent 74%, rgba(14,11,32,.22) 100%);
 }
 
 /* ---------- PHONE par background DIKHNA chahiye (pehle .10/.07 se
    almost gayab tha) — content ke cards opaque hain, isliye art ko
    thoda upar la sakte hain bina padhe chalne ka risk liye. ---------- */
 @media (max-width: 860px) {
-  .jy-mandala-wrap { opacity: .26; width: min(210vmin, 1400px); }
-  .jy-chart { opacity: .30; width: min(78vw, 420px); }
-  .jy-chart-r { opacity: .20; }
-  .jy-kalash { opacity: .24; width: min(38vmin, 220px); }
-  .jy-stars { opacity: .62; }
+  /* Mobile par art aur bhi kam — content ki padhai pehle. */
+  .jy-mandala-wrap { opacity: .09; width: min(180vmin, 1300px); }
+  .jy-kalash { opacity: .09; width: min(30vmin, 180px); }
+  .jy-stars { opacity: .48; }
   .jy-vignette { background: radial-gradient(140% 100% at 50% 40%, transparent 78%, rgba(20,16,48,.18) 100%); }
   /* jyotish background ke upar se text padhne layak.
      PEHLE rgba(10,14,32,.78) tha — ye phone par surface ko KAALA
@@ -234,18 +251,50 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
      TRANSPARENT reh jaata hai, yaani dikhta hi nahi.
      Isliye pehle solid gold, gradient sirf tab jab support ho. */
   color: var(--gold);
-  background: linear-gradient(115deg, #fde68a 0%, #fbbf24 28%, #a78bfa 62%, #67e8f9 100%);
+  /* Sirf 2 rang — gold se halka gold. 4 rang "rainbow" dete hain,
+     jo cheap lagta hai; brand ke liye ek hi khada rang + uska
+     highlight kafi hai. */
+  background: linear-gradient(104deg, #fff3c4 0%, #ffd45e 42%, #f0a63a 100%);
   -webkit-background-clip: text; background-clip: text;
-  filter: drop-shadow(0 4px 22px rgba(251,191,36,.25));
+  filter: drop-shadow(0 6px 26px rgba(255,212,94,.28));
 }
 @supports (-webkit-background-clip: text) or (background-clip: text) {
   .text-gradient { color: transparent; }
 }
 .badge {
-  display: inline-block; padding: 5px 16px; border-radius: 999px; font-size: .75rem;
-  background: rgba(251,191,36,.10); border: 1px solid rgba(251,191,36,.38);
-  color: var(--gold); letter-spacing: 1.4px; text-transform: uppercase; font-weight: 700;
+  display: inline-block; padding: 6px 18px; border-radius: 999px;
+  font-size: .72rem;
+  background: rgba(255,212,94,.10);
+  border: 1px solid rgba(255,212,94,.34);
+  color: var(--gold); letter-spacing: 2px;
+  text-transform: uppercase; font-weight: 700;
+  backdrop-filter: blur(8px);
 }
+/* ── FLUID DISPLAY TYPE ──
+   clamp(min, preferred, max) — 360px phone se 4K monitor tak ek hi
+   rule chalti hai, koi breakpoint chain nahi. Display text me
+   line-height 1.05 aur tracking -0.02em "premium" feel deta hai. */
+.hero h1 {
+  /* max 5rem pehle 1280px pe hi cap ho jaati thi — 4K pe chhoti
+     padti thi. Ab 6.5rem tak ja sakti hai, 4.6vw preferred ke saath. */
+  font-size: clamp(2.1rem, 4.6vw, 6.5rem);
+  line-height: 1.06;
+  letter-spacing: -0.022em;
+  font-weight: 800;
+  margin: 18px auto 0;
+  max-width: 16ch;
+  /* gradient ke neeche halka shadow — art ke upar bhi text khada rahe */
+  text-shadow: 0 4px 30px rgba(12, 10, 34, .55);
+}
+.hero p {
+  font-size: clamp(.98rem, 1.55vw, 1.16rem);
+  line-height: 1.72;
+  max-width: 62ch;
+  margin: 18px auto 0;
+  color: var(--muted);
+  text-shadow: 0 2px 12px rgba(12, 10, 34, .6);
+}
+
 /* Kundli: saare numbers ek saath, upar ki strip me */
 .num-strip {
   display: grid; gap: 10px; margin-top: 16px;
@@ -367,9 +416,13 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 .hero .logo-ring { display: none; }
 
 /* ---------- HERO : bada, shaandar ---------- */
+/* ── HERO ──
+   Pehle 92px top + bada H1 = poori screen khaali. Ab upar se thoda
+   kam, neeche zyada — isse "saans" milti hai aur agli section ka
+   hint bhi dikhta hai (scroll affordance). */
 .hero {
   position: relative;
-  padding: 92px 20px 56px;
+  padding: 68px 20px 76px;
   text-align: center;
   isolation: isolate;
 }
@@ -492,6 +545,17 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 .dropzone:hover { border-color: var(--accent); }
 .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
 .gallery-grid img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; border: 1px solid var(--border); }
+/* ── SECTION HEADINGS: bhi same fluid scale ── */
+.sec-head h2, .card h2 {
+  font-size: clamp(1.35rem, 2.6vw, 3rem);
+  line-height: 1.18;
+  letter-spacing: -0.014em;
+}
+.sec-head .kicker {
+  font-size: .72rem; letter-spacing: 3px; color: var(--gold);
+  opacity: .8; margin-bottom: 6px;
+}
+
 /* ══════════════════════════════════════════════════════════════
    पूरी कुंडली — navigator chips + tables
    ══════════════════════════════════════════════════════════════ */

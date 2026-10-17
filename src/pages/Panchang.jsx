@@ -8,6 +8,7 @@ import {
   sunTimes, fmtMin, shakaSamvat, samvatsaraName, vikramSamvat,
   tithiAt, nakshatraAt, amritKaal, sthanikSamay, grihaPravishTime, vivahMuhur,
   abhijitWindow, godhuliWindow, horaFromSunrise, choghadiyaFromSunrise,
+  kaalWindows,
 } from "../utils/panchang.js";
 import {
   RAHUKAAL, YAMAGANDA, GULIKA, ABHIJIT, HORA_ORDER, HORA_START, HORA_HI,
@@ -118,6 +119,11 @@ export default function Panchang() {
   // Guwahati — har jagah apna time.
   // Naam alag rakha hai taaki upar import hua ABHIJIT constant se clash na ho
   const ABHIJIT_WIN = abhijitWindow(sun.sunrise, sun.dayLength);
+
+  // Rahu Kaal / Yamaganda / Gulika — shehar ke hisaab se. Pehle fixed
+  // IST strings the (RAHUKAAL[weekday]), to Nagpur me bhi Delhi ka time
+  // dikhta tha. Ab har shehar ka apna hota hai.
+  const KAAL = kaalWindows(sun.sunrise, sun.sunset, weekday);
   const GODHULI_WIN = godhuliWindow(sun.sunset);
 
   // Amrit Kaal — user ke janma-nakshatra se
@@ -240,11 +246,11 @@ export default function Panchang() {
                 <div className="card"><h3>{P.pg_karana}</h3><p style={{ marginTop: 8 }}>{p.karana}</p></div>
                 <div className="card"><h3>{P.pg_chandra}</h3><p style={{ marginTop: 8 }}>{p.chandraRashi}</p></div>
                 <div className="card"><h3>{P.pg_surya}</h3><p style={{ marginTop: 8 }}>{p.suryaRashi}</p></div>
-                <div className="card"><h3>{P.pg_rahu}</h3><p style={{ marginTop: 8 }}>{S.pan_rahu_kaal}: {RAHUKAAL[weekday]}</p></div>
+                <div className="card"><h3>{P.pg_rahu}</h3><p style={{ marginTop: 8 }}>{S.pan_rahu_kaal}: {KAAL.rahu.text}</p></div>
                 <div className="card"><h3>{P.pg_abhijit}</h3><p style={{ marginTop: 8 }}>{fmtMin(ABHIJIT_WIN.from)} – {fmtMin(ABHIJIT_WIN.to)}</p><p style={{ fontSize: ".78rem", color: "var(--muted)", marginTop: 4 }}>{S.pan_approx_time}</p></div>
                 <div className="card"><h3>{S.pan_godhuli} ({P.pg_shubh})</h3><p style={{ marginTop: 8 }}>{fmtMin(GODHULI_WIN.from)} – {fmtMin(GODHULI_WIN.to)}</p><p style={{ fontSize: ".78rem", color: "var(--muted)", marginTop: 4 }}>{S.pan_godhuli_time}</p></div>
-                <div className="card"><h3>{S.pan_yamaganda}</h3><p style={{ marginTop: 8 }}>{YAMAGANDA[weekday]}</p></div>
-                <div className="card"><h3>{S.pan_gulika}</h3><p style={{ marginTop: 8 }}>{GULIKA[weekday]}</p></div>
+                <div className="card"><h3>{S.pan_yamaganda}</h3><p style={{ marginTop: 8 }}>{KAAL.yamaganda.text}</p></div>
+                <div className="card"><h3>{S.pan_gulika}</h3><p style={{ marginTop: 8 }}>{KAAL.gulika.text}</p></div>
                 <div className="card"><h3>{S.pan_sunrise} — {city}</h3><p style={{ marginTop: 8 }}>{fmtMin(sun.sunrise)}</p></div>
                 <div className="card"><h3>{S.pan_sunset} — {city}</h3><p style={{ marginTop: 8 }}>{fmtMin(sun.sunset)}</p></div>
                 <div className="card"><h3>{S.pan_day_length}</h3><p style={{ marginTop: 8 }}>{Math.floor(sun.dayLength / 60)} {S.pan_hours} {Math.round(sun.dayLength % 60)} {S.pan_minutes}</p></div>

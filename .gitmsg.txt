@@ -1,35 +1,26 @@
-Recommendations instead of bare lists in the full Kundli chart
+Cleaner background, fluid 4K type, and city-aware Rahu Kaal
 
-The user pointed out four gaps in "Your complete Kundli": the varshphal
-did not say which year it belonged to, the Lal Kitab remedies were one
-line each, the gemstone section listed every stone without saying which
-one to wear, and the auspicious section named muhurtas but gave no times.
+Two things. First, a design pass: I had been lightening the background
+blind and it was still wrong, because the problem was never darkness. A
+screenshot showed five competing layers at once, with the mandala rings
+running straight through the headline and a clipped kalash in the corner.
+Lighter is not the same as clean.
 
-Varshpal now states the calendar year and the running personal year up
-front and puts the running one first with a badge. Lal Kitab gives each
-planet seven fields: result in that house, likely troubles, donation,
-worship, mantra with count, best time, and the base remedy, each sorted
-by whether it runs in the current dasha or the planet is weak.
+The two kundali chart layers are now removed from the background
+entirely, which is where most of the line-art clutter was. The mandala
+stays but drops to .11 opacity behind a radial mask, so it fades out
+before it reaches the text instead of crossing it. The kalash no longer
+clips. The aurora is down to three soft colours from five.
 
-Gemstones are now a decision. Ranking weighs ashtakavarga points,
-shadbala, benefic or malefic nature, and kendra-trikona placement.
-Shadow planets are marked do-not-wear, as are the loss and disease
-houses. A debilitated planet is only optional, since a stone unsettles
-it further. Cap is three, one at a time. If nothing qualifies the top
-candidate is promoted so there is always an answer.
+The headline gradient went from gold-pink-purple-cyan to three warm
+shades. Four hues read as a rainbow rather than a brand. Hero type is
+now fluid via clamp, growing from 34px on a phone to 104px at 4K; the
+old rule capped at 80px and had already stopped growing by 1280px, so
+on a 4K panel it looked undersized. All contrast sits at AAA.
 
-Auspicious and inauspicious times are computed, not listed. Abhijit,
-Brahma, Vijay, Godhuli, Amrit, Rahu Kaal, Yamaganda, Gulika, Bhadra and
-Panchak all derive from the birth city sunrise and sunset, so they move
-with the city.
-
-While checking the render I found three English leaks. grahaName keyed
-its table by Sanskrit names while the astro engine returns English, so
-no planet was ever translated on any page. RATNA data was English only.
-Muhurat names and the gem rationale were hardcoded. All three are now
-translation keys: 201 keys per language across ten languages, with the
-remaining twelve falling back to a same-script relative.
-
-check-kf-files.mjs exempts the {p} and {h} placeholders, which it was
-flagging as Latin, and still catches real script intrusions. It found two
-Devanagari characters that had crept into Tamil and Telugu values.
+Second, Rahu Kaal. The user was right that it was Delhi's time for
+everyone. It was a fixed IST string table, so Nagpur and Chennai showed
+Delhi's window. The day is now split into eight segments from the
+selected city's own sunrise, giving ten different Rahu Kaal windows
+across ten cities. Delhi computes 16:38-18:04 against the published IST
+standard of 16:30-18:00, which is the expected agreement.
