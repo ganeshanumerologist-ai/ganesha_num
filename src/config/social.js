@@ -21,7 +21,7 @@ export const SOCIAL_META = [
   { key: "facebook", label: "Facebook", color: "#1877F2" },
   { key: "instagram", label: "Instagram", color: "#E1306C" },
   { key: "youtube", label: "YouTube", color: "#FF0000" },
-  { key: "x", label: "X", color: "#e8ecff" },
+  { key: "x", label: "X", color: "#141414" },
   { key: "linkedin", label: "LinkedIn", color: "#0A66C2" },
   { key: "tiktok", label: "TikTok", color: "#25F4EE" },
 ];

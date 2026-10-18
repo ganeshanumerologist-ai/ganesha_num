@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useLanguage } from "../i18n/LanguageContext.jsx";
-import { pgT } from "../i18n/jyotish_b.js";
-import shaniTX from "../i18n/shani.js";
-import { langChain } from "../i18n/registry.js";
+import { shaniNav } from "../i18n/shaniNav.js";
+import { pgNav } from "../i18n/pgNav.js";
 import { useAuth } from "../auth/AuthContext.jsx";
 import { useAdmin } from "../auth/useAdmin.js";
 import Logo3D from "./Logo3D.jsx";
@@ -12,14 +11,13 @@ export default function Navbar() {
   const loc = useLocation();
   const nav = useNavigate();
   const { lang, setLang, t, LANGUAGES } = useLanguage();
-  const P = pgT(lang);
-  const shTitle = (() => {
-    for (const c of langChain(lang)) {
-      const d = shaniTX[c];
-      if (d && d.sh_nav && d !== shaniTX.en) return d.sh_nav;
-    }
-    return t("nav_shani_title");
-  })();
+  // NOTE: shani.js (73 KB) aur jyotish_b.js (13 KB) yahan KABHI import
+  // nahi hote. Poora shani-section ka text (kundli, dasha, karm) wo
+  // /shani page par chahiye, aur jyotish_b ke labels /reports par.
+  // Yahan sirf 1 nav label + 11 chhote label chahiye the — wo ab
+  // shaniNav.js aur pgNav.js me hain (~2 KB total).
+  const P = pgNav(lang);
+  const shTitle = shaniNav(lang) || t("nav_shani_title");
   const { user, logout, loading } = useAuth();
   const { isAdmin } = useAdmin();
   const [open, setOpen] = useState(false);
@@ -102,7 +100,45 @@ export default function Navbar() {
         <button className="hamburger" onClick={() => setOpen(!open)} aria-label="Menu">
           {open ? "✕" : "☰"}
         </button>
+
+        {/* ── Top bar me bhasha button (menu band ho tab bhi) ──
+            Pehle sirf menu ke andar tha, aur wo menu ke SABSE neeche
+            tha — phone par log tak nahi pahunchte the. Ab ye hamesha
+            top bar me dikhta hai aur menu khol deta hai. */}
+        <button
+          className="nv-lang-top"
+          onClick={() => setOpen(true)}
+          aria-label={t("language")}
+          title={t("language")}
+        >
+          🌐
+        </button>
         <div className={`nav-links ${open ? "open" : ""}`}>
+          {/* ── BASHAA BADALNA ──
+              User ne kaha "mobile ke home bhashka option dikhta hi nahi".
+              Ye pehle 4 dropdown group aur saare page links ke BAAD,
+              sabse neeche tha — matlab phone par scroll karna padta
+              tha, aur aksar log scroll karte hi nahi.
+
+              Isliye ab ye PEHLE item hai, menu ke bilkul upar —
+              ek click me dikhta hai. */}
+          <div className="nv-langbar" title={t("language")}>
+            <span className="nv-langbar-label">🌐 {t("language")}</span>
+            <select
+              value={lang}
+              onChange={(e) => {
+                setLang(e.target.value);
+                close();
+              }}
+              className="lang-select nv-langbar-select"
+              aria-label={t("language")}
+            >
+              {LANGUAGES.map((l) => (
+                <option key={l.code} value={l.code}>{l.native}</option>
+              ))}
+            </select>
+          </div>
+
           <Link to="/" className={active("/")} onClick={close}>{t("nav_home")}</Link>
           <Drop label={t("nav_kundli")} links={kundliLinks} />
           <Drop label={t("nav_phaladesh")} links={phalLinks} />
@@ -113,18 +149,6 @@ export default function Navbar() {
               {l.label}
             </Link>
           ))}
-          <span className="lang-wrap" title={t("language")}>
-            🌐 {t("language")}
-            <select
-              value={lang}
-              onChange={(e) => setLang(e.target.value)}
-              className="lang-select"
-            >
-              {LANGUAGES.map((l) => (
-                <option key={l.code} value={l.code}>{l.native}</option>
-              ))}
-            </select>
-          </span>
           {user ? (
             <button className="btn secondary" style={{ padding: "8px 14px" }} onClick={onLogout}>
               {t("nav_logout")}

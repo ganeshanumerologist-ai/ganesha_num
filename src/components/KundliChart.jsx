@@ -4,7 +4,7 @@
 // वर्षफल, लग्न, नवमांश, ग्रह स्थिति, चलित तालिका, जन्म विवरण, पंचांग,
 // अष्टकवर्ग, कारकांश, स्वांश, गोचर, शड्बल, प्रस्तर अष्टकवर्ग, भावमध्य,
 // पर दृष्टि, मैत्र चक्र, अवकहड़ा चक्र, अशुभ-शुभ, PDF, रिपोर्ट, एक्सपर्ट.
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../i18n/LanguageContext.jsx";
 import { kundliFull } from "../utils/kundliFull.js";
@@ -36,11 +36,39 @@ function Sec({ id, title, icon, children, note }) {
   );
 }
 
+/* ── Sticky nav ──────────────────────────────────────────────────
+   Section badalne par heading khud screen par chipki rahe, taaki
+   user ko dobara upar scroll na karna pade. */
+function StickyNav({ tab, nav, SECTIONS, X }) {
+  return (
+    <div className="kf-sticky">
+      <div className="kf-nav">
+        <button className={tab === "all" ? "kf-chip on" : "kf-chip"} onClick={() => nav("all")}>
+          {X.kf_all}
+        </button>
+        {SECTIONS.map(([id, icon, label]) => (
+          <button key={id} className={tab === id ? "kf-chip on" : "kf-chip"} onClick={() => nav(id)}>
+            {icon} {label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function KundliChart({ form }) {
   const { lang } = useLanguage();
   const P = pgT(lang);
   const X = kfTX(lang);
-  const [tab, setTab] = useState("all");
+  /* ── Section alag-alag ───────────────────────────────────────────
+   User ne kaha: "जन्म विवरण, पंचांग, लग्न, ग्रह स्थिति ... ek ke
+   niche ek aa rahe hain, wo alag alag page pe aane chahiye."
+
+   Pehle default "all" tha — matlab 22 hisse EK ke niche EK, ek
+   lambi page. Ab default PEHLA section hai. Upar chip bar se koi
+   bhi hissa alag khol sakte hain, aur "सभी" chip se poora chart
+   ek saath dekha ja sakta hai (purana view). */
+const [tab, setTab] = useState("janm");
 
   const r = useMemo(() => {
     try {
@@ -121,7 +149,28 @@ export default function KundliChart({ form }) {
   ];
 
   const show = (id) => tab === "all" || tab === id;
-  const nav = (id) => { setTab(id); };
+
+  /* Section badlo to:
+     1. URL me hash daal do — link share/reload karne par wahi
+        section khule
+     2. Upar scroll kar do — warna lamba page neeche bhi scroll
+        karte rehne se naya hissa screen ke bahar chala jaata */
+  const nav = (id) => {
+    setTab(id);
+    try {
+      const u = new URL(window.location.href);
+      u.hash = id === "all" ? "" : `#${id}`;
+      window.history.replaceState({}, "", u.toString());
+    } catch { /* ignore */ }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // URL hash se shuru karna ho (koi #lalkitab link share kiya ho)
+  useEffect(() => {
+    const h = (window.location.hash || "").replace("#", "");
+    if (h && (h === "all" || SECTIONS.some((s) => s[0] === h))) setTab(h);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const age = (() => {
     const b = new Date(form.birthdate + "T12:00:00");
@@ -138,19 +187,15 @@ export default function KundliChart({ form }) {
         <span className="badge">{X.kf_badge}</span>
         <h2 className="text-gradient" style={{ marginTop: 10 }}>{X.kf_title}</h2>
         <p style={{ fontSize: ".88rem", color: "var(--muted)" }}>{X.kf_sub}</p>
-
-        {/* navigator */}
-        <div className="kf-nav" style={{ marginTop: 16 }}>
-          <button className={tab === "all" ? "kf-chip on" : "kf-chip"} onClick={() => nav("all")}>
-            {X.kf_all}
-          </button>
-          {SECTIONS.map(([id, icon, label]) => (
-            <button key={id} className={tab === id ? "kf-chip on" : "kf-chip"} onClick={() => nav(id)}>
-              {icon} {label}
-            </button>
-          ))}
-        </div>
       </div>
+
+      {/* ── Navigator ──────────────────────────────────────────
+          Ek hi chip bar — wo bhi STICKY, taaki 22 hisse me se
+          koi bhi ek tap me badal jaaye. Pehle ye heading card ke
+          andar tha (scroll karte hi nikal jaata tha) aur saath
+          me ek duplicate bhi tha. Ab ek hi hai, aur hamesha
+          screen par dikhta hai. */}
+      <StickyNav tab={tab} nav={nav} SECTIONS={SECTIONS} X={X} />
 
       {/* ══════════ 1. जन्म विवरण ══════════ */}
       {show("janm") && (
@@ -604,7 +649,8 @@ export default function KundliChart({ form }) {
       )}
 
       {/* ══════════ 22. कार्य: PDF / Reports / Expert ══════════ */}
-      <Sec id="actions" title={X.s_actions} icon="⇩">
+      {show("actions") && (
+        <Sec id="actions" title={X.s_actions} icon="⇩">
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
           <button className="btn" onClick={() => window.print()}>{X.k_pdf}</button>
           <Link className="btn secondary" to="/reports">{X.k_reports}</Link>
@@ -614,6 +660,7 @@ export default function KundliChart({ form }) {
         </div>
         <p style={{ fontSize: ".74rem", color: "var(--muted)", marginTop: 10 }}>{X.note_pdf}</p>
       </Sec>
+      )}
     </div>
   );
 }

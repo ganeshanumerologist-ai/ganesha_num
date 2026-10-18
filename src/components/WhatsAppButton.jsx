@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { WHATSAPP_DEFAULT, waLink } from "../config/contact.js";
-import { db } from "../firebase.js";
-import { doc, getDoc } from "firebase/firestore";
+import { needFirebase } from "../firebaseLazy.js";
 
 export default function WhatsAppButton() {
   const [number, setNumber] = useState(WHATSAPP_DEFAULT);
 
   useEffect(() => {
+    let dead = false;
+    // Dynamic import — pehle ye static tha, har page ke pehle load me
+    // poora Firebase (115 KB gzip) aa jaata tha
     (async () => {
       try {
-        const snap = await getDoc(doc(db, "settings", "payment"));
-        if (snap.exists() && snap.data()?.whatsapp) setNumber(snap.data().whatsapp);
+        const F = await needFirebase();
+        const snap = await F.getDoc(F.doc(F.db, "settings", "payment"));
+        if (!dead && snap.exists() && snap.data()?.whatsapp) setNumber(snap.data().whatsapp);
       } catch { /* default number */ }
     })();
+    return () => { dead = true; };
   }, []);
 
   return (

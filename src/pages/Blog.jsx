@@ -1,29 +1,41 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { POSTS } from "../data/blog.js";
-import { db } from "../firebase.js";
-import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
+import { ALL_POSTS } from "../data/blog.js";
+import { needFirebase } from "../firebaseLazy.js";
 import { useLanguage } from "../i18n/LanguageContext.jsx";
 
 export default function Blog() {
   const { S } = useLanguage();
-  const [posts, setPosts] = useState(POSTS);
+  const [posts, setPosts] = useState(ALL_POSTS);
 
   useEffect(() => {
+    let dead = false;
+    // Dynamic import — pehle static tha, isliye Blog page Firebase ko
+    // eagerly le aata tha. Ab default posts foran dikhte hain, aur
+    // Firebase ke aate hi custom posts upar aa jaate hain.
     (async () => {
       try {
+        const F = await needFirebase();
         let snap;
         try {
-          snap = await getDocs(query(collection(db, "posts"), where("status", "==", "published"), orderBy("createdAt", "desc")));
+          snap = await F.getDocs(
+            F.query(
+              F.collection(F.db, "posts"),
+              F.where("status", "==", "published"),
+              F.orderBy("createdAt", "desc"),
+            ),
+          );
         } catch {
-          snap = await getDocs(collection(db, "posts"));
+          snap = await F.getDocs(F.collection(F.db, "posts"));
         }
+        if (dead) return;
         const custom = snap.docs
           .map((d) => ({ id: d.id, ...d.data() }))
           .filter((p) => (p.status || "published") === "published");
-        if (custom.length) setPosts([...custom, ...POSTS]);
+        if (custom.length) setPosts([...custom, ...ALL_POSTS]);
       } catch { /* Firestore nahi hai to default posts */ }
     })();
+    return () => { dead = true; };
   }, []);
 
   return (

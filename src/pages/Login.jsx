@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import { useAuth } from "../auth/AuthContext.jsx";
+import { useAuth, readRemembered, rememberAccount } from "../auth/AuthContext.jsx";
+import { needFirebase } from "../firebaseLazy.js";
 import { isValidId, looksLikePhone, isValidOtp, toPhone } from "../auth/identity.js";
 import { useLanguage } from "../i18n/LanguageContext.jsx";
 import { pageTX } from "../i18n/pageTx.js";
-import { isFirebaseConfigured } from "../firebase.js";
 import { saveProfile } from "../profile/profile.js";
 
 const ERR_TX = {
@@ -259,10 +259,10 @@ const ERR_TX = {
   },
 };
 
-function friendlyError(err, lang) {
+function friendlyError(err, lang, configured = true) {
   const code = err?.code || "";
   const d = pageTX(ERR_TX, lang);
-  if (code.includes("api-key") || code.includes("invalid-api-key") || code.includes("app-no-app") || !isFirebaseConfigured) return d.key;
+  if (code.includes("api-key") || code.includes("invalid-api-key") || code.includes("app-no-app") || !configured) return d.key;
   if (code.includes("invalid-credential") || code.includes("user-not-found") || code.includes("wrong-password")) return d.cred;
   if (code.includes("email-already-in-use")) return d.idUsed || d.used;
   if (code.includes("network")) return d.net;
@@ -309,6 +309,43 @@ export default function Login() {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
+  /* ── REMEMBER ME ────────────────────────────────────────────────
+     User ne kaha: "ek baar register karne ke baad baar baar register
+     karne ko nahi bolna chahiye."
+
+     Firebase apna token localStorage me rakhta hai, par kabhi kabhi
+     storage block / SW purge / private mode me wo chala jaata hai —
+     aur user ko phir se "Sign up" dikhta hai, jaise account ban hi
+     nahi hua.
+
+     Isliye hum bhi ek chhota local record rakhte hain (id + naam,
+     password NAHI). Usse login page par:
+       • form khud bhar jaata hai — user ko sirf password daalna hai
+       • upar "Welcome back" dikhta hai
+       • mode hamesha SIGN IN rehta hai
+     ───────────────────────────────────────────────────────────── */
+  const [remembered, setRemembered] = useState(() => readRemembered());
+
+  // Firebase ab dynamic import hota hai (page load halka karne ke liye).
+  // Config pata karne ke liye useEffect me chahiye — render me nahi.
+  const [configured, setConfigured] = useState(true);
+  useEffect(() => {
+    let dead = false;
+    needFirebase()
+      .then((F) => { if (!dead) setConfigured(F.isFirebaseConfigured); })
+      .catch(() => { if (!dead) setConfigured(false); });
+    return () => { dead = true; };
+  }, []);
+
+  useEffect(() => {
+    if (!remembered) return;
+    // Form bhar do — password khud daalna hoga, wo hum yaad nahi rakh sakte
+    setId((cur) => cur || remembered.id || "");
+    setName((cur) => cur || remembered.name || "");
+    // Pehle se pata hai ki account bana hua hai — to signup mat kholo
+    setMode((cur) => (cur === "signup" ? cur : "login"));
+  }, [remembered]);
+
   const isPhoneField = looksLikePhone(id);
   const d = pageTX(ERR_TX, lang);
   const CAPTCHA_ID = "recaptcha-otp";
@@ -324,7 +361,7 @@ export default function Login() {
       setOtpSent(true);
       setNote(isTestPhone(id) ? d.otpTestNote : d.otpSent);
     } catch (err) {
-      setError(friendlyError(err, lang) || d.otpNeedsPhone);
+      setError(friendlyError(err, lang, configured) || d.otpNeedsPhone);
     } finally {
       setBusy(false);
     }
@@ -337,7 +374,7 @@ export default function Login() {
     setBusy(true);
     try {
       if (mode === "signup") await signupWithOtp(id, name, otp);
-      else await verifyOtp(otp);
+      else await verifyOtp(otp, id);   // `id` chahiye taki account yaad rahe
       // number profile me bhi rakh do, forms me auto bhare
       // (saveProfile har user ke apne slot me likhta hai — profile.js dekho)
       try {
@@ -345,7 +382,7 @@ export default function Login() {
       } catch { /* ignore */ }
       nav(dest, { replace: true });
     } catch (err) {
-      setError(friendlyError(err, lang));
+      setError(friendlyError(err, lang, configured));
     } finally {
       setBusy(false);
     }
@@ -379,7 +416,25 @@ export default function Login() {
       }
       nav(dest, { replace: true });
     } catch (err) {
-      setError(friendlyError(err, lang));
+      /* ──────────────────────────────────────────────────────────
+         "Ye account pehle se bana hua hai" — matlab user ne galti
+         se Sign Up chuna tha (ya pehle se account tha).
+
+         Ye EXACTLY wo moment hai jahan user ko lagta hai ki app
+         "dobara signup karne ko bol raha hai".
+
+         Isliye ab: error dikhate hi form KHUD Sign In mode par
+         chala jaata hai. User ko kuch karne ki zaroorat nahi —
+         sirf password daalna hai.
+         ────────────────────────────────────────────────────────── */
+      if (mode === "signup" && String(err?.code || "").includes("email-already-in-use")) {
+        setMode("login");
+        // Account confirm ho gaya — ab se login page par "Welcome back"
+        // dikhega aur form khud bharega
+        rememberAccount(id, name);
+        setRemembered({ id: String(id || ""), name: name || "", at: Date.now() });
+      }
+      setError(friendlyError(err, lang, configured));
     } finally {
       setBusy(false);
     }
@@ -391,22 +446,68 @@ export default function Login() {
       await googleLogin();
       nav(dest, { replace: true });
     } catch (err) {
-      setError(friendlyError(err, lang));
+      setError(friendlyError(err, lang, configured));
     }
   };
 
   return (
     <div style={{ maxWidth: 480, margin: "0 auto" }}>
       <h1 className="text-gradient">{t("login_title")}</h1>
-      {!isFirebaseConfigured && (
+      {!configured && (
         <div className="card" style={{ marginTop: 16, borderColor: "var(--gold)" }}>
-          <p style={{ color: "var(--gold)" }}>{friendlyError({ code: "auth/api-key-not-valid" }, lang)}</p>
+          <p style={{ color: "var(--gold)" }}>{friendlyError({ code: "auth/api-key-not-valid" }, lang, configured)}</p>
         </div>
       )}
       <div className="card" style={{ marginTop: 20 }}>
-        <div style={{ display: "flex", gap: 10, marginBottom: 16 }}>
-          <button className={mode === "login" ? "btn" : "btn secondary"} onClick={() => setMode("login")}>{t("sign_in")}</button>
-          <button className={mode === "signup" ? "btn" : "btn secondary"} onClick={() => setMode("signup")}>{t("sign_up")}</button>
+
+        {/* ---- "Welcome back" — user ko ye dikhana hai ki account
+                PEHLE SE bana hua hai, naya nahi banana. ---- */}
+        {remembered && mode === "login" && (
+          <div className="nv-welcome">
+            <span className="nv-welcome-ico" aria-hidden="true">✓</span>
+            <div>
+              <strong>{t("login_welcome_back")}</strong>
+              {remembered.name ? <span className="nv-welcome-name">{remembered.name}</span> : null}
+              <span className="nv-welcome-id">{remembered.id}</span>
+            </div>
+          </div>
+        )}
+
+        {/* ══════════════════════════════════════════════════════════
+            SIGN IN  |  SIGN UP — dono ek hi box me, saath-saath.
+
+            User ne kaha: "sign up ka box do option chahiye — sign up
+            aur sign in. Abhi nahi hai, sirf sign up ke box me niche
+            sign in diya hai. User confuse hoga, ise barabar karo."
+
+            Isliye wapas do upar-saath tab. Lekin ye pehle wale jaisa
+            NAHI hai:
+              • Sign In default + hamesha pehla (user ka account hai)
+              • Welcome back banner upar batata hai ki account bana hua hai
+              • Form apne aap bhara hota hai
+              • "Pehle se registered hai" error par form KHUD sign in
+                par chala jaata hai
+            Isliye ab confuse hone ki zaroorat nahi.
+            ══════════════════════════════════════════════════════════ */}
+        <div className="nv-tabs" role="tablist">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={mode === "login"}
+            className={`nv-tab ${mode === "login" ? "on" : ""}`}
+            onClick={() => { setMode("login"); setError(""); }}
+          >
+            {t("sign_in")}
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={mode === "signup"}
+            className={`nv-tab ${mode === "signup" ? "on" : ""}`}
+            onClick={() => { setMode("signup"); setError(""); }}
+          >
+            {t("sign_up")}
+          </button>
         </div>
 
         {/* ---- Password ya OTP ---- */}
@@ -469,7 +570,7 @@ export default function Login() {
                 required
                 autoFocus
               />
-              {note && <p style={{ fontSize: ".8rem", marginTop: 6, color: "#34d399" }}>{note}</p>}
+              {note && <p style={{ fontSize: ".8rem", marginTop: 6, color: "#0d6b4f" }}>{note}</p>}
             </div>
           )}
 
@@ -519,6 +620,9 @@ export default function Login() {
             </div>
           )}
         </form>
+
+        {/* ---- Neeche koi alag "Sign Up" link nahi — wo upar tab me hai.
+        Ye extra link confuse karta tha: ek hi cheez do jagah. */}
 
         {/* ---- Firebase OTP ke liye ye div chahiye (reCAPTCHA yahan aata hai) ---- */}
         {how === "otp" && !otpSent && (testPhones.length > 0 ? null : (

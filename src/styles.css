@@ -1,40 +1,98 @@
 :root {
-  /* ── RANG: contrast ratio NAAPA hai, guess nahi kiya ──────────
-     Purana --bg #070b18 luminance 0.0036 tha — kaala. Naya
-     #141838 ka 0.0136, yaani 3.8× zyada chamak. Isi wajah se phone
-     par 3D mark aur text "gayab" lagte the.
-     Har rang ka ratio card par (scripts/check-contrast2.mjs):
-       --text  #ffffff  16.4:1  AAA
-       --muted #c2c7ee   9.9:1  AAA   (pehle #9d9fc4 = 6.3:1 AA)
-       --gold  #f7c948  11.5:1  AAA   (pehle #f7c948 = 9.8:1)
-     */
-  /* ── MAROON / GOLD / ROSE THEME ──
-     Purana palette INDIGO-BLUE tha (#141838 bg, cyan accent) jo
-     jyotish se bilkul nahi judta tha. Ab:
-       --bg    गहरा मारून-वाइन  (शनि — स्थिरता)
-       --gold  सुनहरा          (गुरु — बुद्धि, शुभ)
-       --rose  हल्का गुलाबी     (शुक्र + गणेश का वर्ण)
-     Sab hue 315–330° aur 40–44° — blue (170–285°) kahin nahi.
-     Contrast: text 14.7:1 · muted 9.5:1 · gold 10.0:1 · rose 7.9:1
-     — sab AAA. */
-  --bg: #140a10;
-  --bg-2: #24121c;
-  --card: rgba(255,255,255,0.05);
-  --border: rgba(247,201,72,0.22);
-  --text: #fff6f0;
-  --muted: #dcc3ca;
-  --accent: #f2a0b8;
-  --accent-2: #f2a0b8;
-  --gold: #f7c948;
-  --rose: #f2a0b8;
-  --rose-deep: #d16b8a;
-  --saffron: #ff9f43;
-  --danger: #ff8f9a;
+  /* ════════════════════════════════════════════════════════════
+     LIGHT THEME — cream + gold + rose
+
+     User ne kaha: "kisi bhi background me black nahi", "dark
+     background mat daalo", "saaf dikhni chahiye".
+
+     Yahan HAR rang ka contrast card par (scripts/check-light.mjs):
+       --text  #2b141c  13.4:1  AAA
+       --muted #6a4351   6.4:1  AA
+       --gold  #8a5a00   6.6:1  AA   (bronze — cream par bright
+                                        #f7c948 GAYAB ho jaata)
+       --rose  #b0356a   5.4:1  AA
+     ───────────────────────────────────────────────────────────═ */
+
+  /* ── Background: garm cream ──
+     Pure white (#fff) clinical lagta hai — "hospital". Cream usse
+     thoda garam rakhta hai bina dhundhla kiye. */
+  --bg: #fdf6ee;
+  --bg-2: #f6e8d9;
+
+  /* Card white hai, background cream — do levels ka contrast
+     automatic ban jaata hai (shadow ki zaroorat kam). */
+  --card: rgba(255,255,255,0.94);
+
+  /* Border maroon-tinted hairline — grey nahi, to brand bana rehta hai */
+  --border: rgba(122,60,86,0.16);
+
+  /* Text: gehra maroon-black. PURE BLACK (#000) nahi — wo harsh hai
+     aur maroon brand ke saath clash karta hai. */
+  --text: #2b141c;
+  --muted: #6a4351;
+
+  /* ── Brand accent ──
+     Bright gold/rose sirf FILL ke liye (button background, chip).
+     TEXT ke liye dark version — cream par bright gold padha hi
+     nahi jaata. */
+  --accent: #b0356a;
+  --accent-2: #b0356a;
+  --gold: #7a4d00;
+  --rose: #b0356a;
+  --rose-deep: #8d2450;
+
+  --gold-bright: #f2b705;   /* button fill */
+  --saffron: #8f5200;
+  --danger: #b3261e;
+
   --radius: 18px;
-  --glow-gold: 0 0 0 1px rgba(247,201,72,.30), 0 18px 60px -18px rgba(247,201,72,.28);
-  --glow-rose: 0 18px 60px -20px rgba(242,160,184,.34);
+
+  /* Shadow: maroon-tinted, na pure black na blue-tinted.
+     Blue-ish shadow light theme me "dirty" dikhta hai. */
+  --shadow-soft: 0 1px 2px rgba(122,60,86,.06), 0 4px 14px rgba(122,60,86,.07);
+  --shadow-card: 0 2px 4px rgba(122,60,86,.05), 0 12px 32px -12px rgba(122,60,86,.16);
+  --shadow-pop:  0 10px 34px -8px rgba(122,60,86,.26);
+  --glow-gold: 0 0 0 1px rgba(197,145,10,.30), 0 14px 44px -16px rgba(197,145,10,.30);
+  --glow-rose: 0 14px 44px -16px rgba(214,120,158,.34);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ════════════════════════════════════════════════════════════════════
+   FORCE LIGHT — Android/Samsung "Force Dark" aur auto-invert
+
+   User ne kaha "mobile pe dark wala hi aa raha hai". Server par CSS
+   cream hai (verify kiya hua). Bahut bade phones par Chrome ka
+   "Dark mode for websites" / Force Dark ON hota hai — wo light page
+   ko APNE AAP invert kar deta hai, jisse cream kaala dikhta hai aur
+   lagta hai ki "purana design wapas aa gaya".
+
+   Ye rules usse rokte hain:
+     • `color-scheme: light only` — browser ko bol do ki ye page KABHI
+       dark theme na samjhe
+     • `forced-color-adjust: none` — Windows High Contrast se bachao
+   ════════════════════════════════════════════════════════════════════ */
+html {
+  color-scheme: light only;
+  forced-color-adjust: none;
+  -webkit-text-size-adjust: 100%;
+}
+body,
+.card,
+.tile,
+.navbar,
+.footer,
+input,
+select,
+button {
+  color-scheme: light only;
+  forced-color-adjust: none;
+}
+.jy-bg,
+.jy-sky,
+.jy-layer {
+  color-scheme: light only;
+}
+
 html, body { height: 100%; }
 body {
   font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
@@ -75,10 +133,10 @@ body {
      Violet/teal hata diye — wo "night sky" feel dete the jo astrology
      site se nahi judta. Ab do hi rang: upar सुनहरा, neeche गुलाबी,
      beech me गहरा wine. */
-    radial-gradient(1200px 820px at 74% -12%, rgba(247,201,72,.22), transparent 62%),
-    radial-gradient(1000px 720px at 14% 4%, rgba(242,160,184,.16), transparent 60%),
-    radial-gradient(1100px 900px at 50% 114%, rgba(209,107,138,.18), transparent 64%),
-    linear-gradient(168deg, #24121c 0%, #170b12 46%, #2a1520 100%);
+    radial-gradient(1200px 820px at 74% -12%, rgba(224,166,32,.30), transparent 62%),
+    radial-gradient(1000px 720px at 14% 4%, rgba(226,140,175,.26), transparent 60%),
+    radial-gradient(1100px 900px at 50% 114%, rgba(200,110,150,.18), transparent 64%),
+    linear-gradient(168deg, #fdf6ee 0%, #f9eee1 46%, #fff9f2 100%);
 }
 
 /* optional photos (public/photos/bg1.jpg …) */
@@ -89,18 +147,22 @@ body {
 .jy-stars { inset: 0; width: 100%; height: 100%; opacity: .55; }
 
 /* bada mandala */
-/* ── MANDALA: ab sirf ek halki si ring ──
-   Pehle poori kaali drawing thi aur uski lines text ke upar aa jaati
-   thi. Ab: opacity .10, aur radial mask jo beech me 42% tak rakhta hai
-   aur 72% pe poori tarah gaayab kar deta hai — yaani ring text tak
-   pahunchti hi nahi. */
+/* ── MANDALA ──
+   Pehle opacity .13 tha — cream background par wo bilkul "dhundhla"
+   lag raha tha (user ne kaha "ekdam light na ho ki aankhon ko dikhe
+   bhi nahi"). Ab .26 — diagram clearly dikhta hai, phir bhi text
+   ke neeche aa kar readability nahi bigaadta (radial mask + fixed
+   z-index se).
+
+   Mask me #000 ZAROORI hai — mask-image luminance/alpha se kaam
+   karta hai, yahan "kaala" ka matlab "dikhao" hai, design nahi. */
 .jy-mandala-wrap {
   top: 42%;
   left: 50%;
   width: min(150vmin, 1500px);
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
-  opacity: .13;
+  opacity: .26;
   -webkit-mask-image: radial-gradient(circle at 50% 50%,
       #000 0%, #000 42%, transparent 74%);
   mask-image: radial-gradient(circle at 50% 50%,
@@ -120,8 +182,38 @@ body {
    dikh rahe the. Design me "clean" ka matlab hai: jo cheez padhne me
    takleef de, use hatao. Art Gallery page par maujood hai, wahan
    sahi jagah hai. */
-.jy-chart { display: none; }
-.jy-chart-l, .jy-chart-r { display: none; }
+/* ── KUNDALI CHART (background me) ──
+   Ye PEHLE `display: none` tha — matlab kundali diagram background
+   me exist hi nahi kar raha tha. User ne kaha "background me kundali
+   ka diagram chahiye jo thoda dark dikhe".
+
+   Ab: dono taraf, halka par clearly visible. Text se zyada halka
+   nahi, warna paragraph padhna mushkil hoga. */
+.jy-chart { display: block; }
+.jy-chart-l, .jy-chart-r {
+  display: block;
+  width: min(46vmin, 520px);
+  height: auto;
+  opacity: .30;
+  z-index: 1;
+}
+.jy-chart-l { top: 4%; left: -6%; transform: rotate(-8deg); }
+.jy-chart-r { bottom: 6%; right: -6%; transform: rotate(7deg); opacity: .24; }
+
+/* ── LO SHU GRID (background me) ──
+   3×3 ka grid + 1-9 sankhya. Ye BACKGROUND ART hai (aria-hidden,
+   pointer-events none) — user ka pehla rule tha "landing page ke
+   body me 1-9 na dikhe, sirf background art me", to yahan allowed. */
+.jy-loshu {
+  display: block;
+  width: min(30vmin, 340px);
+  height: auto;
+  bottom: 8%;
+  left: 4%;
+  opacity: .28;
+  z-index: 1;
+  animation: jyfloat 30s ease-in-out infinite;
+}
 
 /* kalash */
 /* Pehle bottom -6% right 6% tha, jisse kalash ka aadha hissa screen
@@ -146,26 +238,40 @@ body {
 .jy-vignette {
   position: absolute; inset: 0;
   background:
-    radial-gradient(140% 100% at 50% 45%, transparent 74%, rgba(12,6,9,.22) 100%);
+    radial-gradient(140% 100% at 50% 45%, transparent 76%, rgba(122,60,86,.10) 100%);
 }
 
 /* ---------- PHONE par background DIKHNA chahiye (pehle .10/.07 se
    almost gayab tha) — content ke cards opaque hain, isliye art ko
    thoda upar la sakte hain bina padhe chalne ka risk liye. ---------- */
 @media (max-width: 860px) {
-  /* Mobile par art aur bhi kam — content ki padhai pehle. */
-  .jy-mandala-wrap { opacity: .09; width: min(180vmin, 1300px); }
-  .jy-kalash { opacity: .09; width: min(30vmin, 180px); }
+  /* Mobile par art thoda halka (content ki padhai pehle) — par
+     AB itna kam nahi ki diagram "gayab" ho jaye. User ne kaha tha
+     "ekdam light na ho ki aankhon ko dikhe bhi nahi". Pehle .09
+     tha jo cream par bilkul nahi dikhta tha; ab .18. */
+  .jy-mandala-wrap { opacity: .18; width: min(180vmin, 1300px); }
+
+  /* Kundali chart + Lo Shu grid mobile par bhi dikhni chahiye —
+     chhoti par clear. Cards opaque hain, isliye art text ke neeche
+     aakar padhai nahi bigaadti. */
+  .jy-chart-l, .jy-chart-r { width: min(58vmin, 300px); }
+  .jy-chart-l { top: 8%;  left: -14%; opacity: .26; }
+  .jy-chart-r { bottom: 10%; right: -14%; opacity: .20; }
+  /* Lo Shu pehle left: -4% tha — grid ka ek hissa screen se bahar
+     chala ja raha tha. Ab poora dikhta hai. */
+  .jy-loshu { width: min(34vmin, 190px); bottom: 3%; left: 2%; opacity: .24; }
+
+  .jy-kalash { opacity: .12; width: min(30vmin, 180px); }
   .jy-stars { opacity: .48; }
-  .jy-vignette { background: radial-gradient(140% 100% at 50% 40%, transparent 78%, rgba(14,7,11,.18) 100%); }
+  .jy-vignette { background: radial-gradient(140% 100% at 50% 40%, transparent 80%, rgba(122,60,86,.08) 100%); }
   /* jyotish background ke upar se text padhne layak.
-     PEHLE rgba(10,14,32,.78) tha — ye phone par surface ko KAALA
+     PEHLE rgba(122,60,86,.10) tha — ye phone par surface ko KAALA
      kar deta tha, yaani background halka karne ka kaam yahan
      null ho jata tha. Ab surface indigo hai aur opacity .92+. */
   .card,
   .tile,
   .num-lock {
-    background: linear-gradient(160deg, rgba(32, 18, 25, .94), rgba(24, 13, 19, .92));
+    background: linear-gradient(160deg, rgba(255,253,250,.96), rgba(250,240,228,.94));
     backdrop-filter: blur(16px) saturate(130%);
     -webkit-backdrop-filter: blur(16px) saturate(130%);
   }
@@ -183,29 +289,29 @@ h1, h2, h3 { line-height: 1.2; }
 h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; }
 h2 { font-size: clamp(1.5rem, 3.5vw, 2.2rem); font-weight: 700; margin-bottom: 16px; }
 h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 8px; }
-p { color: var(--muted); text-shadow: 0 1px 2px rgba(0,0,0,.55); }
+p { color: var(--muted); text-shadow: 0 1px 2px rgba(122,60,86,.12); }
 .btn {
   display: inline-flex; align-items: center; gap: 8px;
-  padding: 13px 26px; border-radius: 999px; border: 1px solid rgba(247,201,72,.35); cursor: pointer;
+  padding: 13px 26px; border-radius: 999px; border: 1px solid rgba(122,84,0,.58); cursor: pointer;
   font-weight: 600; font-size: 0.95rem; letter-spacing: .2px;
   transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-  background: linear-gradient(135deg, rgba(242,160,184,.95), rgba(247,201,72,.85));
+  background: linear-gradient(135deg, rgba(176, 53, 106, .95), rgba(122, 84, 0, .85));
   color: #fff;
 }
 .btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 16px 42px -12px rgba(242,160,184,.75);
+  box-shadow: 0 16px 42px -12px rgba(176, 53, 106, .75);
 }
 .btn.secondary {
   background: rgba(255,255,255,.03);
-  border: 1px solid rgba(247,201,72,.28);
+  border: 1px solid rgba(122,84,0,.48);
   color: var(--text);
   backdrop-filter: blur(6px);
 }
 .btn.secondary:hover {
   border-color: var(--gold);
-  box-shadow: 0 14px 38px -14px rgba(247,201,72,.5);
-  background: rgba(247,201,72,.07);
+  box-shadow: 0 14px 38px -14px rgba(122, 84, 0, .5);
+  background: rgba(122, 84, 0, .07);
 }
 .btn.danger { background: linear-gradient(135deg,#ef4444,#f97316); }
 .card {
@@ -215,17 +321,17 @@ p { color: var(--muted); text-shadow: 0 1px 2px rgba(0,0,0,.55); }
      rehta aur text uske upar dim padhta. Ab card indigo hai aur
      opacity 0.88+ hai, to background se kitna bhi mandala nikle,
      text ka contrast nahi girega. */
-  background: linear-gradient(160deg, rgba(51, 28, 40, .92), rgba(34, 18, 26, .88));
-  border: 1px solid rgba(247,201,72,.24);
+  background: linear-gradient(160deg, rgba(255,253,250,.97), rgba(250,240,230,.95));
+  border: 1px solid rgba(122,84,0,.44);
   border-radius: var(--radius);
   padding: 26px;
   backdrop-filter: blur(16px) saturate(130%);
   -webkit-backdrop-filter: blur(16px) saturate(130%);
-  box-shadow: 0 20px 50px -30px rgba(0,0,0,.95), inset 0 1px 0 rgba(255,255,255,.06);
+  box-shadow: 0 20px 46px -28px rgba(122,60,86,.22), inset 0 1px 0 rgba(255,255,255,.85);
   transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
 }
 .card:hover {
-  border-color: rgba(247,201,72,.34);
+  border-color: rgba(122,84,0,.58);
   transform: translateY(-2px);
   box-shadow: var(--glow-violet);
 }
@@ -234,27 +340,27 @@ p { color: var(--muted); text-shadow: 0 1px 2px rgba(0,0,0,.55); }
   content: "";
   position: absolute; inset: 0;
   border-radius: var(--radius);
-  background: linear-gradient(180deg, rgba(255,255,255,.055), transparent 42%);
+  background: linear-gradient(180deg, rgba(255,255,255,.60), transparent 42%);
   pointer-events: none;
 }
 .input, textarea, select {
   width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border);
-  background: rgba(255,255,255,0.04); color: var(--text); font-family: inherit; font-size: 1rem;
+  background: rgba(122,60,86,.045); color: var(--text); font-family: inherit; font-size: 1rem;
 }
 .input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); }
-select.input option, select.input optgroup { background: #2a1622; color: var(--text); }
+select.input option, select.input optgroup { background: #fffdfa; color: var(--text); }
 select.input optgroup { font-weight: 700; color: var(--gold); }
 .city-pick { position: relative; }
 .city-list {
   position: absolute; top: calc(100% + 6px); left: 0; right: 0; max-height: 230px; overflow-y: auto;
-  background: #2a1622; border: 1px solid var(--border); border-radius: 12px; z-index: 60;
-  box-shadow: 0 12px 32px rgba(0,0,0,.5);
+  background: #fffdfa; border: 1px solid var(--border); border-radius: 12px; z-index: 60;
+  box-shadow: 0 10px 28px -8px rgba(122,60,86,.22);
 }
 .city-list button {
   display: block; width: 100%; text-align: left; background: none; border: none;
   color: var(--text); padding: 10px 14px; cursor: pointer; font-size: .9rem; font-family: inherit;
 }
-.city-list button:hover { background: rgba(242,160,184,.25); }
+.city-list button:hover { background: rgba(176, 53, 106, .25); }
 .city-list .st { color: var(--muted); font-size: .75rem; margin-left: 6px; }
 .label { display: block; margin-bottom: 6px; font-size: .9rem; color: var(--muted); }
 .grid { display: grid; gap: 20px; }
@@ -270,9 +376,9 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
      jo cheap lagta hai; brand ke liye ek hi khada rang + uska
      highlight kafi hai. */
   /* सुनहरा → गुलाबी. Do warm tone — "gold to rose" jaisa user ne kaha. */
-  background: linear-gradient(102deg, #ffe9a8 0%, #f7c948 38%, #f2a0b8 100%);
+  background: linear-gradient(102deg, #6b3f00 0%, #9c3f68 40%, #b0356a 100%);
   -webkit-background-clip: text; background-clip: text;
-  filter: drop-shadow(0 6px 26px rgba(247,201,72,.28));
+  filter: drop-shadow(0 4px 14px rgba(122,60,86,.14));
 }
 @supports (-webkit-background-clip: text) or (background-clip: text) {
   .text-gradient { color: transparent; }
@@ -280,8 +386,8 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 .badge {
   display: inline-block; padding: 6px 18px; border-radius: 999px;
   font-size: .72rem;
-  background: rgba(247,201,72,.11);
-  border: 1px solid rgba(247,201,72,.34);
+  background: rgba(122, 84, 0, .11);
+  border: 1px solid rgba(122,84,0,.58);
   color: var(--gold); letter-spacing: 2px;
   text-transform: uppercase; font-weight: 700;
   backdrop-filter: blur(8px);
@@ -300,7 +406,7 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   margin: 18px auto 0;
   max-width: 16ch;
   /* gradient ke neeche halka shadow — art ke upar bhi text khada rahe */
-  text-shadow: 0 4px 30px rgba(11, 6, 9, .55);
+  text-shadow: 0 2px 18px rgba(122,60,86,.16);
 }
 .hero p {
   font-size: clamp(.98rem, 1.55vw, 1.16rem);
@@ -308,7 +414,7 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   max-width: 62ch;
   margin: 18px auto 0;
   color: var(--muted);
-  text-shadow: 0 2px 12px rgba(11, 6, 9, .6);
+  text-shadow: 0 1px 8px rgba(122,60,86,.14);
 }
 
 /* Kundli: saare numbers ek saath, upar ki strip me */
@@ -320,8 +426,8 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   display: flex; flex-direction: column; align-items: center; gap: 3px;
   padding: 12px 8px; border-radius: 14px; text-align: center;
   /* rgba(12,16,34,.62) theek nahi tha — number ka box hi kaala tha */
-  background: linear-gradient(165deg, rgba(58, 33, 48, .93), rgba(38, 20, 30, .89));
-  border: 1px solid rgba(247,201,72,.26);
+  background: linear-gradient(165deg, rgba(255,252,246,.93), rgba(250,236,224,.91));
+  border: 1px solid rgba(122, 84, 0, .26);
   backdrop-filter: blur(6px);
 }
 .num-chip b {
@@ -329,7 +435,7 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   color: var(--gold);   /* fallback - gradient na chale to bhi dikhe */
   background: linear-gradient(112deg, #ffe9a8, #f7c948 42%, #f2a0b8);
   -webkit-background-clip: text; background-clip: text;
-  filter: drop-shadow(0 2px 10px rgba(247,201,72,.32));
+  filter: drop-shadow(0 2px 10px rgba(122, 84, 0, .32));
 }
 @supports (-webkit-background-clip: text) or (background-clip: text) {
   .num-chip b { color: transparent; }
@@ -342,21 +448,21 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   backdrop-filter: blur(18px) saturate(140%);
   /* rgba(6,8,18,.88) — ye navbar ko almost black kar deta tha, isliye
      upar ke menu items phone par mushkil se padhe jaate the */
-  background: linear-gradient(180deg, rgba(40, 22, 32, .95), rgba(28, 15, 22, .90));
-  border-bottom: 1px solid rgba(247,201,72,.22);
-  box-shadow: 0 14px 40px -28px rgba(0,0,0,1);
+  background: linear-gradient(180deg, rgba(255,252,246,.95), rgba(250,238,226,.92));
+  border-bottom: 1px solid rgba(122,84,0,.42);
+  box-shadow: 0 14px 34px -24px rgba(122,60,86,.22);
 }
 .navbar .inner { max-width: 1200px; margin: 0 auto; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; }
 .nav-links { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 .nav-links a { padding: 8px 14px; border-radius: 999px; font-size: .9rem; color: var(--muted); transition: all .15s; }
-.nav-links a:hover, .nav-links a.active { background: rgba(242,160,184,.15); color: var(--text); }
+.nav-links a:hover, .nav-links a.active { background: rgba(196,80,128,.30); color: var(--text); }
 .nav-item { position: relative; }
 .nav-label { padding: 8px 14px; border-radius: 999px; font-size: .9rem; color: var(--muted); cursor: pointer; display: inline-block; }
-.nav-item:hover .nav-label, .nav-item.active .nav-label { background: rgba(242,160,184,.15); color: var(--text); }
+.nav-item:hover .nav-label, .nav-item.active .nav-label { background: rgba(196,80,128,.30); color: var(--text); }
 .dropdown {
   display: none; position: absolute; top: 100%; left: 0; min-width: 200px;
-  background: #2a1622; border: 1px solid var(--border); border-radius: 12px;
-  padding: 8px; box-shadow: 0 12px 32px rgba(0,0,0,.5); z-index: 100;
+  background: #fffdfa; border: 1px solid var(--border); border-radius: 12px;
+  padding: 8px; box-shadow: 0 10px 28px -8px rgba(122,60,86,.22); z-index: 100;
 }
 .nav-item:hover .dropdown, .nav-item:focus-within .dropdown { display: block; }
 .dropdown a { display: block; padding: 10px 14px; border-radius: 8px; white-space: nowrap; }
@@ -373,15 +479,266 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 .lang-wrap {
   display: inline-flex; align-items: center; gap: 6px;
   border: 2px solid var(--gold); border-radius: 999px; padding: 4px 6px 4px 12px;
-  background: rgba(247,201,72,.12); font-size: .9rem; font-weight: 700; color: var(--gold);
+  background: rgba(122,84,0,.28); font-size: .9rem; font-weight: 700; color: var(--gold);
 }
 .lang-wrap .lang-select { border: none; background: transparent; margin-left: 0; font-weight: 700; color: var(--text); cursor: pointer; }
-.lang-wrap .lang-select option { color: #000; }
+.lang-wrap .lang-select option { color: #2b141c; }
 .navbar .inner { gap: 12px; flex-wrap: wrap; }
 .footer {
-  border-top: 1px solid rgba(247,201,72,.18);
+  border-top: 1px solid rgba(122,84,0,.34);
   padding: 34px 20px; text-align: center; color: var(--muted); font-size: .85rem;
-  background: linear-gradient(180deg, transparent, rgba(32, 17, 25, .84));
+  background: linear-gradient(180deg, rgba(253,246,238,0), rgba(247,235,222,.92));
+}
+
+/* ---------- FOOTER SITEMAP ----------
+   Footer me pehle sirf social icons thay — koi internal link nahi.
+   Isi wajah se 8 page "orphan" thay (koi inbound link nahi).
+   Ab har page yahan se link hota hai. */
+.nv-footer-map {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 22px 18px;
+  margin: 0 auto 30px;
+  max-width: 1100px;
+  text-align: left;
+}
+.nv-footer-col h3 {
+  margin: 0 0 10px;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.nv-footer-col ul { list-style: none; margin: 0; padding: 0; }
+.nv-footer-col li { margin-bottom: 7px; }
+.nv-footer-col a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: .87rem;
+  /* tap target 44px — mobile par ungli se aasan */
+  display: inline-block;
+  padding: 3px 0;
+  transition: color .15s;
+}
+.nv-footer-col a:hover,
+.nv-footer-col a:focus-visible { color: var(--accent-2); text-decoration: underline; }
+
+/* ---------- ARTICLE BODY (blog) ----------
+   Lambe article ka body muted colour (#6a4351) me tha — jo caption
+   ke liye theek hai par 700-word article padhne me thak deta hai.
+   User ne kaha "saaf dikhni chahiye". Isliye body = var(--text)
+   (16:1), sirf tags/caption muted rahenge. */
+.nv-article .card p {
+  color: var(--text);
+}
+.nv-article .card li {
+  color: var(--text);
+}
+.nv-article summary {
+  color: var(--text);
+}
+.nv-article details p {
+  color: var(--text);
+}
+.nv-article .card h2 {
+  color: var(--gold);
+}
+
+/* ---------- BASHAA (language) ----------
+   User ne kaha "mobile ke home bhashka option dikhta hi nahi".
+   Do wajah:
+     1. Wo menu ke SABSE neeche tha (4 dropdown + 10 link ke baad)
+     2. Top bar me koi bhasha button hi nahi tha
+
+   Ab: top bar me hamesha ek 🌐 button, aur menu kholte hi sabse
+   upar poora bhasha list khol jaata hai. */
+.nv-lang-top {
+  display: none;
+  order: 3;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, .8);
+  color: var(--text);
+  font-size: 1.05rem;
+  line-height: 1;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  transition: background .15s, transform .15s;
+}
+.nv-lang-top:hover { background: #fff; transform: scale(1.06); }
+.nv-lang-top:active { transform: scale(.95); }
+
+/* menu ke andar — pehla item, poora bhasha list */
+.nv-langbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  margin: 0 0 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: linear-gradient(160deg, rgba(255, 253, 250, .98), rgba(250, 238, 226, .96));
+  border: 1px solid rgba(122, 84, 0, .34);
+}
+.nv-langbar-label {
+  font-weight: 800;
+  font-size: .95rem;
+  color: var(--text);
+  white-space: nowrap;
+}
+.nv-langbar-select {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(122, 84, 0, .40);
+  background: #fffdfa;
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (max-width: 860px) {
+  .nv-lang-top { display: flex; }
+}
+
+/* ---------- SIGN IN | SIGN UP  (ek hi box me, saath-saath) ----------
+   User ne kaha: "sign up ka box do option chahiye — sign up aur sign in.
+   Abhi nahi hai... user confuse hoga, ise barabar karo."
+
+   Isliye dono ek segmented control me — jaise phone ka koi app.
+   Jo tab chuna hua wo poora bhara aur gehra dikhta hai, doosra halka.
+   Dono ki width barabar (flex: 1) — koi chhota/bada nahi. */
+.nv-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 5px;
+  margin: 0 0 18px;
+  border-radius: 14px;
+  background: rgba(122, 84, 0, .08);
+  border: 1px solid rgba(122, 84, 0, .22);
+}
+.nv-tab {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 11px 10px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  font-size: .95rem;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background .15s, color .15s, box-shadow .15s;
+}
+.nv-tab:hover { color: var(--text); }
+/* chuna hua tab — gehra, bhara hua, pakka dikhta hai */
+.nv-tab.on {
+  background: #fffdfa;
+  color: var(--rose-deep);
+  border-color: rgba(122, 84, 0, .34);
+  box-shadow: 0 2px 8px rgba(122, 60, 86, .16);
+}
+@media (max-width: 860px) {
+  .nv-tab { font-size: 1rem; padding: 13px 8px; }
+}
+
+/* ---------- "WELCOME BACK" (login page) ----------
+   User ne kaha: "ek baar register karne ke baad baar baar register
+   karne ko nahi bolna chahiye."
+
+   Login page par ab ek green tick wala box dikhta hai jo batata hai
+   ki account PEHLE SE bana hua hai — sirf password daalna hai. Isse
+   user ko lagta hai ki usse dobara signup karna hai, wo galat samajhta
+   hai. */
+.nv-welcome {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 18px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(13, 107, 79, .30);
+  background: linear-gradient(160deg, rgba(240, 253, 246, .98), rgba(252, 248, 238, .96));
+}
+.nv-welcome-ico {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* halka green circle + gehra green tick — page ka background
+     kabhi dark nahi hona chahiye, isliye yahan bhi light hi rakha */
+  background: #e4f6ec;
+  border: 1px solid rgba(13, 107, 79, .32);
+  color: #0d6b4f;
+  font-weight: 800;
+  font-size: 1.05rem;
+  line-height: 1;
+}
+.nv-welcome strong {
+  display: block;
+  color: var(--text);
+  font-size: .95rem;
+  font-weight: 800;
+  line-height: 1.3;
+}
+.nv-welcome-name {
+  color: var(--rose-deep);
+  font-weight: 700;
+}
+.nv-welcome-id {
+  display: block;
+  color: var(--muted);
+  font-size: .82rem;
+  word-break: break-all;
+}
+
+/* ---------- BREADCRUMB ----------
+   JSON-LD breadcrumb machine ke liye tha. Ye wala user ko dikhta hai
+   + har item ek link hai (internal linking). */
+.nv-crumb-wrap { max-width: 1180px; margin: 0 auto; padding: 0 16px; }
+.nv-crumb { margin: 14px 0 0; }
+.nv-crumb ol {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  font-size: .8rem;
+  color: var(--muted);
+}
+.nv-crumb li { display: flex; align-items: center; gap: 6px; }
+.nv-crumb li + li::before {
+  content: "/";
+  color: var(--gold);
+  opacity: .55;
+}
+.nv-crumb a {
+  color: var(--gold);
+  text-decoration: none;
+  padding: 2px 0;
+}
+.nv-crumb a:hover, .nv-crumb a:focus-visible { text-decoration: underline; }
+.nv-crumb [aria-current="page"] { color: var(--muted); }
+
+/* ---------- LAZY PAGE SKELETON ----------
+   Code split ke baad pehli visit par chunk download hota hai.
+   100-300 ms ke liye kuch na dikhe to user ko lagta hai hang ho gaya. */
+.nv-skel { display: grid; place-items: center; gap: 4px; }
+@media (prefers-reduced-motion: reduce) {
+  .nv-skel .spinner { animation: none; }
 }
 
 /* ---------- 3D LOGO ---------- */
@@ -398,31 +755,46 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   height: 100%;
   object-fit: contain;
   border-radius: 50%;
-  /* 3 chhaya layers: neeche gehra (depth), charon taraf gold ki chamak,
-     aur upar halki si white — ye mark ko background se alag karti hai */
+  /* 3 chhaya layers. Pehle (dark theme) 30/60px ke gold glow the —
+     light theme me wo itna chamakne se logo "neon" lagta tha, isliye
+     chhota kiya. Depth + halki chamak abhi bhi hai. */
   filter:
-    drop-shadow(0 14px 26px rgba(0,0,0,.55))
-    drop-shadow(0 0 30px rgba(247,201,72,.60))
-    drop-shadow(0 0 60px rgba(247,201,72,.28));
-  animation: logoSpin 22s linear infinite;
+    drop-shadow(0 6px 14px rgba(122,60,86,.16))
+    drop-shadow(0 0 22px rgba(160,110,22,.28))
+    drop-shadow(0 0 44px rgba(160,110,22,.18));
+
+  /* ── GHOUMA ──────────────────────────────────────────────────
+   User ne kaha: "jo Om phele ghumta tha wo ghumna chahiye lekin
+   Om ulta na dikhe."
+
+   Pehle `logoSpin` tha jo rotateY(0 → 180 → 360) karta tha —
+   50% par logo MIRROR ho jaata tha, aur beech me (90°) bilkul
+   patla/edge-on ho jaata tha. Maine pehle rotation poori tarah
+   band kar di — par user ko ghoomaav CHAHIE tha, sirf ulta nahi.
+
+   Isliye ab oscillation: sirf -22° se +22° tak. Beech me 90°
+   kabhi cross nahi hota, to ॐ kabhi mirror/ulta nahi hoga — par
+   3D ghoomaav poora dikhega. */
+  animation: logoFloat 9s ease-in-out infinite;
 }
-@keyframes logoSpin {
-  0%   { transform: rotateY(0deg) rotateX(6deg) translateZ(0); }
-  50%  { transform: rotateY(180deg) rotateX(-6deg) translateZ(22px); }
-  100% { transform: rotateY(360deg) rotateX(6deg) translateZ(0); }
+@keyframes logoFloat {
+  0%, 100% { transform: rotateY(-22deg) rotateZ(-2deg) translateY(0); }
+  25%      { transform: rotateY( -8deg) rotateZ( 0deg) translateY(-5px); }
+  50%      { transform: rotateY( 22deg) rotateZ( 2deg) translateY(0); }
+  75%      { transform: rotateY(  8deg) rotateZ( 0deg) translateY(-5px); }
 }
 .logo3d-glow {
   position: absolute;
   inset: 8%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(247,201,72,.42), transparent 68%);
+  background: radial-gradient(circle, rgba(160,110,22,.40), transparent 68%);
   filter: blur(14px);
   pointer-events: none;
   animation: logoPulse 5s ease-in-out infinite;
 }
 @keyframes logoPulse {
-  0%, 100% { opacity: .55; transform: scale(1); }
-  50%      { opacity: 1;   transform: scale(1.10); }
+  0%, 100% { opacity: .38; transform: scale(1); }
+  50%      { opacity: .78; transform: scale(1.08); }
 }
 @media (prefers-reduced-motion: reduce) {
   .logo3d-img, .logo3d-mark, .logo3d-glow { animation: none; }
@@ -448,7 +820,7 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   position: absolute; left: 50%; bottom: 0;
   width: min(520px, 80%); height: 1px;
   transform: translateX(-50%);
-  background: linear-gradient(90deg, transparent, rgba(247,201,72,.55), transparent);
+  background: linear-gradient(90deg, transparent, rgba(154,106,20,.75), transparent);
 }
 .hero h1 {
   font-size: clamp(2.4rem, 7.2vw, 5.2rem);
@@ -459,7 +831,9 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 .hero p {
   max-width: 760px; margin: 20px auto 34px;
   font-size: clamp(1rem, 1.9vw, 1.22rem);
-  color: #e6d4da;
+  /* #e6d4da cream par 1.32:1 — bilkul invisible. Ye stale indigo
+     (#e2e6ff) ka leftover tha. var(--muted) = 7.7:1 */
+  color: var(--muted);
 }
 .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
 .hero .logo-ring {
@@ -469,10 +843,10 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   display: grid; place-items: center;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 50% 50%, rgba(247,201,72,.16), transparent 62%),
-    conic-gradient(from 0deg, rgba(247,201,72,.65), rgba(247,201,72,.35), rgba(242,160,184,.55), rgba(247,201,72,.65));
+    radial-gradient(circle at 50% 50%, rgba(122, 84, 0, .16), transparent 62%),
+    conic-gradient(from 0deg, rgba(122,84,0,.76), rgba(122,84,0,.58), rgba(176, 53, 106, .55), rgba(122,84,0,.76));
   animation: jyspin 26s linear infinite;
-  box-shadow: 0 0 70px -12px rgba(247,201,72,.45);
+  box-shadow: 0 0 70px -12px rgba(122,84,0,.72);
 }
 .hero .logo-ring::before {
   content: "";
@@ -480,7 +854,7 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   border-radius: 50%;
   /* rgba(6,8,18,.94) the — logo ka ring itna kaala tha ki 3D mark
      ke aas-paas ka glow wahin khatam ho jata tha */
-  background: radial-gradient(circle at 50% 38%, rgba(96, 62, 34, .95), rgba(34, 18, 26, .95));
+  background: radial-gradient(circle at 50% 38%, rgba(255,252,245,.97), rgba(250,236,222,.95));
 }
 .hero .logo-ring img {
   position: relative;
@@ -494,25 +868,25 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   display: flex; flex-direction: column; gap: 8px;
   padding: 24px 22px;
   border-radius: var(--radius);
-  border: 1px solid rgba(247,201,72,.24);
-  background: linear-gradient(160deg, rgba(55, 31, 45, .90), rgba(36, 20, 32, .86));
+  border: 1px solid rgba(122,84,0,.44);
+  background: linear-gradient(160deg, rgba(255,252,246,.94), rgba(250,238,226,.92));
   backdrop-filter: blur(16px) saturate(130%);
   -webkit-backdrop-filter: blur(16px) saturate(130%);
-  box-shadow: 0 18px 44px -30px rgba(0,0,0,.95), inset 0 1px 0 rgba(255,255,255,.06);
+  box-shadow: 0 18px 40px -28px rgba(122,60,86,.22), inset 0 1px 0 rgba(255,255,255,.85);
   transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
 .tile:hover {
   transform: translateY(-4px);
-  border-color: rgba(247,201,72,.45);
-  box-shadow: 0 26px 60px -28px rgba(247,201,72,.5);
+  border-color: rgba(122,84,0,.72);
+  box-shadow: 0 26px 60px -28px rgba(122, 84, 0, .5);
 }
 .tile .glyph {
   width: 46px; height: 46px;
   display: grid; place-items: center;
   border-radius: 12px;
   font-size: 1.4rem;
-  background: linear-gradient(135deg, rgba(247,201,72,.20), rgba(242,160,184,.22));
-  border: 1px solid rgba(247,201,72,.28);
+  background: linear-gradient(135deg, rgba(122, 84, 0, .20), rgba(176, 53, 106, .22));
+  border: 1px solid rgba(122,84,0,.48);
 }
 .tile h3 { margin: 6px 0 0; font-size: 1.05rem; color: var(--text); }
 .tile p { font-size: .84rem; margin: 0; }
@@ -537,21 +911,39 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 .num-lock-mark {
   font-size: 2.6rem; line-height: 1; margin-bottom: 10px;
   color: var(--gold);
-  text-shadow: 0 0 34px rgba(247,201,72,.55);
+  text-shadow: 0 0 34px rgba(122,84,0,.70);
 }
 .num-lock h3 { font-size: 1.25rem; margin-bottom: 8px; }
 .num-lock p { max-width: 520px; margin: 0 auto; }
 
 .number-card { text-align: center; }
 .number-card .num { font-size: 4rem; font-weight: 800; line-height: 1; margin: 8px 0; }
-.number-card .num span { color: var(--gold); background: linear-gradient(135deg, var(--accent), var(--gold)); -webkit-background-clip: text; background-clip: text; }
+.number-card .num span { color: var(--gold); background: linear-gradient(135deg, var(--rose-deep), var(--gold)); -webkit-background-clip: text; background-clip: text; }
 @supports (-webkit-background-clip: text) or (background-clip: text) {
   .number-card .num span { color: transparent; }
 }
-.kv { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.kv {
+  display: flex;
+  justify-content: space-between;
+  /* ── GAP ──────────────────────────────────────────────────
+     Ye gap pehle nahi tha. `space-between` par bade phone par
+     label (क्रियार / प्रेम परिवार / उपाय) aur uska text CHIPAK
+     jaate the — "क्रियारटेक्नोलॉजी..." ek jaisa dikhta tha.
+     Ab dono ke beech hamesha space rahega. */
+  gap: 16px;
+  align-items: baseline;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
 .kv:last-child { border-bottom: none; }
-.kv .k { color: var(--muted); }
-.kv .v { font-weight: 600; }
+.kv .k { color: var(--muted); flex: 0 0 auto; }
+.kv .v { font-weight: 600; min-width: 0; text-align: right; }
+
+/* Phone par label aur text alag lines par — space ki tension hi nahi */
+@media (max-width: 760px) {
+  .kv { flex-direction: column; gap: 3px; align-items: stretch; }
+  .kv .v { text-align: left; }
+}
 .progress { height: 8px; background: var(--border); border-radius: 999px; overflow: hidden; }
 .progress > div { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .3s; }
 .dropzone {
@@ -583,16 +975,35 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   padding: 6px 12px; border-radius: 999px; cursor: pointer;
   font-size: .74rem; font-weight: 600; line-height: 1.35;
   color: var(--muted);
-  background: rgba(255, 255, 255, .04);
-  border: 1px solid rgba(247, 201, 72, .22);
+  background: rgba(122,60,86,.045);
+  border: 1px solid rgba(122, 84, 0, .22);
   transition: all .15s;
 }
 .kf-chip:hover { border-color: var(--gold); color: var(--text); }
 .kf-chip.on {
-  color: #1a1206;
+  color: #2b141c;
   background: linear-gradient(135deg, #fde68a, #f7c948);
   border-color: var(--gold);
-  box-shadow: 0 6px 20px -8px rgba(247, 201, 72, .7);
+  box-shadow: 0 6px 20px -8px rgba(122, 84, 0, .7);
+}
+
+/* Section badalne par chip bar upar chipka rahe. 22 hisse me se
+   koi bhi ek tap me badal jaata hai — dobara upar scroll karne
+   ki zaroorat nahi padti. */
+.kf-sticky {
+  position: sticky;
+  top: 56px;                 /* navbar ke neeche */
+  z-index: 30;
+  margin-top: 14px;
+  padding: 10px 0;
+  background: linear-gradient(180deg,
+    rgba(253, 246, 238, .97) 0%,
+    rgba(253, 246, 238, .97) 70%,
+    rgba(253, 246, 238, 0) 100%);
+}
+.kf-sticky .kf-nav { margin-top: 0; }
+@media (max-width: 860px) {
+  .kf-sticky { top: 52px; padding: 8px 0; }
 }
 .kf-table {
   width: 100%; border-collapse: collapse; font-size: .8rem;
@@ -629,20 +1040,20 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
      Chhote screen par backdrop zyada peeche se dikhta hai, isliye
      cards thodi opaque aur text thoda bright karte hain. */
   .card {
-    background: linear-gradient(160deg, rgba(56, 32, 46, .96), rgba(38, 21, 30, .94));
-    border-color: rgba(247, 201, 72, .28);
+    background: linear-gradient(160deg, rgba(255,255,255,.97), rgba(250,240,230,.95));
+    border-color: rgba(122, 84, 0, .28);
     backdrop-filter: blur(12px) saturate(130%);
   }
   .num-chip {
-    background: linear-gradient(165deg, rgba(66, 38, 55, .96), rgba(44, 24, 36, .94));
-    border-color: rgba(247, 201, 72, .32);
+    background: linear-gradient(165deg, rgba(255,252,246,.96), rgba(250,238,226,.94));
+    border-color: rgba(122, 84, 0, .32);
   }
-  .num-chip span { color: #e2e6ff; }
-  .kv .k, .label { color: #e2e6ff; }
-  p, li { text-shadow: 0 1px 3px rgba(0, 0, 0, .55); }
+  .num-chip span { color: var(--text); }
+  .kv .k, .label { color: var(--muted); }
+  p, li { text-shadow: none; }
   .badge {
-    background: rgba(247, 201, 72, .16);
-    border-color: rgba(247, 201, 72, .42);
+    background: rgba(122, 84, 0, .16);
+    border-color: rgba(122, 84, 0, .42);
   }
 
   /* ── TYPOGRAPHY: phone par .68rem padhne layak nahi tha ─────
@@ -663,16 +1074,16 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   /* 3D mark phone par bhi poora chamke */
   .logo3d-mark {
     filter:
-      drop-shadow(0 10px 20px rgba(0,0,0,.50))
-      drop-shadow(0 0 26px rgba(247,201,72,.72))
-      drop-shadow(0 0 52px rgba(242,160,184,.36));
+      drop-shadow(0 8px 16px rgba(122,60,86,.16))
+      drop-shadow(0 0 26px rgba(122, 84, 0, .72))
+      drop-shadow(0 0 52px rgba(196,80,128,.46));
   }
-  .logo3d-glow { background: radial-gradient(circle, rgba(247,201,72,.52), transparent 70%); }
+  .logo3d-glow { background: radial-gradient(circle, rgba(122, 84, 0, .52), transparent 70%); }
   /* Sirf extra shadow. -webkit-text-fill-color YAHAN nahi lagana —
      wo "color" ko follow karta hai, aur @supports me color:transparent
      hota hai, yaani text phir invisible ho jayega! */
   .text-gradient, .num-chip b, .number-card .num span {
-    text-shadow: 0 2px 10px rgba(0, 0, 0, .7);
+    text-shadow: 0 1px 6px rgba(122,60,86,.14);
   }
 }
 
@@ -697,13 +1108,13 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 .vyear-now {
   display: flex; align-items: center; gap: 16px;
   padding: 16px 18px; margin-bottom: 14px; border-radius: 16px;
-  background: linear-gradient(120deg, rgba(247,201,72,.18), rgba(242,160,184,.14));
-  border: 1px solid rgba(247,201,72,.40);
+  background: linear-gradient(120deg, rgba(122,84,0,.34), rgba(176, 53, 106, .14));
+  border: 1px solid rgba(122, 84, 0, .40);
 }
 .vyear-now-num {
   font-size: 3rem; font-weight: 800; line-height: 1;
   color: var(--gold);
-  text-shadow: 0 2px 14px rgba(247,201,72,.45);
+  text-shadow: 0 2px 14px rgba(122,84,0,.72);
   min-width: 62px; text-align: center;
 }
 .vyear-now-lbl { font-size: 1.02rem; font-weight: 700; color: var(--text); }
@@ -711,26 +1122,26 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 
 .vy-row { padding: 10px 0; border-bottom: 1px solid var(--border); }
 .vy-on {
-  background: rgba(247,201,72,.08);
+  background: rgba(122, 84, 0, .08);
   border-radius: 12px; padding: 12px 10px;
-  border: 1px solid rgba(247,201,72,.30);
+  border: 1px solid rgba(122,84,0,.55);
 }
 .vy-badge {
   font-style: normal; font-size: .66rem; margin-left: 8px;
   padding: 2px 9px; border-radius: 999px; font-weight: 700;
-  background: rgba(247,201,72,.22); color: var(--gold);
-  border: 1px solid rgba(247,201,72,.42);
+  background: rgba(122,84,0,.42); color: var(--gold);
+  border: 1px solid rgba(122,84,0,.62);
 }
 
 /* ── लालकिताब: har graha ka pura upay ── */
 .lk-row {
   padding: 14px; margin-bottom: 12px; border-radius: 14px;
-  background: linear-gradient(160deg, rgba(56,32,46,.62), rgba(36,20,30,.52));
+  background: linear-gradient(160deg, rgba(255,253,249,.80), rgba(250,240,230,.70));
   border: 1px solid var(--border);
 }
 .lk-top {
-  border-color: rgba(247,201,72,.45);
-  background: linear-gradient(160deg, rgba(74,42,60,.6), rgba(46,25,38,.5));
+  border-color: rgba(122,84,0,.72);
+  background: linear-gradient(160deg, rgba(255,250,244,.78), rgba(250,238,226,.68));
 }
 .lk-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 9px; }
 .lk-head b { font-size: 1.08rem; color: var(--gold); }
@@ -739,9 +1150,9 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   margin-left: auto; font-size: .66rem; font-weight: 700;
   padding: 3px 10px; border-radius: 999px; letter-spacing: .4px;
 }
-.lk-pri-1 { background: rgba(247,201,72,.22); color: var(--gold); border: 1px solid rgba(247,201,72,.45); }
-.lk-pri-2 { background: rgba(251,146,60,.20); color: #fb923c; border: 1px solid rgba(251,146,60,.42); }
-.lk-pri-3 { background: rgba(255,255,255,.07); color: var(--muted); border: 1px solid var(--border); }
+.lk-pri-1 { background: rgba(122,84,0,.42); color: var(--gold); border: 1px solid rgba(122,84,0,.72); }
+.lk-pri-2 { background: rgba(176,80,10,.16); color: #8f4008; border: 1px solid rgba(176,80,10,.42); }
+.lk-pri-3 { background: rgba(122,60,86,.05); color: var(--muted); border: 1px solid var(--border); }
 
 .lk-grid {
   display: grid; grid-template-columns: minmax(92px, 30%) 1fr;
@@ -759,8 +1170,8 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 /* ── रत्न: saaf recommendation ── */
 .gem-rec {
   padding: 16px; border-radius: 16px; margin-bottom: 14px;
-  background: linear-gradient(135deg, rgba(242,160,184,.16), rgba(247,201,72,.12));
-  border: 1px solid rgba(242,160,184,.36);
+  background: linear-gradient(135deg, rgba(196,80,128,.32), rgba(122,84,0,.28));
+  border: 1px solid rgba(196,80,128,.46);
 }
 .gem-rec-lbl {
   font-size: .78rem; font-weight: 800; letter-spacing: 1.2px;
@@ -770,7 +1181,7 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 .gem-rec-num {
   flex: 0 0 30px; height: 30px; border-radius: 50%;
   display: grid; place-items: center; font-weight: 800; font-size: .9rem;
-  background: linear-gradient(135deg, #f7c948, #f7c948); color: #1a1206;
+  background: linear-gradient(135deg, #f2b705, #e09b06); color: #2b141c;
 }
 .gem-rec-item b { display: block; font-size: 1.06rem; color: var(--gold); }
 .gem-rec-gr { display: block; font-size: .8rem; color: var(--muted); }
@@ -810,8 +1221,8 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
   margin-top: 20px;
   padding: 18px 16px;
   border-radius: 16px;
-  background: linear-gradient(155deg, rgba(70, 40, 56, .84), rgba(44, 24, 36, .78));
-  border: 1px solid rgba(247, 201, 72, .28);
+  background: linear-gradient(155deg, rgba(255,253,249,.94), rgba(250,240,230,.90));
+  border: 1px solid rgba(122, 84, 0, .28);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07);
 }
 .bg-eyes-h {
@@ -826,8 +1237,8 @@ select.input optgroup { font-weight: 700; color: var(--gold); }
 .bg-eye {
   display: flex; flex-direction: column; gap: 3px;
   padding: 10px 12px; border-radius: 12px;
-  background: rgba(28, 15, 23, .50);
-  border: 1px solid rgba(247, 201, 72, .14);
+  background: rgba(255,255,255,.55);
+  border: 1px solid rgba(122, 84, 0, .14);
   min-width: 0;
 }
 .bg-eye-k {

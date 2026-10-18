@@ -1,7 +1,12 @@
 // Firebase configuration.
 // Fill these values in a .env file (see .env.example) OR replace directly here.
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import {
+  getAuth,
+  setPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence,
+} from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
@@ -23,4 +28,27 @@ export const isFirebaseConfigured =
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+
+// ════════════════════════════════════════════════════════════════════
+//  SESSION YAAD RAKHO
+//
+//  User ne kaha: "sign up karne ke baad jab sign in karta hoon to
+//  phir se sign up karne ko bolta hai. Ek baar register karne ke baad
+//  baar baar register karne ko nahi bolna chahiye."
+//
+//  Firebase ka default persistence `local` hota hai — par wo TABHI
+//  chalta hai jab storage allow ho. Kuch browsers me (private mode,
+//  storage-blocked, ya purana SW jisne storage clear kar diya) wo
+//  `session` par gir jaata hai — matlab page reload karte hi user
+//  logout. Isliye ye EXPLICIT kar rahe hain.
+//
+//  `local` = user logout NAHI kare to app band karne par bhi login
+//  rehta hai. Ye wahi hai jo user maang raha hai.
+// ════════════════════════════════════════════════════════════════════
+setPersistence(auth, browserLocalPersistence).catch(() => {
+  // storage block hai to session par girne do — is session me to
+  // chalega hi
+  setPersistence(auth, browserSessionPersistence).catch(() => { /* ignore */ });
+});
+
 export default app;

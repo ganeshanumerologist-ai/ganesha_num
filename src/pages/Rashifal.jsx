@@ -182,11 +182,11 @@ export default function Rashifal() {
 
               {/* ---------- Shubh / Ashubh ---------- */}
               <div style={{ marginTop: 16 }}>
-                <h3 style={{ color: "#34d399", fontSize: "1rem" }}>{S.rf_shubh}</h3>
+                <h3 style={{ color: "#0d6b4f", fontSize: "1rem" }}>{S.rf_shubh}</h3>
                 <p style={{ marginTop: 4, fontSize: ".92rem" }}>{(plan.topics.shubh || []).join(" ")}</p>
               </div>
               <div style={{ marginTop: 12 }}>
-                <h3 style={{ color: "#f87171", fontSize: "1rem" }}>{S.rf_ashubh}</h3>
+                <h3 style={{ color: "#9f1d1d", fontSize: "1rem" }}>{S.rf_ashubh}</h3>
                 <p style={{ marginTop: 4, fontSize: ".92rem" }}>{(plan.topics.ashubh || []).join(" ")}</p>
               </div>
 

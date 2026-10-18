@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useLanguage } from "../i18n/LanguageContext.jsx";
 import { pageTX } from "../i18n/pageTx.js";
-import { db } from "../firebase.js";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { needFirebase } from "../firebaseLazy.js";
 
 const TX = {
   hi: { sub: "न्यूमरोलॉजी रीडिंग के बारे में सवाल है? संदेश भेजें।", errFill: "कृपया सभी खाने भरें।", sending: "भेजा जा रहा है..." },
@@ -39,9 +38,12 @@ export default function Contact() {
     }
     setLoading(true);
     try {
-      await addDoc(collection(db, "inquiries"), {
+      // Dynamic import — pehle static tha, isliye Contact page
+      // Firebase ko eagerly le aata tha
+      const F = await needFirebase();
+      await F.addDoc(F.collection(F.db, "inquiries"), {
         ...form,
-        createdAt: serverTimestamp(),
+        createdAt: F.serverTimestamp(),
       });
       setSent(true);
       setForm({ name: "", email: "", message: "" });

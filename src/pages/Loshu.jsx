@@ -324,13 +324,13 @@ export default function Loshu() {
                   <div key={n} style={{ marginTop: 12, padding: "10px 12px", borderRadius: 10, background: "rgba(255,255,255,.025)", border: "1px solid var(--border)" }}>
                     <div className="kv"><span className="k">{n}</span><span className="v">{U[n]}</span></div>
                     <div style={{ marginTop: 8 }}>
-                      <strong style={{ fontSize: ".85rem", color: "#34d399" }}>{S.lo_do_head}</strong>
+                      <strong style={{ fontSize: ".85rem", color: "#0d6b4f" }}>{S.lo_do_head}</strong>
                       <ul style={{ margin: "4px 0 0 18px", fontSize: ".85rem" }}>
                         {u.do.map((x, i) => <li key={i}>{x}</li>)}
                       </ul>
                     </div>
                     <div style={{ marginTop: 8 }}>
-                      <strong style={{ fontSize: ".85rem", color: "#f87171" }}>{S.lo_dont_head}</strong>
+                      <strong style={{ fontSize: ".85rem", color: "#9f1d1d" }}>{S.lo_dont_head}</strong>
                       <ul style={{ margin: "4px 0 0 18px", fontSize: ".85rem" }}>
                         {u.dont.map((x, i) => <li key={i}>{x}</li>)}
                       </ul>
@@ -374,8 +374,8 @@ export default function Loshu() {
                 <span className="v">{yo.personalYear}</span>
               </div>
               <p style={{ marginTop: 8, fontSize: ".95rem" }}>{TX.yearOverall}</p>
-              <p style={{ marginTop: 8, fontSize: ".92rem", color: "#34d399" }}>{TX.yearGood}</p>
-              <p style={{ marginTop: 8, fontSize: ".92rem", color: "#f87171" }}>{TX.yearCaution}</p>
+              <p style={{ marginTop: 8, fontSize: ".92rem", color: "#0d6b4f" }}>{TX.yearGood}</p>
+              <p style={{ marginTop: 8, fontSize: ".92rem", color: "#9f1d1d" }}>{TX.yearCaution}</p>
               <div style={{ marginTop: 14 }}>
                 <div className="kv"><span className="k">{P.pg_career}</span><span className="v">{TX2.year.career}</span></div>
                 <div className="kv"><span className="k">{PR.dhan}</span><span className="v">{TX2.year.money}</span></div>

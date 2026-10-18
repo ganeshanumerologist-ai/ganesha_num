@@ -1,26 +1,109 @@
 <!DOCTYPE html>
+<!--
+  ════════════════════════════════════════════════════════════════════
+  index.html — crawlers yahi padhte hain (JS chalane se pehle).
+
+  Ye tags Seo.jsx har page par JS se overwrite karta hai. Lekin Google
+  kabhi kabhi JS render karne se pehle hi yahi base padhta hai — khaali
+  title/description milne par page "thin content" samajha jaata hai.
+  Isliye yahan bhi poora, sahi meta rakha hai (English home page ke liye).
+  ════════════════════════════════════════════════════════════════════
+-->
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#8b5cf6" />
-    <meta name="description" content="Ganesha Suyog Astrology - Numerology, Kundli, Rashifal. GANESHA SUYOG ASTROLOGY - free numerology, kundli, rashifal, panchang in 13 languages." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <!-- ── Naya maroon/gold/rose theme (pehle violet violet tha) ── -->
+    <meta name="theme-color" content="#fdf6ee" />
+    <meta name="color-scheme" content="light" />
+
+    <!-- ── Base description: English home page ── -->
+    <title>Ganesha Suyog Astrology | Free Kundli, Numerology, Rashifal in 22 Languages</title>
+    <meta
+      name="description"
+      content="Free numerology, kundli, rashifal and panchang in 22 Indian languages. Get your Moolank, Bhagyank, Life Path, dasha, gemstone and muhurat guidance instantly."
+    />
+    <meta
+      name="keywords"
+      content="kundli, numerology, rashifal, panchang, muhurat, lo shu grid, varshphal, kundli milan, gemstone, lal kitab, shani, ganesha suyog astrology"
+    />
+
+    <!-- ── Open Graph ──
+         og:image PNG hona chahiye — Facebook/Twitter SVG nahi
+         chalaate. /og-image.png 1200×630 banaya gaya hai. -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Ganesha Suyog Astrology - Numerology, Kundli, Rashifal" />
-    <meta property="og:description" content="Life Path, Destiny, Milan, Varshphal, Daily Lucky aur expert guidance — sabhi Indian languages me." />
-    <meta property="og:image" content="/logo.svg" />
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Ganesha Suyog Astrology - Numerology, Kundli, Rashifal" />
-    <meta name="twitter:description" content="Life Path, Destiny, Milan, Varshphal, Daily Lucky aur expert guidance." />
+    <meta property="og:site_name" content="GANESHA SUYOG ASTROLOGY" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:title" content="Ganesha Suyog Astrology | Free Kundli, Numerology, Rashifal" />
+    <meta
+      property="og:description"
+      content="Free numerology, kundli, rashifal and panchang in 22 Indian languages. Complete kundli with 16 vargas, dasha, Lal Kitab remedies and gemstone advice."
+    />
+    <meta property="og:url" content="https://ganeshanumrologisty.web.app/" />
+    <meta property="og:image" content="https://ganeshanumrologisty.web.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Ganesha Suyog Astrology" />
+    <!-- image:type — kuch WhatsApp/Facebook versions isse prefer karti hain -->
+    <meta property="og:image:type" content="image/png" />
+
+    <!-- ── Twitter ── -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Ganesha Suyog Astrology | Free Kundli, Numerology, Rashifal" />
+    <meta
+      name="twitter:description"
+      content="Free numerology, kundli, rashifal and panchang in 22 Indian languages. Complete kundli with 16 vargas, dasha and gemstone advice."
+    />
+    <meta name="twitter:image" content="https://ganeshanumrologisty.web.app/og-image.png" />
+    <meta name="twitter:image:alt" content="Ganesha Suyog Astrology" />
+
+    <!-- ── Crawlers jo JS nahi chalate (Baidu, Twitterbot, Discord) ── -->
+    <meta name="rating" content="general" />
+    <meta name="author" content="Ganesha Suyog Astrology" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <link rel="canonical" href="https://ganeshanumrologisty.web.app/" />
+
+    <!-- ── PWA ── -->
     <link rel="manifest" href="/manifest.json" />
     <link rel="icon" href="/logo.svg" type="image/svg+xml" />
-    <title>Ganesha Suyog Astrology - Numerology, Kundli, Rashifal</title>
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- ── Fonts ──
+         22 bhasha hain. Sirf Devanagari load karna bahut bhaari
+         (har bhasha ka alag font family) — isliye pehle 4 sabse badi
+         (Devanagari, Tamil, Telugu, Bengali) preload hain, baaki
+         browser khud tabhi laata hai jab woh zaroori ho (font-display:
+         swap). -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+Tamil:wght@400;600;700&family=Noto+Sans+Telugu:wght@400;600;700&family=Noto+Sans+Bengali:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- ── Crawler hint ── -->
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
   </head>
   <body>
-    <div id="root"></div>
+    <!--
+      Crawler ko bhasha switcher se pehle page ka content dikhna chahiye.
+      Ye chhota block JS load hone se pehle bhi visible rehta hai —
+      kundli/panchang/gemstone jaise shabd mil jaate hain.
+      React mount hote hi ye hat jaata hai (#root ke andar aata hai).
+    -->
+    <div id="root">
+      <div style="padding:40px 20px;font-family:system-ui,sans-serif;color:#2b141c;background:#fdf6ee;min-height:100vh">
+        <h1 style="color:#7a4d00;margin:0 0 12px">Ganesha Suyog Astrology</h1>
+        <p style="color:#6a4351;max-width:640px;line-height:1.7;margin:0">
+          Free kundli, numerology, rashifal, panchang, muhurat, Lo Shu grid, Varshphal,
+          kundli milan and gemstone guidance in 22 Indian languages. Complete kundli with
+          lagna, navamsa, 16 divisional vargas, ashtakavarga, dasha, antar dasha, phaladesh,
+          Lal Kitab upay and shubh-ashubh muhurat for your city.
+        </p>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

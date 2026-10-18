@@ -12,109 +12,198 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { setProfileOwner, clearAllProfiles } from "../profile/profile.js";
-import { auth, db } from "../firebase.js";
-import {
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signOut,
-  signInWithPopup,
-  GoogleAuthProvider,
-  updateProfile,
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-} from "firebase/auth";
-import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
+import { warmFirebase, needFirebase } from "../firebaseLazy.js";
 import { toAuthEmail, toE164, looksLikePhone, toPhone } from "./identity.js";
 
+// NOTE: `firebase/auth` aur `firebase/firestore` ab KABHI static import
+// nahi hote. Pehle ye line har page ka pehla load 115 KB (gzip) bhaari
+// kar deti thi, chahe user login page par ho ya kundli par.
+// Ab ye sab `firebaseLazy.js` ke through BAAD me load hote hain.
+
 const AuthContext = createContext();
-const googleProvider = new GoogleAuthProvider();
 
 // Firestore atak jaye to app na atke — 15 sec timeout
 const withTimeout = (p, ms = 15000) =>
   Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error("timeout")), ms))]);
 
 // Jitne bhi user docs kholte hain, un sabka ek hi shape rakho
-const userDoc = (name, email, phone) => ({
+// `serverTimestamp` ab har call ke saath milta hai (dynamic import)
+const userDoc = (name, email, phone, serverTimestamp) => ({
   name: name || "",
   email: email || "",
   phone: phone || "",
   createdAt: serverTimestamp(),
 });
 
+/* ════════════════════════════════════════════════════════════════════
+   REMEMBER ME — "ek baar register, baar baar mat pucho"
+
+   User ne kaha: "sign up karne ke baad jab sign in karta hoon to phir
+   se sign up karne ko bolta hai. Data save hona chahiye. Ek baar
+   register karne ke baad baar baar register karne ko nahi bolna
+   chahiye."
+
+   Firebase ka apna session localStorage me hota hai. Lekin:
+     • storage block ho to session khatam ho jaata hai
+     • "invalid-credential" error user ko confuse karta hai — wo
+       samajhta hai ki account hi nahi bana
+
+   Isliye hum bhi ek chhota record rakhte hain: last id + naam.
+   Login page par usse:
+     • form khud bhar jaata hai
+     • "Welcome back" dikhta hai
+     • mode hamesha LOGIN rehta hai (signup nahi)
+
+   Ye security nahi todta — password ya token yahan nahi hai, sirf
+   "kaun ka account tha" ka nishani. Password user hi dalega.
+   ════════════════════════════════════════════════════════════════════ */
+const LS_KEY = "nv-remember";
+
+export function readRemembered() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+
+function rememberMe(user, id) {
+  try {
+    localStorage.setItem(
+      LS_KEY,
+      JSON.stringify({
+        id: String(id || ""),
+        name: (user && user.displayName) || "",
+        at: Date.now(),
+      })
+    );
+  } catch { /* private mode — chhod do */ }
+}
+
+export function clearRemembered() {
+  try { localStorage.removeItem(LS_KEY); } catch { /* ignore */ }
+}
+
+/** Login page se bhi call ho sakta hai — jab Firebase bataye ki account
+ *  pehle se bana hua hai. Tab user ka account confirm ho gaya, to yaad
+ *  rakh lo (naam optional). */
+export function rememberAccount(id, name) {
+  if (!id) return;
+  rememberMe({ displayName: name || "" }, id);
+}
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [fb, setFb] = useState(null);
 
+  // ── Firebase BAAD me load, app turant render ho ──────────────
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (u) => {
-      setUser(u);
-      // ── Profile ka owner badlo ────────────────────────────────
-      // Pehle ek hi "nv-profile" key thi, to ek hi phone par dusre
-      // user ka naam/jant/path dikh jaata tha. Ab har user ka apna
-      // slot hota hai (nv-profile:<uid>), logout par anonymous.
-      setProfileOwner(u ? u.uid : null);
-      if (u) {
-        try {
-          const ref = doc(db, "users", u.uid);
-          const snap = await withTimeout(getDoc(ref));
-          if (!snap.exists()) {
-            await withTimeout(setDoc(ref, userDoc(u.displayName, u.email, ""))).catch(() => {});
-          }
+    let unsub = null;
+    let dead = false;
+
+    (async () => {
+      const F = await needFirebase();
+      if (dead) return;
+      setFb(F);
+
+      unsub = F.onAuthStateChanged(F.auth, async (u) => {
+        setUser(u);
+        // ── Profile ka owner badlo ──────────────────────────────
+        // Pehle ek hi "nv-profile" key thi, to ek hi phone par dusre
+        // user ka naam/jant/path dikh jaata tha. Ab har user ka apna
+        // slot hota hai (nv-profile:<uid>), logout par anonymous.
+        setProfileOwner(u ? u.uid : null);
+        if (u) {
           try {
-            setProfile((await withTimeout(getDoc(ref))).data() || null);
+            const ref = F.doc(F.db, "users", u.uid);
+            const snap = await withTimeout(F.getDoc(ref));
+            if (!snap.exists()) {
+              await withTimeout(
+                F.setDoc(ref, userDoc(u.displayName, u.email, "", F.serverTimestamp)),
+              ).catch(() => {});
+            }
+            try {
+              setProfile((await withTimeout(F.getDoc(ref))).data() || null);
+            } catch {
+              setProfile(null);
+            }
           } catch {
             setProfile(null);
           }
-        } catch {
+        } else {
           setProfile(null);
         }
-      } else {
-        setProfile(null);
-      }
-      setLoading(false);
+        setLoading(false);
+      });
+    })().catch(() => {
+      // Firebase load hi nahi hua (offline / blocked) — app chalti rahe
+      if (!dead) setLoading(false);
     });
-    return () => unsub();
+
+    return () => {
+      dead = true;
+      if (unsub) unsub();
+    };
   }, []);
 
   /* ---------------- email / password ---------------- */
 
   /* `id` ya to email hai ya mobile number — dono me se koi ek chalega. */
-  const login = (id, password) =>
-    signInWithEmailAndPassword(auth, toAuthEmail(id), password);
+  const login = async (id, password) => {
+    const F = await needFirebase();
+    const cred = await F.signInWithEmailAndPassword(F.auth, toAuthEmail(id), password);
+    rememberMe(cred.user, id);
+    return cred;
+  };
 
   const signup = async (name, id, password) => {
+    const F = await needFirebase();
     const mail = toAuthEmail(id);
     const isPhone = looksLikePhone(id);
-    const cred = await createUserWithEmailAndPassword(auth, mail, password);
+    const cred = await F.createUserWithEmailAndPassword(F.auth, mail, password);
     // Profile save fail ho to bhi signup safal rahe — atakna nahi chahiye
     try {
-      await withTimeout(updateProfile(cred.user, { displayName: name }), 10000);
+      await withTimeout(F.updateProfile(cred.user, { displayName: name }), 10000);
       await withTimeout(
-        setDoc(doc(db, "users", cred.user.uid), userDoc(name, isPhone ? "" : mail, "")),
+        F.setDoc(
+          F.doc(F.db, "users", cred.user.uid),
+          userDoc(name, isPhone ? "" : mail, "", F.serverTimestamp),
+        ),
         10000,
       );
     } catch { /* ignore — login phir bhi safal */ }
+    // Yaad rakhne ka kaam SABSE Aakhir me — tab tak displayName set
+    // ho chuka hota hai, warna "Welcome back" par naam khaali dikhta
+    rememberMe(cred.user, id);
     return cred;
   };
 
   const googleLogin = async () => {
-    const cred = await signInWithPopup(auth, googleProvider);
+    const F = await needFirebase();
+    const provider = new F.GoogleAuthProvider();
+    const cred = await F.signInWithPopup(F.auth, provider);
+    rememberMe(cred.user, cred.user.email || "");
     try {
-      const ref = doc(db, "users", cred.user.uid);
-      const snap = await withTimeout(getDoc(ref));
+      const ref = F.doc(F.db, "users", cred.user.uid);
+      const snap = await withTimeout(F.getDoc(ref));
       if (!snap.exists()) {
-        await withTimeout(setDoc(ref, userDoc(cred.user.displayName, cred.user.email, "")));
+        await withTimeout(
+          F.setDoc(ref, userDoc(cred.user.displayName, cred.user.email, "", F.serverTimestamp)),
+        );
       }
     } catch { /* ignore */ }
     return cred;
   };
 
   const logout = async () => {
+    const F = await needFirebase();
     // Profile ka data logout par bhi mitao — shared device par agla
     // user use na dekh sake. (setProfileOwner Auth listener kar raha hai)
-    await signOut(auth);
+    await F.signOut(F.auth);
+    // "Yaad rakha hua account" bhi mitao — warna logout ke baad bhi
+    // login page par purana naam/id dikhta rahega.
+    clearRemembered();
     try {
       clearAllProfiles();
     } catch { /* ignore */ }
@@ -151,50 +240,57 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     // Firebase ko batao ki in numbers par verification skip kar do
-    if (TEST_PHONES.length) {
-      auth.settings.appVerificationDisabledForTesting = true;
-      // Firebase har test number ke liye ek fixed code chunta hai; wo
-      // confirmation.result se milta hai. Hum use yahan nahi rakhenge —
-      // wo confirm() ke waqt khud verify hota hai. Sirf ye setting chahiye.
-    }
-  }, []);
+    if (!TEST_PHONES.length || !fb) return;
+    fb.auth.settings.appVerificationDisabledForTesting = true;
+    // Firebase har test number ke liye ek fixed code chunta hai; wo
+    // confirmation.result se milta hai. Hum use yahan nahi rakhenge —
+    // wo confirm() ke waqt khud verify hota hai. Sirf ye setting chahiye.
+  }, [fb, TEST_PHONES.length]);
 
-  const verifierFor = (containerId) => {
+  const verifierFor = (F, containerId) => {
     // Test number par reCAPTCHA ki zaroorat nahi
     if (TEST_PHONES.length) return null;
     if (!containerId) return null;
-    return new RecaptchaVerifier(auth, containerId, { size: "normal" });
+    return new F.RecaptchaVerifier(F.auth, containerId, { size: "normal" });
   };
 
   /** Kya ye number test list me hai? */
   const isTestPhone = (phone) => TEST_PHONES.includes(toE164(phone));
 
   const sendOtp = async (phone, containerId) => {
-    const verifier = verifierFor(containerId);
+    const F = await needFirebase();
+    const verifier = verifierFor(F, containerId);
     // Test number: verifier null chalta hai, Firebase khud fixed code dega
     const res = verifier
-      ? await signInWithPhoneNumber(auth, toE164(phone), verifier)
-      : await signInWithPhoneNumber(auth, toE164(phone));
+      ? await F.signInWithPhoneNumber(F.auth, toE164(phone), verifier)
+      : await F.signInWithPhoneNumber(F.auth, toE164(phone));
     setOtpConfirmation(res);
     return res;
   };
 
-  const verifyOtp = async (code) => {
+  const verifyOtp = async (code, phone) => {
     if (!otpConfirmation) throw new Error("otp-pehle-bhejo");
     const cred = await otpConfirmation.confirm(String(code || "").trim());
     setOtpConfirmation(null);
+    if (phone) rememberMe(cred.user, phone);
     return cred;
   };
 
   const signupWithOtp = async (phone, name, code) => {
-    const cred = await verifyOtp(code);
+    const F = await needFirebase();
+    const cred = await verifyOtp(code, phone);
     try {
-      if (name) await withTimeout(updateProfile(cred.user, { displayName: name }), 10000);
+      if (name) await withTimeout(F.updateProfile(cred.user, { displayName: name }), 10000);
       await withTimeout(
-        setDoc(doc(db, "users", cred.user.uid), userDoc(name, "", toPhone(phone))),
+        F.setDoc(
+          F.doc(F.db, "users", cred.user.uid),
+          userDoc(name, "", toPhone(phone), F.serverTimestamp),
+        ),
         10000,
       );
     } catch { /* ignore — login phir bhi safal */ }
+    // naam ab set hua hai — yaad record dobara bhar do
+    rememberMe(cred.user, phone);
     return cred;
   };
 

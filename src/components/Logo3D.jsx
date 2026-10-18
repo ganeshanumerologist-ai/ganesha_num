@@ -41,16 +41,19 @@ export default function Logo3D({ size = 132, text = "GANESHA SUYOG ASTROLOGY" })
                 Ab har instance ko apna unique id milta hai. */}
             <radialGradient id={`${uid}-c`} cx="35%" cy="28%">
               <stop offset="0%" stopColor="#fff6d8" />
-              <stop offset="35%" stopColor="#f7c948" />
-              <stop offset="100%" stopColor="#b45309" />
+              <stop offset="35%" stopColor="#c98a10" />
+              <stop offset="100%" stopColor="#7a4d00" />
             </radialGradient>
             <linearGradient id={`${uid}-r`} x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#fde68a" />
-              <stop offset="55%" stopColor="#f7c948" />
-              <stop offset="100%" stopColor="#f2a0b8" />
+              <stop offset="0%" stopColor="#e8c98a" />
+              <stop offset="55%" stopColor="#c98a10" />
+              <stop offset="100%" stopColor="#b0356a" />
             </linearGradient>
             <filter id={`${uid}-s`} x="-40%" y="-40%" width="180%" height="180%">
-              <feDropShadow dx="0" dy="6" stdDeviation="7" floodColor="#000" floodOpacity="0.55" />
+              {/* Light theme: pehle pure black (#000) drop shadow tha,
+                  jo cream background par bahut ganda lagta tha.
+                  Ab maroon-tinted soft shadow. */}
+              <feDropShadow dx="0" dy="3" stdDeviation="4" floodColor="#7a3a52" floodOpacity="0.22" />
             </filter>
           </defs>
 
@@ -70,7 +73,7 @@ export default function Logo3D({ size = 132, text = "GANESHA SUYOG ASTROLOGY" })
                 key={i}
                 x1={Math.cos(a) * 58} y1={Math.sin(a) * 58}
                 x2={Math.cos(a) * 72} y2={Math.sin(a) * 72}
-                stroke="#f7c948" strokeWidth="2" opacity="0.75"
+                stroke="#c98a10" strokeWidth="2" opacity="0.75"
               />
             );
           })}
@@ -87,7 +90,7 @@ export default function Logo3D({ size = 132, text = "GANESHA SUYOG ASTROLOGY" })
                    alag karta hai
             */}
           <circle r="34" fill="#fff6d8" />
-          <circle r="34" fill="none" stroke="#b45309" strokeWidth="1.6" opacity="0.55" />
+          <circle r="34" fill="none" stroke="#7a4d00" strokeWidth="1.6" opacity="0.55" />
           <text
             x="0" y="16"
             textAnchor="middle"

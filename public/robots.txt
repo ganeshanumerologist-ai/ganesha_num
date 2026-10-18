@@ -1,0 +1,56 @@
+# ════════════════════════════════════════════════════════════════════
+#  Ganesha Suyog Astrology
+#  21 page × 22 bhasha = 462 URL, sab sitemap me.
+# ════════════════════════════════════════════════════════════════════
+
+# Sab kuch khola hai — koi page private nahi
+User-agent: *
+Allow: /
+
+# ── Ye page index nahi hone chahiye ──
+# Login ke peeche ka hissa. Inhe khaali content dikhta hai, isliye
+# Google ko inka khayal rakhne ka koi reason nahi.
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /chat
+
+# ── Chhoti bhasha ke canonical redirect ──
+# Ye 9 bhasha ka apna content nahi hai — inka text unke parivaar wale
+# bhasha (hi/ur/bn) se aata hai. Alag URL banakar Google ko duplicate
+# dikhega, isliye crawl karne do par index mat karo.
+Disallow: /ne/
+Disallow: /mai/
+Disallow: /doi/
+Disallow: /brx/
+Disallow: /sa/
+Disallow: /ks/
+Disallow: /sd/
+Disallow: /sat/
+Disallow: /mni/
+
+# ── Build artefacts ──
+Disallow: /assets/*.map
+
+# ── AI crawlers ──
+# Content kisi AI ko train karne ke liye nahi dena. Agar aap
+# ChatGPT/Perplexity se traffic chahte hain to neeche wale
+# un-comment kar dein.
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+# ── Bing / Yandex / DuckDuckGo ──
+# Bing se thoda traffic aata hai, isliye usko khula rakha hai.
+User-agent: bingbot
+Allow: /
+
+# ── Sitemap ──
+Sitemap: https://ganeshanumrologisty.web.app/sitemap.xml
+
+# ── Host ──
+Host: ganeshanumrologisty.web.app

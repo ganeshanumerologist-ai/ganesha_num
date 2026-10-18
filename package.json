@@ -5,11 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/prerender.mjs && node scripts/gen-sitemap.mjs dist/sitemap.xml",
     "preview": "vite preview",
     "deploy": "npm run build && firebase deploy",
     "deploy:hosting": "npm run build && firebase deploy --only hosting",
-    "deploy:storage": "firebase deploy --only storage"
+    "deploy:storage": "firebase deploy --only storage",
+    "seo:sitemap": "node scripts/gen-sitemap.mjs public/sitemap.xml",
+    "seo:index": "node scripts/gen-sitemap-index.mjs",
+    "seo:og": "node scripts/gen-og-image.mjs",
+    "seo:check": "node scripts/verify-seo.mjs && node scripts/verify-prerender.mjs"
   },
   "dependencies": {
     "firebase": "^10.13.0",

@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "./AuthContext.jsx";
 import { ADMIN_EMAILS } from "../config/admins.js";
-import { db } from "../firebase.js";
-import { doc, getDoc } from "firebase/firestore";
+import { needFirebase } from "../firebaseLazy.js";
 
 // Admin = email allowlist me hai YA Firestore me admins/{uid} doc hai
 export function useAdmin() {
@@ -23,9 +22,12 @@ export function useAdmin() {
       setChecking(false);
       return;
     }
+    // Firestore dynamic import — pehle ye static tha aur har page ka
+    // pehla load 115 KB (gzip) bhaari kar deta tha
     (async () => {
       try {
-        const snap = await getDoc(doc(db, "admins", user.uid));
+        const F = await needFirebase();
+        const snap = await F.getDoc(F.doc(F.db, "admins", user.uid));
         setIsAdmin(snap.exists());
       } catch {
         setIsAdmin(false);

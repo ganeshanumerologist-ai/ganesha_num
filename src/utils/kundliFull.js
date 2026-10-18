@@ -17,7 +17,7 @@ import {
   jdFromDateStr, lahiriAyanamsa, rev, sunTropical, moonTropical, planetTropical,
   nakshatraOf, rashiOf, rashiIndex, RASHIS, isRetrograde, lagnaSidereal,
   navamshaSign, dashamshaSign, dwadasamshaSign, horaSign, drekkanaSign,
-  saptamshaSign, tithiOf, yogaOf, karanaOf, grahaSthiti,
+  saptamshaSign, tithiOf, yogaOf, karanaOf, grahaSthiti, rahuTropical,
 } from "./astro.js";
 
 import { ashtakavarga, AV_GRAHAS } from "./ashtakavarga.js";
@@ -441,7 +441,20 @@ export function kundliFull({ name, birthdate, time, place, gender }) {
   for (const g of GRAHAS) {
     if (g === "Sun") lons.Sun = rev(sunTropical(jd) - aya);
     else if (g === "Moon") lons.Moon = rev(moonTropical(jd) - aya);
-    else if (g === "Rahu") lons.Rahu = (() => { const t = jd; const n = (t + 248.5 / 365.25) % 1; return rev(n * 360 - aya); })();
+    // ── RAHU ──────────────────────────────────────────────────────
+    // PEHLE YAHAN YE THA:
+    //   const n = (jd + 248.5 / 365.25) % 1;  return rev(n * 360 - aya);
+    // Wo BILKUL GALAT tha. JD ka fractional part roz ~0.0027 badhta
+    // hai, isliye `n * 360` roz ~0.985° chalti thi — jabki asli Rahu to
+    // mahine me sirf ~1.6° (yani 19.3°/saal, piche ki taraf) chalta hai.
+    // Matlab Rahu ki rashi galat, isliye uska BHAV (house) galat, aur
+    // poora Lal Kitab upay — bhavfal, rogi, daan, puja, mantra, samay —
+    // sab galat ho jata tha.
+    //
+    // Ab wahi SAHI formula jo astro.js me pehle se tha (mean node):
+    //   Ω = 125.04452° − 1934.136261° × T      (T = julian centuries)
+    else if (g === "Rahu") lons.Rahu = rev(rahuTropical(jd) - aya);
+    // Ketu hamesha Rahu se thik 180° door hota hai
     else if (g === "Ketu") lons.Ketu = rev(lons.Rahu + 180);
     else lons[g] = rev(planetTropical(g, jd) - aya);
   }

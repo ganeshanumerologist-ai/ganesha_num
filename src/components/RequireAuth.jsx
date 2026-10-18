@@ -13,11 +13,14 @@
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext.jsx";
+import { langPath, hasLangPrefix, langFromPath } from "../seo/routes.js";
+import { useLanguage } from "../i18n/LanguageContext.jsx";
 
 /** Ye page sirf login ke baad khulega. */
 export function OnlyLoggedIn({ children }) {
   const { user, loading } = useAuth();
   const loc = useLocation();
+  const { lang } = useLanguage();
 
   // Auth state abhi pata nahi — blank screen na dikhe
   if (loading) {
@@ -28,7 +31,14 @@ export function OnlyLoggedIn({ children }) {
     );
   }
 
-  if (!user) return <Navigate to="/login" state={{ from: loc.pathname }} replace />;
+  if (!user) {
+    // /hi/kundli se login par bheja to /hi/login jana chahiye, warna
+    // bhasha prefix gir jaata hai aur user ko English me wapas aata hai.
+    const here = hasLangPrefix(loc.pathname) ? langFromPath(loc.pathname) : lang;
+    return (
+      <Navigate to={langPath("/login", here)} state={{ from: loc.pathname }} replace />
+    );
+  }
   return children;
 }
 
